@@ -22,7 +22,8 @@ Public Class TaskDisplay
             Else
                 state.Add(check.GetType.Name + " - Error #" + check.LastCheck.FailedAttempts.ToString + ": " + check.LastCheck.Time.ToLongTimeString + ", " + check.LastCheck.ErrorText)
             End If
-            If check.Info > "" Then state.Add("---> " + check.Info)
+            If check.ParametersInfo > "" Then state.Add("--> Params: " + check.ParametersInfo)
+            If check.StatusInfo > "" Then state.Add("--> Status: " + check.StatusInfo)
         Next
 
         For Each action In _task.FaultActions
@@ -35,10 +36,10 @@ Public Class TaskDisplay
         Loop
 
         For i = 0 To state.Count - 1
-            stateListbox.Items(i) = state(i)
+            If stateListbox.Items(i) <> state(i) Then stateListbox.Items(i) = state(i)
         Next
 
-        stateListbox.Refresh()
+        '     stateListbox.Refresh()
         MyBase.Refresh()
     End Sub
 End Class

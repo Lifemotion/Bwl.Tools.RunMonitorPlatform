@@ -13,6 +13,7 @@ Public Class ProcessCheck
         _checkProcessResponding = checkProcessResponding
         _checkMultiplyCopies = checkMultiplyCopies
         _processMemoryLimit = processMemoryLimit
+        _parametersInfo = _task.Parameters.ProcessName + ", CheckRespond: " + checkProcessResponding.ToString + ", CheckMulCopies: " + checkMultiplyCopies.ToString + ", MemLimit: " + processMemoryLimit.ToString
     End Sub
 
     Public Overrides Sub Check()
@@ -20,9 +21,11 @@ Public Class ProcessCheck
         Dim prcs = _task.GetProcesses
         _lastCheck.Message += "Processes found: " + prcs.Length.ToString + vbCrLf
         If prcs.Length = 0 Then Throw New TaskCheckException(_task, Me, "Running processes not found")
-        If prcs.Length > 1 And _checkMultiplyCopies Then Throw New TaskCheckException(_task, Me, ">1 processes found")
+        _statusInfo = "Processes: " + prcs.Count.ToString + ", "
         For Each prc In prcs
-            Dim prcMemoryMb = (prc.PrivateMemorySize64 / 1024L / 1024L)
+            Dim prcMemoryMb As Integer = (prc.PrivateMemorySize64 / 1024L / 1024L)
+            _lastCheck.Message += "Process [" + prc.Id.ToString + "] - " + prcMemoryMb.ToString + " Mb" + vbCrLf
+            _statusInfo += "[" + prc.Id.ToString + "] - " + prcMemoryMb.ToString + " Mb" + ", "
 
             If _checkProcessResponding Then
                 If prc.Responding = False Or prc.HasExited = True Then Throw New TaskCheckException(_task, Me, "Process has exited or not responding")
@@ -30,8 +33,9 @@ Public Class ProcessCheck
             If _processMemoryLimit > 0 Then
                 If prcMemoryMb > _processMemoryLimit Then Throw New TaskCheckException(_task, Me, "Memory limit " + _processMemoryLimit.ToString + " > process memory " + prcMemoryMb.ToString)
             End If
-            _lastCheck.Message += "Process " + prc.Id.ToString + " " + prcMemoryMb.ToString + "mb" + vbCrLf
         Next
+        If prcs.Length > 1 And _checkMultiplyCopies Then Throw New TaskCheckException(_task, Me, ">1 processes found")
+
     End Sub
 
 End Class

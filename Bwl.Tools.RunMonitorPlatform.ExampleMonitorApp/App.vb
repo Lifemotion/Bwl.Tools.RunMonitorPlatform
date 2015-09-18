@@ -11,7 +11,7 @@ Public Module App
         _core.Tasks.Add(New ProcessTask(New ProcessTaskParameters() With {.ProcessName = "Calculator", .ExecutableFileName = "calc.exe"}))
         _core.Tasks.Add(New ProcessTask(New ProcessTaskParameters() With {.ProcessName = "Bwl.Tools.RunMonitor.TestApp", .ExecutableFileName = "..\..\TestApp\bin\Bwl.Tools.RunMonitor.TestApp.exe"}))
         _core.Tasks(1).Checks.Add(New NetClientCheck("localhost", 5654))
-        ' _core.Tasks.Add(New MemWatcherTask(100))
+        _core.Tasks.Add(New MemWatcherTask(15000))
         _form.Show()
         _form.Tasks = _core.Tasks.ToArray
         _core.RunInThread()
