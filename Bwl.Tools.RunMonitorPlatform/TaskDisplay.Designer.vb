@@ -50,26 +50,30 @@ Partial Class TaskDisplay
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.stateListbox.FormattingEnabled = True
-        Me.stateListbox.Location = New System.Drawing.Point(9, 76)
+        Me.stateListbox.HorizontalScrollbar = True
+        Me.stateListbox.Location = New System.Drawing.Point(9, 50)
         Me.stateListbox.Name = "stateListbox"
-        Me.stateListbox.Size = New System.Drawing.Size(449, 82)
+        Me.stateListbox.SelectionMode = System.Windows.Forms.SelectionMode.None
+        Me.stateListbox.Size = New System.Drawing.Size(449, 108)
         Me.stateListbox.TabIndex = 3
         '
         'Label2
         '
         Me.Label2.AutoEllipsis = True
+        Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(6, 34)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(387, 38)
+        Me.Label2.Size = New System.Drawing.Size(25, 13)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Info"
         '
         'Label1
         '
         Me.Label1.AutoEllipsis = True
+        Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(6, 18)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(387, 16)
+        Me.Label1.Size = New System.Drawing.Size(60, 13)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Description"
         '
@@ -81,6 +85,7 @@ Partial Class TaskDisplay
         Me.Name = "TaskDisplay"
         Me.Size = New System.Drawing.Size(470, 170)
         Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub

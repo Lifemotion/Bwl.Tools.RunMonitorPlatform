@@ -5,7 +5,7 @@ Public Class CommonTask
     Private _id As String
     Private _info As String
 
-    Public Property Checks As New List(Of ITaskCheck) Implements ITask.Checks
+    Public Property Checks As New ChecksList Implements ITask.Checks
 
     Public Property Description As String Implements ITask.Description
 
@@ -27,7 +27,7 @@ Public Class CommonTask
 
     Public Property State As TaskState = TaskState.warning Implements ITask.State
 
-    Public Property FaultActions As New List(Of IFaultAction) Implements ITask.FaultActions
+    Public Property FaultActions As New FaultActionsList Implements ITask.FaultActions
 
     Public Property CheckStats As New CheckStats Implements ITask.CheckStats
 

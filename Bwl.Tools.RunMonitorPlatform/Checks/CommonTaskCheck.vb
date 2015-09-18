@@ -24,8 +24,6 @@ Public MustInherit Class CommonTaskCheck
 
     Public ReadOnly Property Name As String Implements ITaskCheck.Name
 
-    Public Property Task As ITask Implements ITaskCheck.Task
-
     Public ReadOnly Property ParametersInfo As String Implements ITaskCheck.ParametersInfo
         Get
             Return _parametersInfo

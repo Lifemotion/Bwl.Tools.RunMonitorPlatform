@@ -5,6 +5,7 @@ Public Class TaskDisplay
     Public Property Task As ITask
         Set(value As ITask)
             _task = value
+
         End Set
         Get
             Return _task
@@ -13,8 +14,21 @@ Public Class TaskDisplay
 
     Public Overrides Sub Refresh()
         GroupBox1.Text = _task.ID + " - " + _task.State.ToString
-        Label1.Text = "Info: " + _task.Info
-        Label2.Text = "Description: " + _task.Description
+        Dim control = stateListbox
+        Select Case _task.State
+            Case TaskState.ok : control.BackColor = Color.LightGreen
+            Case TaskState.warning : control.BackColor = Color.Yellow
+            Case TaskState.fault : control.BackColor = Color.LightPink
+            Case TaskState.disabled : control.BackColor = Color.Gray
+            Case Else : GroupBox1.BackColor = SystemColors.Control
+        End Select
+        Label1.Text = "Description: " + _task.Description
+        If _task.Info > "" Then
+            Label2.Text = "Info: " + _task.Info
+            Label2.Visible = True
+        Else
+            Label2.Visible = False
+        End If
         Dim state As New List(Of String)
         For Each check In _task.Checks
             If check.LastCheck.Success Then
@@ -36,7 +50,9 @@ Public Class TaskDisplay
         Loop
 
         For i = 0 To state.Count - 1
-            If stateListbox.Items(i) <> state(i) Then stateListbox.Items(i) = state(i)
+            If stateListbox.Items(i) <> state(i) Then
+                stateListbox.Items(i) = state(i)
+            End If
         Next
 
         '     stateListbox.Refresh()

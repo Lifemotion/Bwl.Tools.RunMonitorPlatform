@@ -22,6 +22,7 @@ Public Class RunMonitorStatus
                           Dim tcmp As New TaskDisplay()
                           Me.Width = tcmp.Width + DatagridLogWriter1.Width + 10
                           DatagridLogWriter1.Left = tcmp.Width + 10
+                          DatagridLogWriter1.Width = Me.Width - tcmp.Width - 30
                           Dim height = tcmp.Height
                           Me.Height = height * _tasks.Count + 50
                           Dim i As Integer
@@ -39,14 +40,14 @@ Public Class RunMonitorStatus
         End Set
     End Property
 
-    Private Sub RunMonitorStatus_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-    End Sub
-
     Private Sub refresh_Tick(sender As Object, e As EventArgs) Handles refreshTimer.Tick
         For Each cmp In Controls
             cmp.refresh
         Next
         Refresh()
+    End Sub
+
+    Private Sub RunMonitorStatus_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        e.Cancel = True
     End Sub
 End Class

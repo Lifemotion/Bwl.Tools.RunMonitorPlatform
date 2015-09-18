@@ -4,7 +4,7 @@ Imports Bwl.Framework
 Public Class RunMonitorCore
     Private _logger As Logger
     Private _thread As Threading.Thread
-    Public ReadOnly Property Tasks As New List(Of ITask)
+    Public ReadOnly Property Tasks As New TasksList
 
     Public Sub New(logger As Logger)
         _logger = logger
@@ -37,23 +37,15 @@ Public Class RunMonitorCore
                 For Each check In task.Checks
                     If (Now - check.LastCheck.Time).TotalSeconds > check.CheckIntervalSeconds Then
                         Try
-                            check.LastCheck.Time = Now
-                            check.LastCheck.Message = ""
-                            check.LastCheck.ErrorText = ""
                             check.Check()
-                            check.LastCheck.Success = True
-                            check.LastCheck.FailedAttempts = 0
-                            _logger.AddDebug("Checking Task Ok " + task.ID + " - " + check.Name)
+                            check.LastCheck.SetNowOk("")
+                            _logger.AddDebug("Check Task Ok " + task.ID + " - " + check.Name)
                         Catch ex As TaskCheckException
-                            check.LastCheck.ErrorText = ex.MainMessage
-                            _logger.AddWarning("Checking Task Failed " + task.ID + " - " + ex.Message)
-                            check.LastCheck.Success = False
-                            check.LastCheck.FailedAttempts += 1
+                            _logger.AddWarning("Check Failed " + task.ID + " - " + ex.MainMessage)
+                            check.LastCheck.SetNowError("", ex.MainMessage)
                         Catch ex As Exception
-                            check.LastCheck.ErrorText = ex.Message
-                            _logger.AddWarning("Checking Task Failed " + task.ID + " - " + ex.Message)
-                            check.LastCheck.Success = False
-                            check.LastCheck.FailedAttempts += 1
+                            _logger.AddWarning("Check Failed " + task.ID + " - " + ex.Message)
+                            check.LastCheck.SetNowError("", ex.Message)
                         End Try
                     End If
                     If maximumCheckFails < check.LastCheck.FailedAttempts Then maximumCheckFails = check.LastCheck.FailedAttempts
@@ -65,17 +57,16 @@ Public Class RunMonitorCore
                     If maximumCheckFails >= action.FaultsToRun And (Now - action.LastAttempt.Time).TotalSeconds > action.DelayBeforeActionSeconds Then
                         task.State = TaskState.fault
                         Try
-                            _logger.AddMessage("Running Task FaultAction" + task.ID + " - " + action.Name)
-                            action.LastAttempt.Time = Now
-                            action.LastAttempt.Message = ""
-                            action.LastAttempt.ErrorText = ""
+                            _logger.AddMessage("Task FaultAction" + task.ID + " - " + action.Name)
                             action.Run()
-                            action.LastAttempt.Success = False
-                            _logger.AddDebug("Running Task FaultAction" + task.ID + " - " + action.Name + " - ok")
+                            action.LastAttempt.SetNowOk("")
+                            _logger.AddDebug("Task FaultAction" + task.ID + " - " + action.Name + " - ok")
+                        Catch ex As FaultActionException
+                            action.LastAttempt.SetNowError("", ex.MainMessage)
+                            _logger.AddWarning("Task FaultAction Failed " + task.ID + " - " + ex.MainMessage)
                         Catch ex As Exception
-                            action.LastAttempt.ErrorText = ex.Message
-                            action.LastAttempt.Success = False
-                            _logger.AddWarning("Running Task FaultAction Failed " + task.ID + " - " + ex.Message)
+                            action.LastAttempt.SetNowError("", ex.Message)
+                            _logger.AddWarning("Task FaultAction Failed " + task.ID + " - " + ex.Message)
                         End Try
                     End If
                 Next

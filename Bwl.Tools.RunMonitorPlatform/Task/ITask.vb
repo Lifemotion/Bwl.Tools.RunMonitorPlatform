@@ -10,7 +10,7 @@ Public Interface ITask
     Property Description As String
     Property State As TaskState
     ReadOnly Property Info As String
-    Property Checks As List(Of ITaskCheck)
-    Property FaultActions As List(Of IFaultAction)
+    Property Checks As ChecksList
+    Property FaultActions As FaultActionsList
     Property CheckStats As CheckStats
 End Interface
