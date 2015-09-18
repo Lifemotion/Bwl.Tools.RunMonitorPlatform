@@ -1,0 +1,6 @@
+Bwl.RunMonitorPlatform
+Igor Koshelev (igor@lifemotion.ru) 
+
+Run Monitor Platform - library for building software watchdogs to keep apps running, network working, etc.
+Some code from Bwl.RunMonitor
+Keep selected application running and restarts it when it hangs, closed etc.

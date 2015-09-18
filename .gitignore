@@ -1,0 +1,8 @@
+*.suo
+local.*
+temp.*
+debug.*
+obj
+bin
+release
+debug
