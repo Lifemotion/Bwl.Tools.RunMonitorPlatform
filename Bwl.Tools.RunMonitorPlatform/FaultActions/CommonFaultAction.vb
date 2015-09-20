@@ -2,7 +2,6 @@
 Public MustInherit Class CommonFaultAction
     Implements IFaultAction
 
-    Protected _info As String = ""
     Protected _lastCall As New LastCall
 
     Public Sub New(name As String, faultsToRun As Integer)
@@ -14,11 +13,6 @@ Public MustInherit Class CommonFaultAction
 
     Public Property FaultsToRun As Integer Implements IFaultAction.FaultsToRun
 
-    Public ReadOnly Property Info As String Implements IFaultAction.Info
-        Get
-            Return _info
-        End Get
-    End Property
 
     Public ReadOnly Property LastAttempt As LastCall Implements IFaultAction.LastAttempt
         Get

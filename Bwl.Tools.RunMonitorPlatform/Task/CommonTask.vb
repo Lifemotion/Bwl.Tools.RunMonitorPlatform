@@ -1,4 +1,6 @@
 ﻿
+Imports Bwl.Tools.RunMonitorPlatform
+
 Public Class CommonTask
     Implements ITask
 
@@ -30,5 +32,7 @@ Public Class CommonTask
     Public Property FaultActions As New FaultActionsList Implements ITask.FaultActions
 
     Public Property CheckStats As New CheckStats Implements ITask.CheckStats
+
+    Public Property ExternalInfo As String Implements ITask.ExternalInfo
 
 End Class

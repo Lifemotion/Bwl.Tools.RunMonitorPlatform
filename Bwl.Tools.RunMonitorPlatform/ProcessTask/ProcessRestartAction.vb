@@ -9,47 +9,46 @@
         _task = task
     End Sub
 
-    Public Overrides Sub Run()
-        _lastCall.Message = "ProcessRestartAction started" + vbCrLf
 
+
+    Public Sub KillProcesses(prcs As Process(), method As Integer)
+        If prcs.Length > 0 Then
+            _lastCall.Message += "Running processes found and will be killed (method #" + method.ToString + ")" + vbCrLf
+            For Each prc In prcs
+                Dim success As Boolean = False
+                For i = 1 To 3
+                    _lastCall.Message += "Process " + prc.Id.ToString + " " + prc.ProcessName + " kill (method #" + method.ToString + ") attempt #" + i.ToString + "..."
+                    ProcessTools.KillProcess(prc, method)
+                    If ProcessTools.ProcessExited(prc) Then _lastCall.Message += " success" + vbCrLf : success = True : Exit For Else _lastCall.Message += " failed" + vbCrLf
+                Next
+
+            Next
+        End If
+    End Sub
+
+    Public Sub KillAllProcesses()
+        For method = 0 To 2
+            Dim prcs = _task.GetProcesses
+            KillProcesses(prcs, method)
+
+            prcs = _task.GetProcesses
+            If prcs.Length > 0 Then
+                Threading.Thread.Sleep(500)
+                prcs = _task.GetProcesses
+            End If
+
+            If prcs.Length = 0 Then Return
+        Next
+        Throw New FaultActionException(_task, Me, "Fault to close processes with all methods")
+    End Sub
+
+    Public Sub StartProcess()
         Dim prcs = _task.GetProcesses
 
         If prcs.Length > 0 Then
-            _info = "Running processes found and will be killed" : _lastCall.Message += _info + vbCrLf
-            For Each prc In prcs
-                Dim success As Boolean = True
-                For i = 1 To 3
-                    _info = "Process " + prc.Id.ToString + " " + prc.ProcessName + " kill attempt #" + i.ToString + "..."
-                    Try
-                        prc.Kill()
-                    Catch ex As Exception
-                    End Try
-                    success = prc.HasExited
-                    If Not success Then
-                        Threading.Thread.Sleep(500)
-                        success = prc.HasExited
-                    End If
-
-                    If success Then _info += " success"
-                    _lastCall.Message += _info + vbCrLf
-                    If success Then Exit For
-                Next
-
-                If Not success Then Throw New FaultActionException(_task, Me, "Failed to kill process")
-            Next
-        End If
-
-        prcs = _task.GetProcesses
-        If prcs.Length > 0 Then
-            Threading.Thread.Sleep(500)
-            prcs = _task.GetProcesses
-        End If
-
-        If prcs.Length > 0 Then
-            Throw New FaultActionException(_task, Me, "Running processes found after successful killing")
+            Throw New FaultActionException(_task, Me, "Running processes found before starting")
         Else
-            _info = "No running processes found, starting new process"
-            _lastCall.Message += _info + vbCrLf
+            _lastCall.Message += "No running processes found, starting new process" + vbCrLf
             Dim prc As New Process
             prc.StartInfo.FileName = _task.Parameters.ExecutableFileName
             prc.StartInfo.WorkingDirectory = _task.Parameters.WorkingDirectory
@@ -63,17 +62,22 @@
             For i = 1 To 10
                 prcs = _task.GetProcesses
                 If prcs.Length = 1 Then
-                    _info = "Process started sucessfuly" : _lastCall.Message += _info + vbCrLf
+                    _lastCall.Message += "Process started sucessfuly" + vbCrLf
                     Return
                 Else
-                    _info = "Waiting Process To Start... #" + i.ToString
+                    _lastCall.Message += "Waiting Process To Start... #" + i.ToString + vbCrLf
                 End If
                 Threading.Thread.Sleep(500)
             Next
 
             Throw New FaultActionException(_task, Me, "Process was started, but not found after start")
 
-
         End If
+    End Sub
+
+    Public Overrides Sub Run()
+        _lastCall.Message = "ProcessRestartAction started" + vbCrLf
+        KillAllProcesses()
+        StartProcess()
     End Sub
 End Class

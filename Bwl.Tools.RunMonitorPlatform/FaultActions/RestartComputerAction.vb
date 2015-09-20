@@ -7,7 +7,6 @@
     Public Sub New(faultsToRun As Integer, restartDelaySeconds As Integer)
         MyBase.New("RestartComputer" + restartDelaySeconds.ToString + "s", faultsToRun)
         _delay = restartDelaySeconds
-        _info = "Ожидание"
         DelayBeforeActionSeconds = 60
     End Sub
 
@@ -28,6 +27,5 @@
 
         End If
         _lastCall.Message = "Команда перезагрузки выполнена, ожидание перезагрузки"
-        _info = "Команда перезагрузки выполнена, ожидание перезагрузки"
     End Sub
 End Class

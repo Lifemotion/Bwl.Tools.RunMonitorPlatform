@@ -28,48 +28,63 @@ Public Class RunMonitorCore
     End Sub
 
     Public Sub SingleCheck()
+        Const timeToAutomaticEnable = 10
         For Each task In Tasks.ToArray
-            If task.State <> TaskState.disabled Then
-                _logger.AddDebug("Checking Task " + task.ID)
-
-                Dim maximumCheckFails As Integer = 0
-
-                For Each check In task.Checks
-                    If (Now - check.LastCheck.Time).TotalSeconds > check.CheckIntervalSeconds Then
-                        Try
-                            check.Check()
-                            check.LastCheck.SetNowOk("")
-                            _logger.AddDebug("Check Task Ok " + task.ID + " - " + check.Name)
-                        Catch ex As TaskCheckException
-                            _logger.AddWarning("Check Failed " + task.ID + " - " + ex.MainMessage)
-                            check.LastCheck.SetNowError("", ex.MainMessage)
-                        Catch ex As Exception
-                            _logger.AddWarning("Check Failed " + task.ID + " - " + ex.Message)
-                            check.LastCheck.SetNowError("", ex.Message)
-                        End Try
+            If task.Checks.Count > 0 Then
+                If task.State = TaskState.disabled Then
+                    task.ExternalInfo = "Time to autotomatic enable: " + (timeToAutomaticEnable - (Now - task.Checks(0).LastCheck.Time).TotalMinutes).ToString("0.0") + "min"
+                    If (Now - task.Checks(0).LastCheck.Time).TotalMinutes > timeToAutomaticEnable Then
+                        task.State = TaskState.warning
+                        task.ExternalInfo = ""
                     End If
-                    If maximumCheckFails < check.LastCheck.FailedAttempts Then maximumCheckFails = check.LastCheck.FailedAttempts
-                Next
+                Else
+                    _logger.AddDebug("Checking Task " + task.ID)
 
-                If maximumCheckFails = 0 Then task.State = TaskState.ok Else task.State = TaskState.warning
+                    Dim maximumCheckFails As Integer = 0
 
-                For Each action In task.FaultActions
-                    If maximumCheckFails >= action.FaultsToRun And (Now - action.LastAttempt.Time).TotalSeconds > action.DelayBeforeActionSeconds Then
-                        task.State = TaskState.fault
-                        Try
-                            _logger.AddMessage("Task FaultAction" + task.ID + " - " + action.Name)
-                            action.Run()
-                            action.LastAttempt.SetNowOk("")
-                            _logger.AddDebug("Task FaultAction" + task.ID + " - " + action.Name + " - ok")
-                        Catch ex As FaultActionException
-                            action.LastAttempt.SetNowError("", ex.MainMessage)
-                            _logger.AddWarning("Task FaultAction Failed " + task.ID + " - " + ex.MainMessage)
-                        Catch ex As Exception
-                            action.LastAttempt.SetNowError("", ex.Message)
-                            _logger.AddWarning("Task FaultAction Failed " + task.ID + " - " + ex.Message)
-                        End Try
-                    End If
-                Next
+                    For Each check In task.Checks
+                        If (Now - check.LastCheck.Time).TotalSeconds > check.CheckIntervalSeconds Then
+                            Try
+                                check.Check()
+                                check.LastCheck.SetNowOk("")
+                                _logger.AddDebug("Check Task Ok " + task.ID + " - " + check.Name)
+                            Catch ex As TaskCheckException
+                                _logger.AddWarning("Check Failed " + task.ID + " - " + ex.MainMessage)
+                                check.LastCheck.SetNowError("", ex.MainMessage)
+                            Catch ex As Exception
+                                _logger.AddWarning("Check Failed " + task.ID + " - " + ex.Message)
+                                check.LastCheck.SetNowError("", ex.Message)
+                            End Try
+                        End If
+                        If maximumCheckFails < check.LastCheck.FailedAttempts Then maximumCheckFails = check.LastCheck.FailedAttempts
+                    Next
+
+                    If maximumCheckFails = 0 Then task.State = TaskState.ok Else task.State = TaskState.warning
+
+                    For Each action In task.FaultActions
+                        If maximumCheckFails >= action.FaultsToRun And (Now - action.LastAttempt.Time).TotalSeconds > action.DelayBeforeActionSeconds Then
+                            task.State = TaskState.fault
+                            Try
+                                _logger.AddMessage("Task FaultAction" + task.ID + " - " + action.Name)
+                                action.Run()
+                                action.LastAttempt.SetNowOk("")
+                                _logger.AddDebug("Task FaultAction" + task.ID + " - " + action.Name + " - ok")
+                                _logger.AddDebug(action.LastAttempt.Message)
+                                _logger.AddDebug(action.LastAttempt.ErrorText)
+                            Catch ex As FaultActionException
+                                action.LastAttempt.SetNowError("", ex.MainMessage)
+                                _logger.AddWarning("Task FaultAction Failed " + task.ID + " - " + ex.MainMessage)
+                                _logger.AddDebug(action.LastAttempt.Message)
+                                _logger.AddDebug(action.LastAttempt.ErrorText)
+                            Catch ex As Exception
+                                action.LastAttempt.SetNowError("", ex.Message)
+                                _logger.AddWarning("Task FaultAction Failed " + task.ID + " - " + ex.Message)
+                                _logger.AddDebug(action.LastAttempt.Message)
+                                _logger.AddDebug(action.LastAttempt.ErrorText)
+                            End Try
+                        End If
+                    Next
+                End If
             End If
         Next
         Thread.Sleep(1)

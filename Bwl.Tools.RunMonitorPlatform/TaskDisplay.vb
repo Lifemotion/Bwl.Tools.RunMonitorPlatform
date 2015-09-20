@@ -23,8 +23,8 @@ Public Class TaskDisplay
             Case Else : GroupBox1.BackColor = SystemColors.Control
         End Select
         Label1.Text = "Description: " + _task.Description
-        If _task.Info > "" Then
-            Label2.Text = "Info: " + _task.Info
+        If _task.Info > "" Or Task.ExternalInfo > "" Then
+            Label2.Text = "Info: " + Task.ExternalInfo + ";" + _task.Info
             Label2.Visible = True
         Else
             Label2.Visible = False
@@ -57,5 +57,34 @@ Public Class TaskDisplay
 
         '     stateListbox.Refresh()
         MyBase.Refresh()
+    End Sub
+
+    Private Sub DisableEnableToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DisableEnableToolStripMenuItem.Click
+        If _task.State = TaskState.disabled Then _task.State = TaskState.warning Else _task.State = TaskState.disabled
+    End Sub
+
+    Private Sub DoAction1ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DoAction1ToolStripMenuItem.Click
+        DoAction(0)
+    End Sub
+    Private Sub DoAction2ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DoAction2ToolStripMenuItem.Click
+        DoAction(1)
+    End Sub
+    Private Sub DoAction3ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DoAction3ToolStripMenuItem.Click
+        DoAction(2)
+    End Sub
+
+    Private Sub DoAction(index As Integer)
+        Try
+            If _task.FaultActions.Count > index Then
+                _task.FaultActions(index).Run()
+                MsgBox(_task.FaultActions(index).LastAttempt.Message + "; " + _task.FaultActions(index).LastAttempt.ErrorText)
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Sub
+
+    Private Sub GroupBox1_MouseDown(sender As Object, e As MouseEventArgs) Handles GroupBox1.MouseDown
+        If e.Button = MouseButtons.Right Then ContextMenuStrip1.Show(Me, e.X, e.Y)
     End Sub
 End Class

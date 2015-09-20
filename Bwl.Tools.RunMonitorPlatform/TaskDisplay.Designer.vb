@@ -22,11 +22,18 @@ Partial Class TaskDisplay
     'Не изменяйте ее в редакторе исходного кода.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.stateListbox = New System.Windows.Forms.ListBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.DisableEnableToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DoAction1ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DoAction2ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DoAction3ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1.SuspendLayout()
+        Me.ContextMenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
@@ -63,7 +70,7 @@ Partial Class TaskDisplay
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(6, 34)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(25, 13)
+        Me.Label2.Size = New System.Drawing.Size(27, 15)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Info"
         '
@@ -73,9 +80,40 @@ Partial Class TaskDisplay
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(6, 18)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(60, 13)
+        Me.Label1.Size = New System.Drawing.Size(69, 15)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Description"
+        '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DisableEnableToolStripMenuItem, Me.DoAction1ToolStripMenuItem, Me.DoAction2ToolStripMenuItem, Me.DoAction3ToolStripMenuItem})
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(186, 108)
+        '
+        'DisableEnableToolStripMenuItem
+        '
+        Me.DisableEnableToolStripMenuItem.Name = "DisableEnableToolStripMenuItem"
+        Me.DisableEnableToolStripMenuItem.Size = New System.Drawing.Size(185, 26)
+        Me.DisableEnableToolStripMenuItem.Text = "Disable\Enable"
+        '
+        'DoAction1ToolStripMenuItem
+        '
+        Me.DoAction1ToolStripMenuItem.Name = "DoAction1ToolStripMenuItem"
+        Me.DoAction1ToolStripMenuItem.Size = New System.Drawing.Size(185, 26)
+        Me.DoAction1ToolStripMenuItem.Text = "Do Action #1"
+        '
+        'DoAction2ToolStripMenuItem
+        '
+        Me.DoAction2ToolStripMenuItem.Name = "DoAction2ToolStripMenuItem"
+        Me.DoAction2ToolStripMenuItem.Size = New System.Drawing.Size(185, 26)
+        Me.DoAction2ToolStripMenuItem.Text = "Do Action #2"
+        '
+        'DoAction3ToolStripMenuItem
+        '
+        Me.DoAction3ToolStripMenuItem.Name = "DoAction3ToolStripMenuItem"
+        Me.DoAction3ToolStripMenuItem.Size = New System.Drawing.Size(185, 26)
+        Me.DoAction3ToolStripMenuItem.Text = "Do Action #3"
         '
         'TaskDisplay
         '
@@ -86,6 +124,7 @@ Partial Class TaskDisplay
         Me.Size = New System.Drawing.Size(470, 170)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -94,4 +133,9 @@ Partial Class TaskDisplay
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents stateListbox As ListBox
+    Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
+    Friend WithEvents DisableEnableToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents DoAction1ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents DoAction2ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents DoAction3ToolStripMenuItem As ToolStripMenuItem
 End Class

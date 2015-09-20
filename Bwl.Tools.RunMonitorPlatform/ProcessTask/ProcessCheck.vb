@@ -35,7 +35,7 @@ Public Class ProcessCheck
             End If
         Next
         If prcs.Length > 1 And _checkMultiplyCopies Then Throw New TaskCheckException(_task, Me, ">1 processes found")
-
     End Sub
+
 
 End Class
