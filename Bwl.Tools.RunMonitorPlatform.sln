@@ -9,6 +9,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bwl.Tools.RunMonitorPlatfor
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bwl.Tools.RunMonitorPlatform", "Bwl.Tools.RunMonitorPlatform\Bwl.Tools.RunMonitorPlatform.vbproj", "{0E68D73A-77DE-4F0F-B49C-731D7040DB1B}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bwl.Tools.RunMonitorPlatform.DiagTool", "Bwl.Tools.RunMonitorPlatform.DiagTool\Bwl.Tools.RunMonitorPlatform.DiagTool.vbproj", "{70AE9D8E-E6C7-4CC6-BA49-3B4363D8771E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{0E68D73A-77DE-4F0F-B49C-731D7040DB1B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0E68D73A-77DE-4F0F-B49C-731D7040DB1B}.Release|x86.ActiveCfg = Release|Any CPU
 		{0E68D73A-77DE-4F0F-B49C-731D7040DB1B}.Release|x86.Build.0 = Release|Any CPU
+		{70AE9D8E-E6C7-4CC6-BA49-3B4363D8771E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70AE9D8E-E6C7-4CC6-BA49-3B4363D8771E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70AE9D8E-E6C7-4CC6-BA49-3B4363D8771E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{70AE9D8E-E6C7-4CC6-BA49-3B4363D8771E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{70AE9D8E-E6C7-4CC6-BA49-3B4363D8771E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{70AE9D8E-E6C7-4CC6-BA49-3B4363D8771E}.Debug|x86.Build.0 = Debug|Any CPU
+		{70AE9D8E-E6C7-4CC6-BA49-3B4363D8771E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70AE9D8E-E6C7-4CC6-BA49-3B4363D8771E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70AE9D8E-E6C7-4CC6-BA49-3B4363D8771E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{70AE9D8E-E6C7-4CC6-BA49-3B4363D8771E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{70AE9D8E-E6C7-4CC6-BA49-3B4363D8771E}.Release|x86.ActiveCfg = Release|Any CPU
+		{70AE9D8E-E6C7-4CC6-BA49-3B4363D8771E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

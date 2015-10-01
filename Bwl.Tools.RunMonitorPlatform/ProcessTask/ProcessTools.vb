@@ -15,6 +15,13 @@ Public Class ProcessTools
     End Function
 
 
+    Public Shared Sub KillWindowsErrorReporting()
+        Dim prcs = Process.GetProcessesByName("WerFault")
+        For Each prc In prcs
+            prc.Kill()
+        Next
+    End Sub
+
     Public Shared Sub KillProcessAndChildren(pid As Integer)
         Dim searcher As ManagementObjectSearcher = New ManagementObjectSearcher("Select * From Win32_Process Where ParentProcessID=" + pid.ToString)
         Dim moc As ManagementObjectCollection = searcher.Get()

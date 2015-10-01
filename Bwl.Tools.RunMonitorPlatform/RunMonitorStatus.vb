@@ -47,7 +47,19 @@ Public Class RunMonitorStatus
         Refresh()
     End Sub
 
+    Private _allowClose As Boolean
     Private Sub RunMonitorStatus_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
-        e.Cancel = True
+        If Not _allowClose Then e.Cancel = True
+    End Sub
+
+    Private Sub processesToolButton_Click(sender As Object, e As EventArgs) Handles processesToolButton.Click
+        Dim frm As New ProcessesForm
+        frm.Show()
+    End Sub
+
+    Private Sub exitButton_Click(sender As Object, e As EventArgs) Handles exitButton.Click
+        Static count As Integer
+        count += 1
+        If count > 5 Then _allowClose = True : Close() : Application.Exit()
     End Sub
 End Class

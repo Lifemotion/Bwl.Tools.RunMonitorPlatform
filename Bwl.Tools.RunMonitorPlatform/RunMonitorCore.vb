@@ -27,6 +27,11 @@ Public Class RunMonitorCore
         _thread.Start()
     End Sub
 
+    Public Sub StopThread()
+        If _thread Is Nothing Then Throw New Exception
+        _thread.Abort()
+    End Sub
+
     Public Sub SingleCheck()
         Const timeToAutomaticEnable = 10
         For Each task In Tasks.ToArray

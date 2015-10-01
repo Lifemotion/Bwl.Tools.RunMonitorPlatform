@@ -9,8 +9,6 @@
         _task = task
     End Sub
 
-
-
     Public Sub KillProcesses(prcs As Process(), method As Integer)
         If prcs.Length > 0 Then
             _lastCall.Message += "Running processes found and will be killed (method #" + method.ToString + ")" + vbCrLf
@@ -27,6 +25,11 @@
     End Sub
 
     Public Sub KillAllProcesses()
+        Try
+            ProcessTools.KillWindowsErrorReporting()
+        Catch ex As Exception
+        End Try
+
         For method = 0 To 2
             Dim prcs = _task.GetProcesses
             KillProcesses(prcs, method)
@@ -37,8 +40,16 @@
                 prcs = _task.GetProcesses
             End If
 
-            If prcs.Length = 0 Then Return
+            If prcs.Length = 0 Then
+                Try
+                    ProcessTools.KillWindowsErrorReporting()
+                Catch ex As Exception
+                End Try
+                Return
+            End If
         Next
+
+
         Throw New FaultActionException(_task, Me, "Fault to close processes with all methods")
     End Sub
 

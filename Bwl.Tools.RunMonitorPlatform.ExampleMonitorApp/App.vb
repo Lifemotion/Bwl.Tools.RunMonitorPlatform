@@ -17,6 +17,7 @@ Public Module App
         _form.Show()
         _form.Tasks = _core.Tasks.ToArray
         _core.RunInThread()
-        Application.Run()
+        Application.Run(_form)
+        _core.StopThread
     End Sub
 End Module
