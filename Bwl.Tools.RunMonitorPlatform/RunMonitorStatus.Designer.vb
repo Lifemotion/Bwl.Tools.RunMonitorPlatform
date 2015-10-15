@@ -25,7 +25,7 @@ Partial Class RunMonitorStatus
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(RunMonitorStatus))
         Me.refreshTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.DatagridLogWriter1 = New Bwl.Framework.DatagridLogWriter()
+        Me.DatagridLogWriter1 = New DatagridLogWriter()
         Me.exitButton = New System.Windows.Forms.Button()
         Me.processesToolButton = New System.Windows.Forms.Button()
         Me.SuspendLayout()
@@ -91,7 +91,7 @@ Partial Class RunMonitorStatus
     End Sub
 
     Friend WithEvents refreshTimer As Timer
-    Friend WithEvents DatagridLogWriter1 As Framework.DatagridLogWriter
+    Friend WithEvents DatagridLogWriter1 As DatagridLogWriter
     Friend WithEvents exitButton As Button
     Friend WithEvents processesToolButton As Button
 End Class

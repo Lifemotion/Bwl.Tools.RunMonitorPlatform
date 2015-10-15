@@ -44,24 +44,16 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bwl.Framework">
-      <HintPath>..\refs\Bwl.Framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
-    <Import Include="System.Data" />
     <Import Include="System.Diagnostics" />
     <Import Include="System.Drawing" />
     <Import Include="System.Linq" />
@@ -69,6 +61,38 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmbeddedFramework\Logging\Logger.vb" />
+    <Compile Include="EmbeddedFramework\Logging\LogWriters\Interface\ILogWriter.vb" />
+    <Compile Include="EmbeddedFramework\Logging\LogWriters\Interface\LogEventType.vb" />
+    <Compile Include="EmbeddedFramework\Logging\LogWriters\Realizations\ConsoleLogWriter.vb" />
+    <Compile Include="EmbeddedFramework\Logging\LogWriters\Realizations\DatagridLogWriter.Designer.vb">
+      <DependentUpon>DatagridLogWriter.vb</DependentUpon>
+    </Compile>
+    <Compile Include="EmbeddedFramework\Logging\LogWriters\Realizations\DatagridLogWriter.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="EmbeddedFramework\Logging\LogWriters\Realizations\FormLogInfo.Designer.vb">
+      <DependentUpon>FormLogInfo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="EmbeddedFramework\Logging\LogWriters\Realizations\FormLogInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmbeddedFramework\Logging\LogWriters\Realizations\SimpleFileLogWriter.vb" />
+    <Compile Include="EmbeddedFramework\Logging\UI\LoggerForm.designer.vb">
+      <DependentUpon>LoggerForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="EmbeddedFramework\Logging\UI\LoggerForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmbeddedFramework\Tools\Image.vb" />
+    <Compile Include="EmbeddedFramework\Tools\IniFile.vb" />
+    <Compile Include="EmbeddedFramework\Tools\RunMonitorHelper.vb" />
+    <Compile Include="EmbeddedFramework\Tools\Tools.vb" />
+    <Compile Include="EmbeddedNetMessaging\NetClient.vb" />
+    <Compile Include="EmbeddedNetMessaging\NetMessage.vb" />
+    <Compile Include="EmbeddedNetMessaging\NetServer.vb" />
+    <Compile Include="EmbeddedNetMessaging\NetClientCheck.vb" />
+    <Compile Include="NetWatcher\HttpTools.vb" />
     <Compile Include="TasksList.vb" />
     <Compile Include="CheckStats.vb" />
     <Compile Include="Checks\CommonTaskCheck.vb" />
@@ -149,6 +173,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="EmbeddedFramework\Logging\LogWriters\Realizations\DatagridLogWriter.resx">
+      <DependentUpon>DatagridLogWriter.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmbeddedFramework\Logging\LogWriters\Realizations\FormLogInfo.resx">
+      <DependentUpon>FormLogInfo.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmbeddedFramework\Logging\UI\LoggerForm.resx">
+      <DependentUpon>LoggerForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FaultActions\RestartComputerAbortForm.resx">
       <DependentUpon>RestartComputerAbortForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -182,6 +215,7 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

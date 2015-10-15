@@ -1,5 +1,4 @@
-﻿Imports Bwl.Framework
-
+﻿
 Public Class RunMonitorStatus
     Private _tasks As ITask()
 

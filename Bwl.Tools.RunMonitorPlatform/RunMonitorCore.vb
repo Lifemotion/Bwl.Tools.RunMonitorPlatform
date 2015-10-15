@@ -1,5 +1,4 @@
 ﻿Imports System.Threading
-Imports Bwl.Framework
 
 Public Class RunMonitorCore
     Private _logger As Logger
@@ -17,7 +16,7 @@ Public Class RunMonitorCore
             Catch ex As Exception
                 _logger.AddError("RunMonitorCore Run Error: " + ex.Message)
             End Try
-            Thread.Sleep(1)
+            Thread.Sleep(1000)
         Loop
     End Sub
 
