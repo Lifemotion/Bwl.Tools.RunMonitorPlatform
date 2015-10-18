@@ -6,7 +6,7 @@ Public Module App
     Dim _form As New RunMonitorStatus(_logger)
     Sub Main()
         Application.EnableVisualStyles()
-        _core.Tasks.Add(New ProcessTask(New ProcessTaskParameters("Calculator", "calc.exe")))
+        _core.Tasks.Add(New ProcessTask(New ProcessTaskParameters("Calculator", "calc.exe") With {.RestartDelaySecongs = 15}))
         _core.Tasks.Add(New ProcessTask(New ProcessTaskParameters("Bwl.Tools.RunMonitor.TestApp", "..\..\TestApp\bin\Bwl.Tools.RunMonitor.TestApp.exe"),
                 {New NetClientCheck("localhost", 5654, AddressOf testAppNetCheck)}))
         _core.Tasks.Add(New MemWatcherTask(1500))

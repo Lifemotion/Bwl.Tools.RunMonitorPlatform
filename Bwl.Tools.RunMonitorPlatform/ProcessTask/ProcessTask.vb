@@ -3,20 +3,22 @@
     Public ExecutableFileName As String
     Public WorkingDirectory As String
     Public Arguments As String
+    Public RestartDelaySecongs As Integer
 
-    Public Sub New(processName As String, executableFileName As String, workingDirectory As String, arguments As String)
+    Public Sub New(processName As String, executableFileName As String, workingDirectory As String, arguments As String, restartDelaySecongs As Integer)
         Me.ProcessName = processName
         Me.ExecutableFileName = executableFileName
         Me.WorkingDirectory = workingDirectory
         Me.Arguments = arguments
+        Me.RestartDelaySecongs = restartDelaySecongs
     End Sub
 
     Public Sub New(processName As String, executableFileName As String)
-        Me.New(processName, executableFileName, "", "")
+        Me.New(processName, executableFileName, "", "", 1)
     End Sub
 
     Public Sub New(processName As String, executableFileName As String, arguments As String)
-        Me.New(processName, executableFileName, "", "")
+        Me.New(processName, executableFileName, "", "", 1)
     End Sub
 End Structure
 

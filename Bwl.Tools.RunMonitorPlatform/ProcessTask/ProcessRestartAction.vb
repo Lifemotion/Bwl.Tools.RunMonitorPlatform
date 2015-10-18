@@ -59,7 +59,10 @@
         If prcs.Length > 0 Then
             Throw New FaultActionException(_task, Me, "Running processes found before starting")
         Else
-            _lastCall.Message += "No running processes found, starting new process" + vbCrLf
+            _lastCall.Message += "No running processes found, starting new process after delay " + _task.Parameters.RestartDelaySecongs.ToString + " sec" + vbCrLf
+            If _task.Parameters.RestartDelaySecongs > 0 Then
+                Threading.Thread.Sleep(1000 * _task.Parameters.RestartDelaySecongs)
+            End If
             Dim prc As New Process
             prc.StartInfo.FileName = _task.Parameters.ExecutableFileName
             prc.StartInfo.WorkingDirectory = _task.Parameters.WorkingDirectory
