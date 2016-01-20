@@ -1,0 +1,8 @@
+﻿ProcessTask
+
+ExecutableFileName = calc.exe
+Arguments = 
+ProcessName = Calculator
+RestartDelaySecongs = 15
+WorkingDirectory = 
+NetClientCheck = localhost = 5654

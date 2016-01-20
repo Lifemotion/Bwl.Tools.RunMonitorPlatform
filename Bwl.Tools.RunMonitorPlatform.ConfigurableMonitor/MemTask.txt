@@ -1,0 +1,3 @@
+﻿MemWatcherTask
+
+Limit = 1000

@@ -1,0 +1,7 @@
+﻿ProcessTask
+
+ExecutableFileName = ..\..\TestApp\bin\Bwl.Tools.RunMonitor.TestApp.exe
+Arguments = 
+ProcessName = Bwl.Tools.RunMonitor.TestApp
+RestartDelaySecongs = 
+WorkingDirectory = 

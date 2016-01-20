@@ -1,0 +1,3 @@
+﻿NetWatcherTask
+Address = https://ya.ru
+GetOnlyHeaders = True
