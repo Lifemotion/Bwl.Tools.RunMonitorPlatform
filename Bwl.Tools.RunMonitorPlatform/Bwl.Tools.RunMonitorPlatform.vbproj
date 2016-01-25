@@ -95,6 +95,8 @@
     <Compile Include="EmbeddedNetMessaging\NetMessage.vb" />
     <Compile Include="EmbeddedNetMessaging\NetServer.vb" />
     <Compile Include="EmbeddedNetMessaging\NetClientCheck.vb" />
+    <Compile Include="HttpWatcher\HttpRequestCheck.vb" />
+    <Compile Include="HttpWatcher\HttpWatcherTask.vb" />
     <Compile Include="NetWatcher\HttpTools.vb" />
     <Compile Include="TasksList.vb" />
     <Compile Include="CheckStats.vb" />

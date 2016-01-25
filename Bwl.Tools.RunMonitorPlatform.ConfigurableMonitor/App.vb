@@ -29,6 +29,7 @@ Public Module App
         file.WriteLine("RestartDelaySecongs = 15")
         file.WriteLine("WorkingDirectory = ")
         file.WriteLine("NetClientCheck = host = port")
+        file.WriteLine("HttpRequestCheck = httpUrl = goodWords = badWords = mustChange")
         file.WriteLine()
         file.WriteLine("MemWatcherTask")
         file.WriteLine("Limit = 1500")
@@ -68,6 +69,16 @@ Public Module App
                                                  End Sub))
                                 End If
                             End If
+                            If argument = "HttpRequestCheck".ToLower Then
+                                If parts.Length >= 5 Then
+                                    Dim address = parts(1).Trim
+                                    Dim goodWords = (parts(2)).Trim
+                                    Dim badWords = (parts(3)).Trim
+                                    Dim mustChange = CType(parts(4).Trim, Boolean)
+
+                                    addChecks.Add(New HttpRequestCheck(address, goodWords, badWords, mustChange))
+                                End If
+                            End If
                         End If
                     Next
                     Dim task = New ProcessTask(parameters, addChecks)
@@ -98,7 +109,7 @@ Public Module App
                             Dim argument = parts(0).Trim.ToLower
                             Dim value = parts(1).Trim
                             If argument = "Address".ToLower Then address = value
-                            If argument = "GetOnlyHeaders".ToLower Then getOnlyHeaders = CType(value, Boolean)
+                            If argument = "GetOnlyHeaders".ToLower Then getOnlyHeaders = CType(value.Trim, Boolean)
                         End If
                     Next
 
