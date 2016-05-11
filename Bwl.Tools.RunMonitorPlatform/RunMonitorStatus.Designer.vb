@@ -25,15 +25,46 @@ Partial Class RunMonitorStatus
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(RunMonitorStatus))
         Me.refreshTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.DatagridLogWriter1 = New DatagridLogWriter()
         Me.exitButton = New System.Windows.Forms.Button()
         Me.processesToolButton = New System.Windows.Forms.Button()
+        Me._panelTasks = New System.Windows.Forms.Panel()
+        Me.DatagridLogWriter1 = New Bwl.Tools.RunMonitorPlatform.DatagridLogWriter()
         Me.SuspendLayout()
         '
         'refreshTimer
         '
         Me.refreshTimer.Enabled = True
         Me.refreshTimer.Interval = 500
+        '
+        'exitButton
+        '
+        Me.exitButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.exitButton.Location = New System.Drawing.Point(652, 0)
+        Me.exitButton.Name = "exitButton"
+        Me.exitButton.Size = New System.Drawing.Size(75, 23)
+        Me.exitButton.TabIndex = 1
+        Me.exitButton.Text = "Exit"
+        Me.exitButton.UseVisualStyleBackColor = True
+        '
+        'processesToolButton
+        '
+        Me.processesToolButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.processesToolButton.Location = New System.Drawing.Point(571, 0)
+        Me.processesToolButton.Name = "processesToolButton"
+        Me.processesToolButton.Size = New System.Drawing.Size(75, 23)
+        Me.processesToolButton.TabIndex = 2
+        Me.processesToolButton.Text = "Processes"
+        Me.processesToolButton.UseVisualStyleBackColor = True
+        '
+        '_panelTasks
+        '
+        Me._panelTasks.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me._panelTasks.AutoScroll = True
+        Me._panelTasks.Location = New System.Drawing.Point(1, 0)
+        Me._panelTasks.Name = "_panelTasks"
+        Me._panelTasks.Size = New System.Drawing.Size(285, 373)
+        Me._panelTasks.TabIndex = 3
         '
         'DatagridLogWriter1
         '
@@ -50,40 +81,19 @@ Partial Class RunMonitorStatus
         Me.DatagridLogWriter1.ShowInformation = True
         Me.DatagridLogWriter1.ShowMessages = True
         Me.DatagridLogWriter1.ShowWarnings = True
-        Me.DatagridLogWriter1.Size = New System.Drawing.Size(723, 501)
+        Me.DatagridLogWriter1.Size = New System.Drawing.Size(438, 373)
         Me.DatagridLogWriter1.TabIndex = 0
-        '
-        'exitButton
-        '
-        Me.exitButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.exitButton.Location = New System.Drawing.Point(937, 0)
-        Me.exitButton.Name = "exitButton"
-        Me.exitButton.Size = New System.Drawing.Size(75, 23)
-        Me.exitButton.TabIndex = 1
-        Me.exitButton.Text = "Exit"
-        Me.exitButton.UseVisualStyleBackColor = True
-        '
-        'processesToolButton
-        '
-        Me.processesToolButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.processesToolButton.Location = New System.Drawing.Point(856, 0)
-        Me.processesToolButton.Name = "processesToolButton"
-        Me.processesToolButton.Size = New System.Drawing.Size(75, 23)
-        Me.processesToolButton.TabIndex = 2
-        Me.processesToolButton.Text = "Processes"
-        Me.processesToolButton.UseVisualStyleBackColor = True
         '
         'RunMonitorStatus
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1016, 500)
+        Me.ClientSize = New System.Drawing.Size(731, 372)
+        Me.Controls.Add(Me._panelTasks)
         Me.Controls.Add(Me.processesToolButton)
         Me.Controls.Add(Me.exitButton)
         Me.Controls.Add(Me.DatagridLogWriter1)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximizeBox = False
         Me.Name = "RunMonitorStatus"
         Me.Text = "Bwl RunMonitor Status"
         Me.ResumeLayout(False)
@@ -94,4 +104,5 @@ Partial Class RunMonitorStatus
     Friend WithEvents DatagridLogWriter1 As DatagridLogWriter
     Friend WithEvents exitButton As Button
     Friend WithEvents processesToolButton As Button
+    Friend WithEvents _panelTasks As Panel
 End Class

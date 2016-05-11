@@ -19,15 +19,16 @@ Public Class RunMonitorStatus
             _tasks = value
             Me.Invoke(Sub()
                           Dim tcmp As New TaskDisplay()
-                          Me.Width = tcmp.Width + DatagridLogWriter1.Width + 10
-                          DatagridLogWriter1.Left = tcmp.Width + 10
-                          DatagridLogWriter1.Width = Me.Width - tcmp.Width - 30
+                          Me.Width = tcmp.Width + DatagridLogWriter1.Width + 40
+                          _panelTasks.Width = tcmp.Width + 20
+                          DatagridLogWriter1.Left = tcmp.Width + 35
+                          DatagridLogWriter1.Width = Me.Width - tcmp.Width - 50
                           Dim height = tcmp.Height
-                          Me.Height = height * _tasks.Count + 50
+                          'Me.Height = height * _tasks.Count + 50
                           Dim i As Integer
                           For Each task In _tasks
                               Dim cmp As New TaskDisplay()
-                              Controls.Add(cmp)
+                              _panelTasks.Controls.Add(cmp)
                               cmp.Left = 0
                               cmp.Top = i * height
                               i += 1
@@ -40,7 +41,7 @@ Public Class RunMonitorStatus
     End Property
 
     Private Sub refresh_Tick(sender As Object, e As EventArgs) Handles refreshTimer.Tick
-        For Each cmp In Controls
+        For Each cmp In _panelTasks.Controls
             cmp.refresh
         Next
         Refresh()
