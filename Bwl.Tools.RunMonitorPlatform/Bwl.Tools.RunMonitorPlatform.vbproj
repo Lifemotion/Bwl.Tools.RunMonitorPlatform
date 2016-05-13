@@ -98,6 +98,9 @@
     <Compile Include="HttpWatcher\HttpRequestCheck.vb" />
     <Compile Include="HttpWatcher\HttpWatcherTask.vb" />
     <Compile Include="NetWatcher\HttpTools.vb" />
+    <Compile Include="NetWatcher\NetWatcherTaskHttp.vb" />
+    <Compile Include="NetWatcher\NetWatcherTaskPing.vb" />
+    <Compile Include="NetWatcher\PingCheck.vb" />
     <Compile Include="TasksList.vb" />
     <Compile Include="CheckStats.vb" />
     <Compile Include="Checks\CommonTaskCheck.vb" />
@@ -142,7 +145,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="NetWatcher\HttpNetCheck.vb" />
-    <Compile Include="NetWatcher\NetWatcherTask.vb" />
     <Compile Include="ProcessTask\ProcessCheck.vb" />
     <Compile Include="ProcessTask\ProcessRestartAction.vb" />
     <Compile Include="ProcessTask\ProcessTask.vb" />
@@ -152,12 +154,6 @@
       <DependentUpon>RunMonitorStatus.vb</DependentUpon>
     </Compile>
     <Compile Include="RunMonitorStatus.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TaskDialog.Designer.vb">
-      <DependentUpon>TaskDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="TaskDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="TaskDisplay.Designer.vb">
@@ -198,9 +194,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RunMonitorStatus.resx">
       <DependentUpon>RunMonitorStatus.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TaskDialog.resx">
-      <DependentUpon>TaskDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TaskDisplay.resx">
       <DependentUpon>TaskDisplay.vb</DependentUpon>

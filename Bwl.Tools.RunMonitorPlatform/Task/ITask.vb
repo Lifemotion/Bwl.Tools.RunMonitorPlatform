@@ -1,8 +1,8 @@
 ﻿Public Enum TaskState
-    disabled
-    ok
-    warning
-    fault
+    Disabled
+    Ok
+    Warning
+    Fault
 End Enum
 
 Public Interface ITask
@@ -14,4 +14,6 @@ Public Interface ITask
     Property Checks As ChecksList
     Property FaultActions As FaultActionsList
     Property CheckStats As CheckStats
+    Property ShortName As String
+    Property ShortState As String
 End Interface

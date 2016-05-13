@@ -31,12 +31,20 @@ Public Class RunMonitorCore
         _thread.Abort()
     End Sub
 
+    Public Function GetShortStatus() As String()()
+        Dim states As New List(Of String())
+        For Each task In Tasks.ToArray
+            states.Add({task.ID, task.ShortName, task.State.ToString, task.ShortState})
+        Next
+        Return states.ToArray
+    End Function
+
     Public Sub SingleCheck()
         Const timeToAutomaticEnable = 10
         For Each task In Tasks.ToArray
             If task.Checks.Count > 0 Then
                 If task.State = TaskState.disabled Then
-                    task.ExternalInfo = "Time to autotomatic enable: " + (timeToAutomaticEnable - (Now - task.Checks(0).LastCheck.Time).TotalMinutes).ToString("0.0") + "min"
+                    task.ExternalInfo = "Time to automatic enable: " + (timeToAutomaticEnable - (Now - task.Checks(0).LastCheck.Time).TotalMinutes).ToString("0.0") + "min"
                     If (Now - task.Checks(0).LastCheck.Time).TotalMinutes > timeToAutomaticEnable Then
                         task.State = TaskState.warning
                         task.ExternalInfo = ""

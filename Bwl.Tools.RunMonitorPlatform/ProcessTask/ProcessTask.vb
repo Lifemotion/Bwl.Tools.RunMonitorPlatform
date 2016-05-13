@@ -26,12 +26,12 @@ Public Class ProcessTask
     Inherits CommonTask
     Public ReadOnly Property Parameters As ProcessTaskParameters
 
-    Sub New(parameters As ProcessTaskParameters)
-        Me.New(parameters, {})
+    Sub New(shortname As String, parameters As ProcessTaskParameters)
+        Me.New(shortname, parameters, {})
     End Sub
 
-    Sub New(parameters As ProcessTaskParameters, additionalChecks As IEnumerable(Of ITaskCheck))
-        MyBase.New("ProcessTask_" + parameters.ProcessName)
+    Sub New(shortname As String, parameters As ProcessTaskParameters, additionalChecks As IEnumerable(Of ITaskCheck))
+        MyBase.New("ProcessTask_" + parameters.ProcessName, shortname)
         _Parameters = parameters
         Checks.Add(New ProcessCheck(Me, True, True, 0))
         Checks.AddRange(additionalChecks)

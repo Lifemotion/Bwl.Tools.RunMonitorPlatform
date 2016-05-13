@@ -81,7 +81,7 @@ Public Module App
                             End If
                         End If
                     Next
-                    Dim task = New ProcessTask(parameters, addChecks)
+                    Dim task = New ProcessTask(parameters.ProcessName, parameters, addChecks)
                     _core.Tasks.Add(task)
                 End If
 
@@ -113,7 +113,7 @@ Public Module App
                         End If
                     Next
 
-                    Dim task = New NetWatcherTask(address, getOnlyHeaders)
+                    Dim task = New NetWatcherTaskHttp("Internet", address, getOnlyHeaders)
                     _core.Tasks.Add(task)
                 End If
             Catch ex As Exception

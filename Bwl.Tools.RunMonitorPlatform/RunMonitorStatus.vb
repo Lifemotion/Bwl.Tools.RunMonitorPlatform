@@ -53,6 +53,7 @@ Public Class RunMonitorStatus
     End Sub
 
     Private Sub processesToolButton_Click(sender As Object, e As EventArgs) Handles processesToolButton.Click
+
         Dim frm As New ProcessesForm
         frm.Show()
     End Sub
@@ -61,5 +62,9 @@ Public Class RunMonitorStatus
         Static count As Integer
         count += 1
         If count > 5 Then _allowClose = True : Close() : Application.Exit()
+    End Sub
+
+    Private Sub RunMonitorStatus_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
     End Sub
 End Class

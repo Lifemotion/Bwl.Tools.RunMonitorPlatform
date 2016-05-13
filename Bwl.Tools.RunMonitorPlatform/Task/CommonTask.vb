@@ -23,8 +23,9 @@ Public Class CommonTask
         End Get
     End Property
 
-    Public Sub New(id As String)
+    Public Sub New(id As String, shortName As String)
         _id = id
+        _ShortName = shortName
     End Sub
 
     Public Property State As TaskState = TaskState.warning Implements ITask.State
@@ -34,5 +35,9 @@ Public Class CommonTask
     Public Property CheckStats As New CheckStats Implements ITask.CheckStats
 
     Public Property ExternalInfo As String Implements ITask.ExternalInfo
+
+    Public Property ShortName As String = "" Implements ITask.ShortName
+
+    Public Property ShortState As String = "" Implements ITask.ShortState
 
 End Class

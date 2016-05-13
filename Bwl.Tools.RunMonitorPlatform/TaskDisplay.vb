@@ -14,6 +14,7 @@ Public Class TaskDisplay
 
     Public Overrides Sub Refresh()
         GroupBox1.Text = _task.ID + " - " + _task.State.ToString
+        lbShortMode.Text = _task.ShortName + " - " + _task.State.ToString
         Dim control = stateListbox
         Select Case _task.State
             Case TaskState.ok : control.BackColor = Color.LightGreen
@@ -22,12 +23,9 @@ Public Class TaskDisplay
             Case TaskState.disabled : control.BackColor = Color.Gray
             Case Else : GroupBox1.BackColor = SystemColors.Control
         End Select
-        Label1.Text = "Description: " + _task.Description
+        lbDescription.Text = "Description: " + _task.Description
         If _task.Info > "" Or Task.ExternalInfo > "" Then
-            Label2.Text = "Info: " + Task.ExternalInfo + ";" + _task.Info
-            Label2.Visible = True
-        Else
-            Label2.Visible = False
+            lbDescription.Text += "Info: " + Task.ExternalInfo + ";" + _task.Info
         End If
         Dim state As New List(Of String)
         For Each check In _task.Checks
@@ -86,5 +84,9 @@ Public Class TaskDisplay
 
     Private Sub GroupBox1_MouseDown(sender As Object, e As MouseEventArgs) Handles GroupBox1.MouseDown
         If e.Button = MouseButtons.Right Then ContextMenuStrip1.Show(Me, e.X, e.Y)
+    End Sub
+
+    Private Sub TaskDisplay_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
     End Sub
 End Class
