@@ -1,4 +1,5 @@
 ﻿Imports System.Threading
+Imports Bwl.Framework
 
 Public Class RunMonitorCore
     Private _logger As Logger
@@ -12,7 +13,7 @@ Public Class RunMonitorCore
     Public Sub Run()
         Do
             Try
-                SingleCheck
+                SingleCheck()
             Catch ex As Exception
                 _logger.AddError("RunMonitorCore Run Error: " + ex.Message)
             End Try
@@ -43,10 +44,10 @@ Public Class RunMonitorCore
         Const timeToAutomaticEnable = 10
         For Each task In Tasks.ToArray
             If task.Checks.Count > 0 Then
-                If task.State = TaskState.disabled Then
+                If task.State = TaskState.Disabled Then
                     task.ExternalInfo = "Time to automatic enable: " + (timeToAutomaticEnable - (Now - task.Checks(0).LastCheck.Time).TotalMinutes).ToString("0.0") + "min"
                     If (Now - task.Checks(0).LastCheck.Time).TotalMinutes > timeToAutomaticEnable Then
-                        task.State = TaskState.warning
+                        task.State = TaskState.Warning
                         task.ExternalInfo = ""
                     End If
                 Else
@@ -71,11 +72,11 @@ Public Class RunMonitorCore
                         If maximumCheckFails < check.LastCheck.FailedAttempts Then maximumCheckFails = check.LastCheck.FailedAttempts
                     Next
 
-                    If maximumCheckFails = 0 Then task.State = TaskState.ok Else task.State = TaskState.warning
+                    If maximumCheckFails = 0 Then task.State = TaskState.Ok Else task.State = TaskState.Warning
 
                     For Each action In task.FaultActions
                         If maximumCheckFails >= action.FaultsToRun And (Now - action.LastAttempt.Time).TotalSeconds > action.DelayBeforeActionSeconds Then
-                            task.State = TaskState.fault
+                            task.State = TaskState.Fault
                             Try
                                 _logger.AddMessage("Task FaultAction" + task.ID + " - " + action.Name)
                                 action.Run()

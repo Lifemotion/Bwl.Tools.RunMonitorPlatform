@@ -1,5 +1,5 @@
-﻿Imports Bwl.Framework
-Imports Bwl.Network.ClientServerMessaging
+﻿Imports Bwl.Network.ClientServer
+Imports Bwl.Framework
 
 Public Class TestAppForm
     Inherits FormAppBase

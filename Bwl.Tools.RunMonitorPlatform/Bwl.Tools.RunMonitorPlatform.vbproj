@@ -47,6 +47,15 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Bwl.Framework">
+      <HintPath>..\refs\Bwl.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="bwl.Network.ClientServer">
+      <HintPath>..\refs\bwl.Network.ClientServer.dll</HintPath>
+    </Reference>
+    <Reference Include="bwl.Network.ClientServer.Remoting">
+      <HintPath>..\refs\bwl.Network.ClientServer.Remoting.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
@@ -64,43 +73,14 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EmbeddedFramework\Logging\Logger.vb" />
-    <Compile Include="EmbeddedFramework\Logging\LogWriters\Interface\ILogWriter.vb" />
-    <Compile Include="EmbeddedFramework\Logging\LogWriters\Interface\LogEventType.vb" />
-    <Compile Include="EmbeddedFramework\Logging\LogWriters\Realizations\ConsoleLogWriter.vb" />
-    <Compile Include="EmbeddedFramework\Logging\LogWriters\Realizations\DatagridLogWriter.Designer.vb">
-      <DependentUpon>DatagridLogWriter.vb</DependentUpon>
-    </Compile>
-    <Compile Include="EmbeddedFramework\Logging\LogWriters\Realizations\DatagridLogWriter.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="EmbeddedFramework\Logging\LogWriters\Realizations\FormLogInfo.Designer.vb">
-      <DependentUpon>FormLogInfo.vb</DependentUpon>
-    </Compile>
-    <Compile Include="EmbeddedFramework\Logging\LogWriters\Realizations\FormLogInfo.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="EmbeddedFramework\Logging\LogWriters\Realizations\SimpleFileLogWriter.vb" />
-    <Compile Include="EmbeddedFramework\Logging\UI\LoggerForm.designer.vb">
-      <DependentUpon>LoggerForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="EmbeddedFramework\Logging\UI\LoggerForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="EmbeddedFramework\Tools\Image.vb" />
-    <Compile Include="EmbeddedFramework\Tools\IniFile.vb" />
-    <Compile Include="EmbeddedFramework\Tools\RunMonitorHelper.vb" />
-    <Compile Include="EmbeddedFramework\Tools\Tools.vb" />
-    <Compile Include="EmbeddedNetMessaging\NetClient.vb" />
-    <Compile Include="EmbeddedNetMessaging\NetMessage.vb" />
-    <Compile Include="EmbeddedNetMessaging\NetServer.vb" />
-    <Compile Include="EmbeddedNetMessaging\NetClientCheck.vb" />
     <Compile Include="HttpWatcher\HttpRequestCheck.vb" />
     <Compile Include="HttpWatcher\HttpWatcherTask.vb" />
+    <Compile Include="NetClientCheck.vb" />
     <Compile Include="NetWatcher\HttpTools.vb" />
     <Compile Include="NetWatcher\NetWatcherTaskHttp.vb" />
     <Compile Include="NetWatcher\NetWatcherTaskPing.vb" />
     <Compile Include="NetWatcher\PingCheck.vb" />
+    <Compile Include="RunMonitorAutoUI.vb" />
     <Compile Include="TasksList.vb" />
     <Compile Include="CheckStats.vb" />
     <Compile Include="Checks\CommonTaskCheck.vb" />
@@ -150,18 +130,6 @@
     <Compile Include="ProcessTask\ProcessTask.vb" />
     <Compile Include="ProcessTask\ProcessTools.vb" />
     <Compile Include="RunMonitorCore.vb" />
-    <Compile Include="RunMonitorStatus.Designer.vb">
-      <DependentUpon>RunMonitorStatus.vb</DependentUpon>
-    </Compile>
-    <Compile Include="RunMonitorStatus.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TaskDisplay.Designer.vb">
-      <DependentUpon>TaskDisplay.vb</DependentUpon>
-    </Compile>
-    <Compile Include="TaskDisplay.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Task\ChecksList.vb" />
     <Compile Include="Task\CommonTask.vb" />
     <Compile Include="Task\FaultActionsList.vb" />
@@ -174,15 +142,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EmbeddedFramework\Logging\LogWriters\Realizations\DatagridLogWriter.resx">
-      <DependentUpon>DatagridLogWriter.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="EmbeddedFramework\Logging\LogWriters\Realizations\FormLogInfo.resx">
-      <DependentUpon>FormLogInfo.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="EmbeddedFramework\Logging\UI\LoggerForm.resx">
-      <DependentUpon>LoggerForm.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FaultActions\RestartComputerAbortForm.resx">
       <DependentUpon>RestartComputerAbortForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -191,12 +150,6 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RunMonitorStatus.resx">
-      <DependentUpon>RunMonitorStatus.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TaskDisplay.resx">
-      <DependentUpon>TaskDisplay.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProcessesForm.resx">
       <DependentUpon>ProcessesForm.vb</DependentUpon>

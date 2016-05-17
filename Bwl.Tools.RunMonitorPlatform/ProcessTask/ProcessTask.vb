@@ -1,4 +1,5 @@
 ﻿Public Structure ProcessTaskParameters
+    Public IdAppendix As String
     Public ProcessName As String
     Public ExecutableFileName As String
     Public WorkingDirectory As String
@@ -31,7 +32,7 @@ Public Class ProcessTask
     End Sub
 
     Sub New(shortname As String, parameters As ProcessTaskParameters, additionalChecks As IEnumerable(Of ITaskCheck))
-        MyBase.New("ProcessTask_" + parameters.ProcessName, shortname)
+        MyBase.New("ProcessTask_" + parameters.ProcessName + parameters.IdAppendix, shortname)
         _Parameters = parameters
         Checks.Add(New ProcessCheck(Me, True, True, 0))
         Checks.AddRange(additionalChecks)

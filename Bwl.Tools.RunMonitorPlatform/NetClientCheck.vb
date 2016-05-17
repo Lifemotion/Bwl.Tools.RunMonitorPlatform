@@ -1,4 +1,5 @@
-﻿Imports Bwl.Tools.RunMonitorPlatform
+﻿Imports Bwl.Network.ClientServer
+Imports Bwl.Tools.RunMonitorPlatform
 
 Public Delegate Sub NetClientCheckDelegate(check As NetClientCheck)
 

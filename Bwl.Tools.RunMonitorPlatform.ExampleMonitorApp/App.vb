@@ -1,9 +1,12 @@
-﻿Imports Bwl.Tools.RunMonitorPlatform
+﻿Imports Bwl.Network.ClientServer
+Imports Bwl.Framework
+Imports Bwl.Tools.RunMonitorPlatform
 
 Public Module App
     Dim _logger As New Logger
     Dim _core As New RunMonitorCore(_logger)
-    Dim _form As New RunMonitorStatus(_logger)
+    Dim _autoui As New RunMonitorAutoUI(_logger)
+
     Sub Main()
         Application.EnableVisualStyles()
         _core.Tasks.Add(New ProcessTask("Calculator", New ProcessTaskParameters("Calculator", "calc.exe") With {.RestartDelaySecongs = 15}))
@@ -11,11 +14,10 @@ Public Module App
                 {New NetClientCheck("localhost", 5654, AddressOf testAppNetCheck)}))
         _core.Tasks.Add(New MemWatcherTask(1500))
         _core.Tasks.Add(New NetWatcherTaskHttp("Internet", "http: //ya.ru", True))
-        _form.Show()
         _core.GetShortStatus()
-        _form.Tasks = _core.Tasks.ToArray
+        _autoui.Tasks = _core.Tasks.ToArray
         _core.RunInThread()
-        Application.Run(_form)
+        Application.Run(_autoui.CreateForm)
         _core.StopThread()
     End Sub
 
