@@ -90,6 +90,13 @@ Public Class RunMonitorAutoUI
                 listBox.Info.Caption = task.ShortName
                 listBox.Info.Height = 350
                 listBox.AutoHeight = True
+                AddHandler listBox.DoubleClick, Sub()
+                                                    If task.State = TaskState.Disabled Then
+                                                        task.State = TaskState.Warning
+                                                    Else
+                                                        task.State = TaskState.Disabled
+                                                    End If
+                                                End Sub
             Next
         End Set
     End Property
