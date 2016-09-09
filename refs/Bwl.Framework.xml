@@ -6,6 +6,22 @@ Bwl.Framework
 </name>
 </assembly>
 <members>
+<member name="T:Bwl.Framework.My.Resources.Resources">
+<summary>
+  Класс ресурса со строгой типизацией для поиска локализованных строк и т.д.
+</summary>
+</member>
+<member name="P:Bwl.Framework.My.Resources.Resources.ResourceManager">
+<summary>
+  Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
+</summary>
+</member>
+<member name="P:Bwl.Framework.My.Resources.Resources.Culture">
+<summary>
+  Перезаписывает свойство CurrentUICulture текущего потока для всех
+  обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
+</summary>
+</member>
 <member name="M:Bwl.Framework.CryptoTools.Des3Encode(System.String,System.Byte[])">
  <summary>
  
@@ -28,6 +44,16 @@ Bwl.Framework
  <param name="filename">
  Имя файла с расширением и путем.
  </param>
+ <remarks></remarks>
+</member>
+<member name="M:Bwl.Framework.IniFile.GetSettingNoWrite(System.String,System.String,System.String)">
+ <summary>
+ Читает значение параметра. Если параметр не найден, возвращает заданную строку. Только чтение, ничего не пишет.
+ </summary>
+ <param name="groupName">Имя группы параметров в ini-файле.</param>
+ <param name="paramName">Имя параметра.</param>
+ <param name="returnIsNotExist">Что возвращает, если параметр не найден.</param>
+ <returns>Значение параметра.</returns>
  <remarks></remarks>
 </member>
 <member name="M:Bwl.Framework.IniFile.GetSetting(System.String,System.String,System.String,System.String)">
@@ -107,22 +133,6 @@ Bwl.Framework
  </summary>
  <remarks></remarks>
 </member>
-<member name="T:Bwl.Framework.My.Resources.Resources">
-<summary>
-  Класс ресурса со строгой типизацией для поиска локализованных строк и т.д.
-</summary>
-</member>
-<member name="P:Bwl.Framework.My.Resources.Resources.ResourceManager">
-<summary>
-  Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
-</summary>
-</member>
-<member name="P:Bwl.Framework.My.Resources.Resources.Culture">
-<summary>
-  Перезаписывает свойство CurrentUICulture текущего потока для всех
-  обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
-</summary>
-</member>
 <member name="P:Bwl.Framework.PasswordSetting.Value">
  <summary>
  Не является парллем, используйте поле Pass.
@@ -153,6 +163,14 @@ Bwl.Framework
  <remarks></remarks>
 </member>
 <member name="M:Bwl.Framework.SettingsStorageRoot.#ctor(System.String,System.String)">
+ <summary>
+ Создать новое хранилище настроек, являющееся корневым.
+ </summary>
+ <param name="iniFileName">Имя ini-файла с настройками.</param>
+ <param name="rootCategoryName">Имя корневой категории настроек.</param>
+ <remarks></remarks>
+</member>
+<member name="M:Bwl.Framework.SettingsStorageRoot.#ctor(System.String,System.String,System.Boolean)">
  <summary>
  Создать новое хранилище настроек, являющееся корневым.
  </summary>

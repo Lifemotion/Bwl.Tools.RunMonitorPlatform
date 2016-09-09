@@ -8,17 +8,17 @@ Imports System.Runtime.InteropServices
 
 ' Проверьте значения атрибутов сборки
 
-<Assembly: AssemblyTitle("Bwl.Tools.RunMonitorPlatform.RemotingHost")>
+<Assembly: AssemblyTitle("Bwl.Tools.RunMonitorPlatform.HostControl")>
 <Assembly: AssemblyDescription("")>
 <Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("Bwl.Tools.RunMonitorPlatform.RemotingHost")>
+<Assembly: AssemblyProduct("Bwl.Tools.RunMonitorPlatform.HostControl")>
 <Assembly: AssemblyCopyright("Copyright ©  2016")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
 
 'Следующий GUID служит для идентификации библиотеки типов, если этот проект будет видимым для COM
-<Assembly: Guid("13819a1c-e807-43a6-ae0a-f8aae48ea895")>
+<Assembly: Guid("d7e9acab-0886-4de2-aace-9d312e26e659")>
 
 ' Сведения о версии сборки состоят из следующих четырех значений:
 '

@@ -64,9 +64,9 @@ Namespace My
     Friend Module MySettingsProperty
 
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")> _
-        Friend ReadOnly Property Settings() As Global.Bwl.Tools.RunMonitorPlatform.RemotingHost.My.MySettings
+        Friend ReadOnly Property Settings() As Global.Bwl.Tools.RunMonitorPlatform.HostClient.My.MySettings
             Get
-                Return Global.Bwl.Tools.RunMonitorPlatform.RemotingHost.My.MySettings.Default
+                Return Global.Bwl.Tools.RunMonitorPlatform.HostClient.My.MySettings.Default
             End Get
         End Property
     End Module

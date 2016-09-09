@@ -1,12 +1,12 @@
 ﻿
-Public Class ProcessCheck
+Public Class RemoteCmdCheck
     Inherits CommonTaskCheck
-    Private _task As ProcessTask
+    Private _task As RemoteCmdTask
     Private _checkProcessResponding As Boolean
     Private _checkMultiplyCopies As Boolean
     Private _processMemoryLimit As Integer
 
-    Sub New(task As ProcessTask, checkProcessResponding As Boolean, checkMultiplyCopies As Boolean, processMemoryLimit As Integer)
+    Sub New(task As RemoteCmdTask, checkProcessResponding As Boolean, checkMultiplyCopies As Boolean, processMemoryLimit As Integer)
         MyBase.New("ProcessCheck_" + task.ID + "_state-" + checkProcessResponding.ToString + "_" + processMemoryLimit.ToString + "mb")
         _task = task
         _checkProcessResponding = checkProcessResponding
