@@ -2,12 +2,24 @@
 Imports Bwl.Tools.RunMonitorPlatform
 
 Public Class RunMonitorAutoUI
+    Public Property RefreshTasksDelay As Integer = 1000
+
     Private _logger As Logger
     Private _tasks As ITask()
+    Private _formDescriptor As AutoFormDescriptor
+    Private _ui As New AutoUI
 
     Public ReadOnly Property FormDescriptor As AutoFormDescriptor
-    Public ReadOnly Property UI As New AutoUI
-    Public Property RefreshTasksDelay As Integer = 1000
+        Get
+            Return _formDescriptor
+        End Get
+    End Property
+
+    Public ReadOnly Property UI As AutoUI
+        Get
+            Return _ui
+        End Get
+    End Property
 
     Public Sub New(_logger As Logger)
         Me._logger = _logger
