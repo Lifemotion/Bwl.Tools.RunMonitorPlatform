@@ -85,6 +85,7 @@ Public Class RunMonitorAutoUI
         End Get
         Set(value As ITask())
             _tasks = value
+            UI.Elements.RemoveAll(Function(elem As IUIElementLocal) elem.GetType = GetType(AutoListbox))
             For Each task In _tasks
                 Dim listBox As New AutoListbox(UI, task.ID + "_list")
                 listBox.Info.Caption = task.ShortName

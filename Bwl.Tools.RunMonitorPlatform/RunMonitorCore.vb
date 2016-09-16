@@ -40,15 +40,20 @@ Public Class RunMonitorCore
         Return states.ToArray
     End Function
 
+    Public Property AutomaticEnableTasks As Boolean = True
+
     Public Sub SingleCheck()
         Const timeToAutomaticEnable = 10
         For Each task In Tasks.ToArray
             If task.Checks.Count > 0 Then
                 If task.State = TaskState.Disabled Then
-                    task.ExternalInfo = "Time to automatic enable: " + (timeToAutomaticEnable - (Now - task.Checks(0).LastCheck.Time).TotalMinutes).ToString("0.0") + "min"
-                    If (Now - task.Checks(0).LastCheck.Time).TotalMinutes > timeToAutomaticEnable Then
-                        task.State = TaskState.Warning
-                        task.ExternalInfo = ""
+                    If AutomaticEnableTasks Then
+                        task.ExternalInfo = "Time to automatic enable: " + (timeToAutomaticEnable - (Now - task.Checks(0).LastCheck.Time).TotalMinutes).ToString("0.0") + "min"
+                        Dim mins = (Now - task.Checks(0).LastCheck.Time).TotalMinutes
+                        If mins > timeToAutomaticEnable And mins < 100000 Then
+                            task.State = TaskState.Warning
+                            task.ExternalInfo = ""
+                        End If
                     End If
                 Else
                     _logger.AddDebug("Checking Task " + task.ID)

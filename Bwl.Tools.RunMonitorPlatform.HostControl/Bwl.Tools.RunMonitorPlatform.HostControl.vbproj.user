@@ -7,6 +7,6 @@
     </StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>localserver=8064 test=1</StartArguments>
+    <StartArguments>localserver=8064=Rpi1 remoteapp</StartArguments>
   </PropertyGroup>
 </Project>

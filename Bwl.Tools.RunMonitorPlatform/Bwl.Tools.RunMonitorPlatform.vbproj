@@ -77,9 +77,6 @@
     <Compile Include="NetWatcher\NetWatcherTaskHttp.vb" />
     <Compile Include="NetWatcher\NetWatcherTaskPing.vb" />
     <Compile Include="NetWatcher\PingCheck.vb" />
-    <Compile Include="RemoteCmdTask\RemoteCmdCheck.vb" />
-    <Compile Include="RemoteCmdTask\RemoteCmdRestartAction.vb" />
-    <Compile Include="RemoteCmdTask\RemoteCmdTask.vb" />
     <Compile Include="RunMonitorAutoUI.vb" />
     <Compile Include="TasksList.vb" />
     <Compile Include="CheckStats.vb" />

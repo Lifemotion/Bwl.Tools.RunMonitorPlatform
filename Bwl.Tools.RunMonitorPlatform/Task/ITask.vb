@@ -16,4 +16,5 @@ Public Interface ITask
     Property CheckStats As CheckStats
     Property ShortName As String
     Property ShortState As String
+    Property AutoStart As Boolean
 End Interface

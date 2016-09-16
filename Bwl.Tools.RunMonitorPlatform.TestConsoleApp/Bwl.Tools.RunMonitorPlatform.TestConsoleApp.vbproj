@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E00A8AFC-8167-4A9B-83F7-227F37F7737F}</ProjectGuid>
+    <ProjectGuid>{E7AE0CAA-3C15-48C1-A3E1-2CCFB8EACAF4}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>Bwl.Tools.RunMonitorPlatform.HostControl.App</StartupObject>
-    <RootNamespace>Bwl.Tools.RunMonitorPlatform.HostControl</RootNamespace>
-    <AssemblyName>Bwl.Tools.RunMonitorPlatform.HostControl</AssemblyName>
+    <StartupObject>Bwl.Tools.RunMonitorPlatform.TestConsoleApp.TestApp</StartupObject>
+    <RootNamespace>Bwl.Tools.RunMonitorPlatform.TestConsoleApp</RootNamespace>
+    <AssemblyName>Bwl.Tools.RunMonitorPlatform.TestConsoleApp</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Console</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -19,8 +19,8 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\debug\RunMonitorHostControl\bin\</OutputPath>
-    <DocumentationFile>Bwl.Tools.RunMonitorPlatform.HostControl.xml</DocumentationFile>
+    <OutputPath>..\debug\TestConsoleApp\bin\</OutputPath>
+    <DocumentationFile>Bwl.Tools.RunMonitorPlatform.TestConsoleApp.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -29,8 +29,8 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>..\release\RunMonitorHostControl\bin\</OutputPath>
-    <DocumentationFile>Bwl.Tools.RunMonitorPlatform.HostControl.xml</DocumentationFile>
+    <OutputPath>..\debug\TestConsoleApp\bin\</OutputPath>
+    <DocumentationFile>Bwl.Tools.RunMonitorPlatform.TestConsoleApp.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -46,26 +46,28 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bwl.Framework">
-      <HintPath>..\refs\Bwl.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="bwl.Network.ClientServer">
-      <HintPath>..\refs\bwl.Network.ClientServer.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
     <Import Include="System.Diagnostics" />
     <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App.vb" />
+    <Compile Include="TestApp.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -100,12 +102,7 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Bwl.Tools.RunMonitorPlatform\Bwl.Tools.RunMonitorPlatform.vbproj">
-      <Project>{0e68d73a-77de-4f0f-b49c-731d7040db1b}</Project>
-      <Name>Bwl.Tools.RunMonitorPlatform</Name>
-    </ProjectReference>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

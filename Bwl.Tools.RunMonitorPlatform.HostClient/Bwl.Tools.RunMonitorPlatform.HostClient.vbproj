@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\debug\RunMonitorHostClient\bin\</OutputPath>
     <DocumentationFile>Bwl.Tools.RunMonitorPlatform.HostClient.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
@@ -29,7 +29,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\release\RunMonitorHostClient\bin\</OutputPath>
     <DocumentationFile>Bwl.Tools.RunMonitorPlatform.HostClient.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
@@ -77,13 +77,14 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HostClient.vb">
+    <Compile Include="GuiClient.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HostClient.Designer.vb">
-      <DependentUpon>HostClient.vb</DependentUpon>
+    <Compile Include="GuiClient.Designer.vb">
+      <DependentUpon>GuiClient.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="HostNetClient.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -101,8 +102,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="HostClient.resx">
-      <DependentUpon>HostClient.vb</DependentUpon>
+    <EmbeddedResource Include="GuiClient.resx">
+      <DependentUpon>GuiClient.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

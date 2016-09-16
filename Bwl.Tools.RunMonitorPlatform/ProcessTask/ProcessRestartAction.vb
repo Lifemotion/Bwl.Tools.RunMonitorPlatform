@@ -1,7 +1,10 @@
-﻿Public Class ProcessRestartAction
+﻿Imports Bwl.Network.ClientServer
+
+Public Class ProcessRestartAction
 
     Inherits CommonFaultAction
     Private _task As ProcessTask
+    Private _remcmd As CmdlineServer
 
     Public Sub New(task As ProcessTask, faultsToRun As Integer)
         MyBase.New("ProcessRestartAction_" + task.ID, faultsToRun)
@@ -63,30 +66,53 @@
             If _task.Parameters.RestartDelaySecongs > 0 Then
                 Threading.Thread.Sleep(1000 * _task.Parameters.RestartDelaySecongs)
             End If
-            Dim prc As New Process
-            prc.StartInfo.FileName = _task.Parameters.ExecutableFileName
-            prc.StartInfo.WorkingDirectory = _task.Parameters.WorkingDirectory
-            prc.StartInfo.Arguments = _task.Parameters.Arguments
 
-            Try
-                prc.Start()
-            Catch ex As Exception
-                Throw New FaultActionException(_task, Me, "Process Start error: " + ex.Message)
-            End Try
-            For i = 1 To 10
-                prcs = _task.GetProcesses
-                If prcs.Length = 1 Then
-                    _lastCall.Message += "Process started sucessfuly" + vbCrLf
-                    Return
+            Dim filename = _task.Parameters.ExecutableFileName
+            Dim fullPath = IO.Path.Combine(_task.Parameters.WorkingDirectory, filename)
+            If IO.File.Exists(fullPath) Then filename = fullPath
+
+            If filename = "@shell" Then filename = "cmd"
+                If _task.Parameters.RedirectInputOutput Then
+                    If _remcmd IsNot Nothing Then _remcmd.Dispose()
+                    _remcmd = New CmdlineServer(_task.Transport, _task.ID, filename, _task.Parameters.Arguments, _task.Parameters.WorkingDirectory)
+                    Try
+                        _remcmd.Start()
+                        _task.SetProcess(_remcmd.Process, _remcmd)
+                        If _task.Parameters.ProcessName Is Nothing OrElse _task.Parameters.ProcessName = "" Then
+                            _task.SetProcessName(_remcmd.Process.ProcessName)
+                        End If
+                    Catch ex As Exception
+                        Throw New FaultActionException(_task, Me, "Process (CmdlineServer) Start error: " + ex.Message)
+                    End Try
                 Else
-                    _lastCall.Message += "Waiting Process To Start... #" + i.ToString + vbCrLf
+                    Dim prc As New Process
+                    prc.StartInfo.FileName = filename
+                    prc.StartInfo.WorkingDirectory = _task.Parameters.WorkingDirectory
+                    prc.StartInfo.Arguments = _task.Parameters.Arguments
+                    Try
+                        prc.Start()
+                        _task.SetProcess(prc, Nothing)
+                        If _task.Parameters.ProcessName Is Nothing OrElse _task.Parameters.ProcessName = "" Then
+                            _task.SetProcessName(prc.ProcessName)
+                        End If
+                    Catch ex As Exception
+                        Throw New FaultActionException(_task, Me, "Process Start error: " + ex.Message)
+                    End Try
                 End If
-                Threading.Thread.Sleep(500)
-            Next
 
-            Throw New FaultActionException(_task, Me, "Process was started, but not found after start")
+                For i = 1 To 10
+                    prcs = _task.GetProcesses
+                    If prcs.Length = 1 Then
+                        _lastCall.Message += "Process started sucessfuly" + vbCrLf
+                        Return
+                    Else
+                        _lastCall.Message += "Waiting Process To Start... #" + i.ToString + vbCrLf
+                    End If
+                    Threading.Thread.Sleep(500)
+                Next
 
-        End If
+                Throw New FaultActionException(_task, Me, "Process was started, but not found after start")
+            End If
     End Sub
 
     Public Overrides Sub Run()
