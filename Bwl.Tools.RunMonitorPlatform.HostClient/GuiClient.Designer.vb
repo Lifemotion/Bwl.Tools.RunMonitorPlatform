@@ -366,10 +366,10 @@ Partial Class GuiClient
         Me.Label4.TabIndex = 19
         Me.Label4.Text = "Run File:"
         '
-        'tbUploadFrom
+        'cbUploadFrom
         '
         Me.cbUploadFrom.Location = New System.Drawing.Point(78, 100)
-        Me.cbUploadFrom.Name = "tbUploadFrom"
+        Me.cbUploadFrom.Name = "cbUploadFrom"
         Me.cbUploadFrom.Size = New System.Drawing.Size(613, 20)
         Me.cbUploadFrom.TabIndex = 18
         '
@@ -418,7 +418,7 @@ Partial Class GuiClient
         '
         Me.tbTaskId.Location = New System.Drawing.Point(78, 18)
         Me.tbTaskId.Name = "tbTaskId"
-        Me.tbTaskId.Size = New System.Drawing.Size(165, 20)
+        Me.tbTaskId.Size = New System.Drawing.Size(302, 20)
         Me.tbTaskId.TabIndex = 2
         Me.tbTaskId.Text = "ProcessTask_"
         '

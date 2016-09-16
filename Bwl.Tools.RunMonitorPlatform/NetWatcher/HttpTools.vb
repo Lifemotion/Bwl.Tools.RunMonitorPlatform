@@ -8,7 +8,8 @@ Public Class HttpTools
         req.Headers.Add(HttpRequestHeader.Pragma, "no-cache")
         req.Method = "GET"
         req.Timeout = 5000
-        req.ContinueTimeout = 5000
+        'TODO: only FW 4 !
+        'req.ContinueTimeout = 5000
         req.ReadWriteTimeout = 5000
         Return req
     End Function

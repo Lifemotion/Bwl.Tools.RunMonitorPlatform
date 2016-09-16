@@ -60,9 +60,7 @@ Public Class GuiClient
             If Equals(sender, bUploadStart) Then ops = "kill set upload start"
             _client.SendProcessTask(tbTaskId.Text, ops, tbFile.Text, tbArguments.Text, "", tbParameters.Text, cbAutoStart.Checked, cbMonitor.Checked, cbRemoteCmd.Checked, cbUploadFrom.Text)
             If cbRemoteCmd.Checked And ops.Contains("start") Then
-                Dim cmdclient = New CmdlineClient(_client.Transport, tbTaskId.Text, _client.Transport.TargetSetting.Value)
-                Dim form As New CmdlineUi(cmdclient)
-                form.Show()
+                _client.CreateRemoteCmdForm(tbTaskId.Text).Show(Me)
             End If
             ShowTasksList()
         Catch ex As Exception
@@ -72,7 +70,7 @@ Public Class GuiClient
 
     Private Sub bRunRemoteShell_Click(sender As Object, e As EventArgs) Handles bRunRemoteShell.Click
         Try
-            _client.CreateShellTask()
+            _client.CreateRemoteCmdForm(_client.CreateShellTask()).Show(Me)
             ShowTasksList()
         Catch ex As Exception
             _logger.AddError(ex.Message)
@@ -143,7 +141,16 @@ Public Class GuiClient
                 Next
                 If tbFile.Items.Count > 0 Then
                     tbFile.Text = (tbFile.Items(0))
+                    Dim id As String = ""
+                    For Each ch In IO.Path.GetFileNameWithoutExtension(tbFile.Text)
+                        Select Case ch
+                            Case "A" To "Z", "a" To "z", "0" To "9", "-", "_"
+                                id += ch
+                        End Select
+                    Next
+                    tbTaskId.Text = "ProcessTask_" + id
                 Else
+                    tbTaskId.Text = "ProcessTask_"
                     tbFile.Text = ""
                 End If
             End If

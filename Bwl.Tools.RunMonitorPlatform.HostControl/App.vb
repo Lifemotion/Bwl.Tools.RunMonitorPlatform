@@ -110,10 +110,10 @@ Module App
                             Dim parts = taskparam.Split("=")
                             If parts.Length = 2 Then
                                 Select Case parts(0).Trim.ToLower
-                                    Case "filename" : currentParams.ExecutableFileName = parts(1)
+                                    Case "filename" : currentParams.ExecutableFileName = parts(1).Replace("\", IO.Path.DirectorySeparatorChar)
                                     Case "arguments" : currentParams.Arguments = parts(1)
                                     Case "process" : currentParams.ProcessName = parts(1)
-                                    Case "workdir" : currentParams.WorkingDirectory = parts(1)
+                                    Case "workdir" : currentParams.WorkingDirectory = parts(1).Replace("\", IO.Path.DirectorySeparatorChar)
                                     Case "autostart" : foundTask.AutoStart = (parts(1) = "True")
                                     Case "runmonitored" : If parts(1) = "True" Then foundTask.State = TaskState.Warning Else foundTask.State = TaskState.Disabled
                                     Case "remotecmd" : currentParams.RedirectInputOutput = (parts(1) = "True")

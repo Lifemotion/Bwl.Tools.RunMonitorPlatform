@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0E68D73A-77DE-4F0F-B49C-731D7040DB1B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Bwl.Tools.RunMonitorPlatform</RootNamespace>
+    <AssemblyName>Bwl.Tools.RunMonitorPlatform</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>Windows</MyType>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>..\debug\RunMonitorPlatform-Fw4\</OutputPath>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>None</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>false</Optimize>
+    <OutputPath>..\release\RunMonitorPlatform-Fw4\</OutputPath>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>..\debug\RunMonitorPlatform-Fw4\</OutputPath>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>..\release\RunMonitorPlatform-Fw4\</OutputPath>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>None</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Bwl.Framework">
+      <HintPath>..\refs-fw4\Bwl.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="bwl.Network.ClientServer">
+      <HintPath>..\refs-fw4\bwl.Network.ClientServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HttpWatcher\HttpRequestCheck.vb" />
+    <Compile Include="HttpWatcher\HttpWatcherTask.vb" />
+    <Compile Include="NetClientCheck.vb" />
+    <Compile Include="NetWatcher\HttpTools.vb" />
+    <Compile Include="NetWatcher\NetWatcherTaskHttp.vb" />
+    <Compile Include="NetWatcher\NetWatcherTaskPing.vb" />
+    <Compile Include="NetWatcher\PingCheck.vb" />
+    <Compile Include="RunMonitorAutoUI.vb" />
+    <Compile Include="TasksList.vb" />
+    <Compile Include="CheckStats.vb" />
+    <Compile Include="Checks\CommonTaskCheck.vb" />
+    <Compile Include="Checks\ITaskCheck.vb" />
+    <Compile Include="Checks\TaskCheckException.vb" />
+    <Compile Include="FaultActions\CommonFaultAction.vb" />
+    <Compile Include="FaultActions\FaultActionException.vb" />
+    <Compile Include="FaultActions\IFaultAction.vb" />
+    <Compile Include="FaultActions\RestartComputerAbortForm.Designer.vb">
+      <DependentUpon>RestartComputerAbortForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FaultActions\RestartComputerAbortForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FaultActions\RestartComputerAction.vb" />
+    <Compile Include="Info\AppInfo.vb" />
+    <Compile Include="Info\CpuInfo.vb" />
+    <Compile Include="Info\DrvInfo.vb" />
+    <Compile Include="Info\EnvironmentInfo.vb" />
+    <Compile Include="Info\EthernetInfo.vb" />
+    <Compile Include="Info\HardwareInfo.vb" />
+    <Compile Include="Info\HddInfo.vb" />
+    <Compile Include="Info\InfoType.vb" />
+    <Compile Include="Info\MemoryInfo.vb" />
+    <Compile Include="Info\TaskInfo.vb" />
+    <Compile Include="LastCall.vb" />
+    <Compile Include="MemWatcher\FreeMemoryCheck.vb" />
+    <Compile Include="MemWatcher\MemWatcherTask.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="NetWatcher\HttpNetCheck.vb" />
+    <Compile Include="ProcessTask\ProcessCheck.vb" />
+    <Compile Include="ProcessTask\ProcessRestartAction.vb" />
+    <Compile Include="ProcessTask\ProcessTask.vb" />
+    <Compile Include="ProcessTask\ProcessTools.vb" />
+    <Compile Include="RunMonitorCore.vb" />
+    <Compile Include="Task\ChecksList.vb" />
+    <Compile Include="Task\CommonTask.vb" />
+    <Compile Include="Task\FaultActionsList.vb" />
+    <Compile Include="Task\ITask.vb" />
+    <Compile Include="ProcessesForm.Designer.vb">
+      <DependentUpon>ProcessesForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ProcessesForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FaultActions\RestartComputerAbortForm.resx">
+      <DependentUpon>RestartComputerAbortForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProcessesForm.resx">
+      <DependentUpon>ProcessesForm.vb</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -49,6 +49,16 @@ Public Class HostNetClient
                              workdir As String, params As String, autostart As Boolean, runmonitored As Boolean,
                              remoteCmd As Boolean, uploadFrom As String)
         If id.StartsWith("ProcessTask_") = False Then Throw New Exception("Id must start with 'ProcessTask_'")
+        Dim name = id.Replace("ProcessTask_", "")
+        If name.Length < 1 Then Throw New Exception("Id must not be empty")
+        For Each smb In name
+            Select Case smb
+                Case "a"c To "z"c, "A"c To "Z"c, "0"c To "9"c, "-", ".", "_"
+                Case Else
+                    Throw New Exception("Id must contains only digits, letters, <-> and <_>")
+            End Select
+        Next
+        If filename Is Nothing OrElse filename.Length < 1 Then Throw New Exception("Filename must not be empty")
         Dim taskparams As String = ""
         taskparams += "filename=" + filename + vbCrLf
         taskparams += "arguments=" + arguments + vbCrLf
@@ -100,12 +110,15 @@ Public Class HostNetClient
 
     Public ReadOnly Property TargetConnected As Boolean
 
-    Public Function CreateShellTask() As CmdlineUi
-        Dim id = "@shell"
-        SendProcessTask("ProcessTask_" + id, "kill set start", "@shell", "", "", "", False, False, True, "")
-        Dim cmdclient = New CmdlineClient(Transport, "ProcessTask_" + id, Transport.TargetSetting.Value)
+    Public Function CreateShellTask() As String
+        Dim id = "ProcessTask__shell"
+        SendProcessTask(id, "kill set start", "@shell", "", "", "", False, False, True, "")
+        Return id
+    End Function
+
+    Public Function CreateRemoteCmdForm(id As String) As CmdlineUi
+        Dim cmdclient = New CmdlineClient(Transport, id, Transport.TargetSetting.Value)
         Dim form As New CmdlineUi(cmdclient)
-        form.Show()
         Return form
     End Function
 

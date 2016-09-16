@@ -102,11 +102,11 @@ Public Class ProcessRestartAction
 
                 For i = 1 To 10
                     prcs = _task.GetProcesses
-                    If prcs.Length = 1 Then
-                        _lastCall.Message += "Process started sucessfuly" + vbCrLf
-                        Return
-                    Else
-                        _lastCall.Message += "Waiting Process To Start... #" + i.ToString + vbCrLf
+                If prcs.Length > 0 Then
+                    _lastCall.Message += "Process started sucessfuly" + vbCrLf
+                    Return
+                Else
+                    _lastCall.Message += "Waiting Process To Start... #" + i.ToString + vbCrLf
                     End If
                     Threading.Thread.Sleep(500)
                 Next
