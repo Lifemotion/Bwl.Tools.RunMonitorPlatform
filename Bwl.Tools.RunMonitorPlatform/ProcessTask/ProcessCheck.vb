@@ -27,7 +27,12 @@ Public Class ProcessCheck
             _statusInfo += "[" + prc.Id.ToString + "] - " + prcMemoryMb.ToString + " Mb" + ", "
 
             If _checkProcessResponding Then
-                If prc.Responding = False Or prc.HasExited = True Then Throw New TaskCheckException(_task, Me, "Process has exited or not responding")
+                If prc.Responding = False Then
+                    If System.Environment.OSVersion.VersionString.Contains("Windows") Then
+                        Throw New TaskCheckException(_task, Me, "Process not responding")
+                    End If
+                End If
+                If prc.HasExited = True Then Throw New TaskCheckException(_task, Me, "Process has exited")
             End If
             If _processMemoryLimit > 0 Then
                 If prcMemoryMb > _processMemoryLimit Then Throw New TaskCheckException(_task, Me, "Memory limit " + _processMemoryLimit.ToString + " > process memory " + prcMemoryMb.ToString)

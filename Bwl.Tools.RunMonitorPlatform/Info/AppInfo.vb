@@ -10,15 +10,6 @@ Public Class AppInfo
 
     Public Shared Function CreateFrom(path As String) As AppInfo
         Throw New NotImplementedException
-        Try
-            Dim file = System.IO.File.ReadAllText(path, System.Text.Encoding.UTF8)
-            '	Dim res As AppInfo = JsonConvert.DeserializeObject(Of AppInfo)(file)
-            '         Res.LoadedFrom = path
-            ' Return res
-        Catch ex As Exception
-            Return Nothing
-        End Try
-
     End Function
 
     Public Sub SaveTo(path As String)

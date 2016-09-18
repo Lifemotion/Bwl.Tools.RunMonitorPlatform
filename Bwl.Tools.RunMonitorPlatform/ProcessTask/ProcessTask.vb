@@ -28,15 +28,21 @@ End Structure
 
 Public Class ProcessTask
     Inherits CommonTask
+    private _restartAction as ProcessRestartAction
+
     Public Property Parameters As ProcessTaskParameters
-    Public ReadOnly Property Process As Process
-    Public ReadOnly Property CmdRemoting As CmdlineServer
+    'Public ReadOnly Property Process As Process
+    'Public ReadOnly Property CmdRemoting As CmdlineServer
     Public Property Transport As IMessageTransport
     Public ReadOnly Property RestartAction As ProcessRestartAction
+        Get
+            Return _restartAction
+        End Get
+    End Property
 
     Friend Sub SetProcess(process As Process, cmdlineServer As CmdlineServer)
-        _Process = process
-        _CmdRemoting = cmdlineServer
+       ' _Process = process
+       ' _CmdRemoting = cmdlineServer
     End Sub
 
     Friend Sub SetProcessName(processName As String)
@@ -54,7 +60,7 @@ Public Class ProcessTask
         _Parameters = parameters
         Checks.Add(New ProcessCheck(Me, True, True, 0))
         Checks.AddRange(additionalChecks)
-        RestartAction = New ProcessRestartAction(Me, 3)
+        _RestartAction = New ProcessRestartAction(Me, 3)
         FaultActions.Add(RestartAction)
     End Sub
 

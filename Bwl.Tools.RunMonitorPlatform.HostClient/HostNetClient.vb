@@ -127,7 +127,7 @@ Public Class HostNetClient
         Dim msg As New NetMessage("S", "RunMonitorControl", "TaskList")
         msg.ToID = _transport.TargetSetting.Value
         msg.FromID = _transport.MyID
-        Dim result = _transport.SendMessageWaitAnswer(msg, "RunMonitorControl-TaskList", 20)
+        Dim result = _transport.SendMessageWaitAnswer(msg, "RunMonitorControl-TaskList", 3)
         If result Is Nothing Then Throw New Exception("No response")
         For i = 1 To result.Count - 1
             Dim taskitems = result.Part(i).Split({"#||"}, StringSplitOptions.RemoveEmptyEntries)

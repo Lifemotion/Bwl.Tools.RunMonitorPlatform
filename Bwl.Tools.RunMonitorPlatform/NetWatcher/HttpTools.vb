@@ -37,7 +37,7 @@ Public Class HttpTools
     End Function
 
     Shared Function UploadFile(ByVal url As String, ByVal fileName As String, fileContent As String) As String
-        Dim filebytes() As Byte = Text.Encoding.UTF8.GetBytes(fileContent)
+        Dim filebytes() As Byte = System.Text.Encoding.UTF8.GetBytes(fileContent)
         Return UploadFile(url, fileName, filebytes)
     End Function
 

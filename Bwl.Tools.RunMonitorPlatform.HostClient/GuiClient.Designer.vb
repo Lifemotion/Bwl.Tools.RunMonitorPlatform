@@ -90,7 +90,7 @@ Partial Class GuiClient
         Me.gbConnect.Controls.Add(Me.bHostConnect)
         Me.gbConnect.Location = New System.Drawing.Point(12, 28)
         Me.gbConnect.Name = "gbConnect"
-        Me.gbConnect.Size = New System.Drawing.Size(195, 218)
+        Me.gbConnect.Size = New System.Drawing.Size(261, 218)
         Me.gbConnect.TabIndex = 2
         Me.gbConnect.TabStop = False
         Me.gbConnect.Text = "Host Connect"
@@ -106,72 +106,88 @@ Partial Class GuiClient
         '
         'bFindLocalServers
         '
+        Me.bFindLocalServers.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.bFindLocalServers.Location = New System.Drawing.Point(9, 113)
         Me.bFindLocalServers.Name = "bFindLocalServers"
-        Me.bFindLocalServers.Size = New System.Drawing.Size(174, 23)
+        Me.bFindLocalServers.Size = New System.Drawing.Size(240, 23)
         Me.bFindLocalServers.TabIndex = 9
         Me.bFindLocalServers.Text = "Find local servers"
         Me.bFindLocalServers.UseVisualStyleBackColor = True
         '
         'lbLocalServers
         '
+        Me.lbLocalServers.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbLocalServers.FormattingEnabled = True
         Me.lbLocalServers.Location = New System.Drawing.Point(9, 38)
         Me.lbLocalServers.Name = "lbLocalServers"
-        Me.lbLocalServers.Size = New System.Drawing.Size(174, 69)
+        Me.lbLocalServers.Size = New System.Drawing.Size(240, 69)
         Me.lbLocalServers.TabIndex = 8
         '
         'settingHostAddress
         '
+        Me.settingHostAddress.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.settingHostAddress.AssignedSetting = Nothing
         Me.settingHostAddress.DesignText = Nothing
         Me.settingHostAddress.Location = New System.Drawing.Point(3, 137)
         Me.settingHostAddress.Name = "settingHostAddress"
-        Me.settingHostAddress.Size = New System.Drawing.Size(186, 40)
+        Me.settingHostAddress.Size = New System.Drawing.Size(252, 40)
         Me.settingHostAddress.TabIndex = 7
         '
         'bHostConnect
         '
+        Me.bHostConnect.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.bHostConnect.Location = New System.Drawing.Point(8, 185)
         Me.bHostConnect.Name = "bHostConnect"
-        Me.bHostConnect.Size = New System.Drawing.Size(175, 23)
+        Me.bHostConnect.Size = New System.Drawing.Size(241, 23)
         Me.bHostConnect.TabIndex = 2
         Me.bHostConnect.Text = "Connect"
         Me.bHostConnect.UseVisualStyleBackColor = True
         '
         'bRunMonitorRemoteUi
         '
+        Me.bRunMonitorRemoteUi.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.bRunMonitorRemoteUi.Location = New System.Drawing.Point(9, 222)
         Me.bRunMonitorRemoteUi.Name = "bRunMonitorRemoteUi"
-        Me.bRunMonitorRemoteUi.Size = New System.Drawing.Size(174, 23)
+        Me.bRunMonitorRemoteUi.Size = New System.Drawing.Size(240, 23)
         Me.bRunMonitorRemoteUi.TabIndex = 12
         Me.bRunMonitorRemoteUi.Text = "Open Remote HostControl UI"
         Me.bRunMonitorRemoteUi.UseVisualStyleBackColor = True
         '
         'bSaveSettings
         '
+        Me.bSaveSettings.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.bSaveSettings.Location = New System.Drawing.Point(9, 250)
         Me.bSaveSettings.Name = "bSaveSettings"
-        Me.bSaveSettings.Size = New System.Drawing.Size(174, 23)
+        Me.bSaveSettings.Size = New System.Drawing.Size(240, 23)
         Me.bSaveSettings.TabIndex = 11
         Me.bSaveSettings.Text = "Save Settings"
         Me.bSaveSettings.UseVisualStyleBackColor = True
         '
         'settingTarget
         '
+        Me.settingTarget.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.settingTarget.AssignedSetting = Nothing
         Me.settingTarget.DesignText = Nothing
         Me.settingTarget.Location = New System.Drawing.Point(3, 174)
         Me.settingTarget.Name = "settingTarget"
-        Me.settingTarget.Size = New System.Drawing.Size(186, 42)
+        Me.settingTarget.Size = New System.Drawing.Size(252, 42)
         Me.settingTarget.TabIndex = 6
         '
         'lbTargets
         '
+        Me.lbTargets.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbTargets.FormattingEnabled = True
         Me.lbTargets.Location = New System.Drawing.Point(9, 59)
         Me.lbTargets.Name = "lbTargets"
-        Me.lbTargets.Size = New System.Drawing.Size(174, 108)
+        Me.lbTargets.Size = New System.Drawing.Size(240, 108)
         Me.lbTargets.TabIndex = 3
         '
         'gbTasks
@@ -182,15 +198,16 @@ Partial Class GuiClient
         Me.gbTasks.Controls.Add(Me.bUpdateTasks)
         Me.gbTasks.Controls.Add(Me.DataGridView1)
         Me.gbTasks.Enabled = False
-        Me.gbTasks.Location = New System.Drawing.Point(213, 28)
+        Me.gbTasks.Location = New System.Drawing.Point(279, 28)
         Me.gbTasks.Name = "gbTasks"
-        Me.gbTasks.Size = New System.Drawing.Size(779, 318)
+        Me.gbTasks.Size = New System.Drawing.Size(713, 318)
         Me.gbTasks.TabIndex = 3
         Me.gbTasks.TabStop = False
         Me.gbTasks.Text = "Remote Tasks"
         '
         'bRunRemoteShell
         '
+        Me.bRunRemoteShell.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.bRunRemoteShell.Location = New System.Drawing.Point(6, 289)
         Me.bRunRemoteShell.Name = "bRunRemoteShell"
         Me.bRunRemoteShell.Size = New System.Drawing.Size(117, 23)
@@ -200,7 +217,8 @@ Partial Class GuiClient
         '
         'bUpdateTasks
         '
-        Me.bUpdateTasks.Location = New System.Drawing.Point(690, 289)
+        Me.bUpdateTasks.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.bUpdateTasks.Location = New System.Drawing.Point(624, 289)
         Me.bUpdateTasks.Name = "bUpdateTasks"
         Me.bUpdateTasks.Size = New System.Drawing.Size(83, 23)
         Me.bUpdateTasks.TabIndex = 10
@@ -213,8 +231,9 @@ Partial Class GuiClient
         Me.DataGridView1.AllowUserToDeleteRows = False
         Me.DataGridView1.AllowUserToResizeColumns = False
         Me.DataGridView1.AllowUserToResizeRows = False
-        Me.DataGridView1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.DataGridView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DataGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
         DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
@@ -230,7 +249,7 @@ Partial Class GuiClient
         Me.DataGridView1.Location = New System.Drawing.Point(6, 19)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(767, 264)
+        Me.DataGridView1.Size = New System.Drawing.Size(701, 264)
         Me.DataGridView1.TabIndex = 0
         '
         'Column1
@@ -279,9 +298,9 @@ Partial Class GuiClient
         Me.gbTask.Controls.Add(Me.cbMonitor)
         Me.gbTask.Controls.Add(Me.cbRemoteCmd)
         Me.gbTask.Enabled = False
-        Me.gbTask.Location = New System.Drawing.Point(213, 352)
+        Me.gbTask.Location = New System.Drawing.Point(279, 352)
         Me.gbTask.Name = "gbTask"
-        Me.gbTask.Size = New System.Drawing.Size(779, 183)
+        Me.gbTask.Size = New System.Drawing.Size(713, 183)
         Me.gbTask.TabIndex = 4
         Me.gbTask.TabStop = False
         Me.gbTask.Text = "Task"
@@ -296,7 +315,8 @@ Partial Class GuiClient
         '
         'bSelectFolder
         '
-        Me.bSelectFolder.Location = New System.Drawing.Point(697, 100)
+        Me.bSelectFolder.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.bSelectFolder.Location = New System.Drawing.Point(631, 100)
         Me.bSelectFolder.Name = "bSelectFolder"
         Me.bSelectFolder.Size = New System.Drawing.Size(75, 20)
         Me.bSelectFolder.TabIndex = 27
@@ -305,6 +325,7 @@ Partial Class GuiClient
         '
         'bSet
         '
+        Me.bSet.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.bSet.Location = New System.Drawing.Point(78, 149)
         Me.bSet.Name = "bSet"
         Me.bSet.Size = New System.Drawing.Size(75, 23)
@@ -314,7 +335,8 @@ Partial Class GuiClient
         '
         'bUploadStart
         '
-        Me.bUploadStart.Location = New System.Drawing.Point(673, 150)
+        Me.bUploadStart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.bUploadStart.Location = New System.Drawing.Point(607, 150)
         Me.bUploadStart.Name = "bUploadStart"
         Me.bUploadStart.Size = New System.Drawing.Size(99, 23)
         Me.bUploadStart.TabIndex = 24
@@ -323,7 +345,8 @@ Partial Class GuiClient
         '
         'bUpload
         '
-        Me.bUpload.Location = New System.Drawing.Point(592, 150)
+        Me.bUpload.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.bUpload.Location = New System.Drawing.Point(526, 150)
         Me.bUpload.Name = "bUpload"
         Me.bUpload.Size = New System.Drawing.Size(75, 23)
         Me.bUpload.TabIndex = 23
@@ -368,28 +391,35 @@ Partial Class GuiClient
         '
         'cbUploadFrom
         '
+        Me.cbUploadFrom.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cbUploadFrom.Location = New System.Drawing.Point(78, 100)
         Me.cbUploadFrom.Name = "cbUploadFrom"
-        Me.cbUploadFrom.Size = New System.Drawing.Size(613, 20)
+        Me.cbUploadFrom.Size = New System.Drawing.Size(547, 20)
         Me.cbUploadFrom.TabIndex = 18
         '
         'tbParameters
         '
+        Me.tbParameters.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.tbParameters.Location = New System.Drawing.Point(78, 73)
         Me.tbParameters.Name = "tbParameters"
-        Me.tbParameters.Size = New System.Drawing.Size(695, 20)
+        Me.tbParameters.Size = New System.Drawing.Size(629, 20)
         Me.tbParameters.TabIndex = 17
         '
         'tbArguments
         '
+        Me.tbArguments.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.tbArguments.Location = New System.Drawing.Point(458, 46)
         Me.tbArguments.Name = "tbArguments"
-        Me.tbArguments.Size = New System.Drawing.Size(314, 20)
+        Me.tbArguments.Size = New System.Drawing.Size(248, 20)
         Me.tbArguments.TabIndex = 16
         '
         'bStart
         '
-        Me.bStart.Location = New System.Drawing.Point(511, 150)
+        Me.bStart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.bStart.Location = New System.Drawing.Point(445, 150)
         Me.bStart.Name = "bStart"
         Me.bStart.Size = New System.Drawing.Size(75, 23)
         Me.bStart.TabIndex = 13
@@ -398,7 +428,8 @@ Partial Class GuiClient
         '
         'bKill
         '
-        Me.bKill.Location = New System.Drawing.Point(430, 150)
+        Me.bKill.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.bKill.Location = New System.Drawing.Point(364, 150)
         Me.bKill.Name = "bKill"
         Me.bKill.Size = New System.Drawing.Size(75, 23)
         Me.bKill.TabIndex = 12
@@ -424,8 +455,9 @@ Partial Class GuiClient
         '
         'cbAutoStart
         '
+        Me.cbAutoStart.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cbAutoStart.AutoSize = True
-        Me.cbAutoStart.Location = New System.Drawing.Point(609, 18)
+        Me.cbAutoStart.Location = New System.Drawing.Point(543, 18)
         Me.cbAutoStart.Name = "cbAutoStart"
         Me.cbAutoStart.Size = New System.Drawing.Size(68, 17)
         Me.cbAutoStart.TabIndex = 1
@@ -434,8 +466,9 @@ Partial Class GuiClient
         '
         'cbMonitor
         '
+        Me.cbMonitor.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cbMonitor.AutoSize = True
-        Me.cbMonitor.Location = New System.Drawing.Point(483, 18)
+        Me.cbMonitor.Location = New System.Drawing.Point(417, 18)
         Me.cbMonitor.Name = "cbMonitor"
         Me.cbMonitor.Size = New System.Drawing.Size(117, 17)
         Me.cbMonitor.TabIndex = 0
@@ -444,8 +477,9 @@ Partial Class GuiClient
         '
         'cbRemoteCmd
         '
+        Me.cbRemoteCmd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cbRemoteCmd.AutoSize = True
-        Me.cbRemoteCmd.Location = New System.Drawing.Point(686, 18)
+        Me.cbRemoteCmd.Location = New System.Drawing.Point(620, 18)
         Me.cbRemoteCmd.Name = "cbRemoteCmd"
         Me.cbRemoteCmd.Size = New System.Drawing.Size(84, 17)
         Me.cbRemoteCmd.TabIndex = 25
@@ -467,23 +501,24 @@ Partial Class GuiClient
         Me.gbTargets.Enabled = False
         Me.gbTargets.Location = New System.Drawing.Point(12, 252)
         Me.gbTargets.Name = "gbTargets"
-        Me.gbTargets.Size = New System.Drawing.Size(195, 283)
+        Me.gbTargets.Size = New System.Drawing.Size(261, 283)
         Me.gbTargets.TabIndex = 12
         Me.gbTargets.TabStop = False
         Me.gbTargets.Text = "Targets"
         '
         'bFindTargets
         '
+        Me.bFindTargets.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.bFindTargets.Location = New System.Drawing.Point(9, 19)
         Me.bFindTargets.Name = "bFindTargets"
-        Me.bFindTargets.Size = New System.Drawing.Size(174, 23)
+        Me.bFindTargets.Size = New System.Drawing.Size(240, 23)
         Me.bFindTargets.TabIndex = 13
         Me.bFindTargets.Text = "Find targets"
         Me.bFindTargets.UseVisualStyleBackColor = True
         '
         'tUpdateTasks
         '
-        Me.tUpdateTasks.Enabled = True
         Me.tUpdateTasks.Interval = 3000
         '
         'selectFolderDialog

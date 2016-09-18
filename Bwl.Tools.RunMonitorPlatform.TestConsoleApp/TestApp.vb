@@ -12,7 +12,7 @@
             If read = "1" Then
                 Console.WriteLine("Input: ")
                 Dim read2 = Console.ReadLine
-                Console.WriteLine(read.ToUpper)
+                Console.WriteLine(read2.ToUpper)
             End If
         Loop
 

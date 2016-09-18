@@ -7,8 +7,14 @@ Public MustInherit Class CommonTaskCheck
     Protected _statusInfo As String = ""
     Protected _parametersInfo As String = ""
     Protected _lastCheck As New LastCall
+    protected _checkInterval as integer =3
+    protected _name as string
 
-    Public ReadOnly Property CheckIntervalSeconds As Integer = 3 Implements ITaskCheck.CheckIntervalSeconds
+    Public ReadOnly Property CheckIntervalSeconds As Integer Implements ITaskCheck.CheckIntervalSeconds
+            Get
+            Return _checkInterval
+        End Get
+    End Property
 
     Public ReadOnly Property StatusInfo As String Implements ITaskCheck.StatusInfo
         Get
@@ -23,6 +29,10 @@ Public MustInherit Class CommonTaskCheck
     End Property
 
     Public ReadOnly Property Name As String Implements ITaskCheck.Name
+        Get
+            Return _name
+        End Get
+    End Property
 
     Public ReadOnly Property ParametersInfo As String Implements ITaskCheck.ParametersInfo
         Get

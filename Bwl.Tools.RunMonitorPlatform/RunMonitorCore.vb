@@ -4,7 +4,7 @@ Imports Bwl.Framework
 Public Class RunMonitorCore
     Private _logger As Logger
     Private _thread As Threading.Thread
-    Public ReadOnly Property Tasks As New TasksList
+    Public Property Tasks As New TasksList
 
     Public Sub New(logger As Logger)
         _logger = logger

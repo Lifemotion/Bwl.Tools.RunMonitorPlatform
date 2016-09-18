@@ -2,7 +2,7 @@
 Imports Bwl.Tools.RunMonitorPlatform
 
 Public Class RunMonitorAutoUI
-    Public Property RefreshTasksDelay As Integer = 1000
+    Public Property RefreshTasksDelay As Integer
 
     Private _logger As Logger
     Private _tasks As ITask()
@@ -22,8 +22,9 @@ Public Class RunMonitorAutoUI
     End Property
 
     Public Sub New(_logger As Logger)
+        RefreshTasksDelay = 1000
         Me._logger = _logger
-        _FormDescriptor = New AutoFormDescriptor(UI, "wdt-form")
+        _formDescriptor = New AutoFormDescriptor(UI, "wdt-form")
         Dim refreshThread As New Threading.Thread(AddressOf RefreshThreadSub)
         refreshThread.IsBackground = True
         refreshThread.Name = "RunMonitorAutoUI_Refresh"

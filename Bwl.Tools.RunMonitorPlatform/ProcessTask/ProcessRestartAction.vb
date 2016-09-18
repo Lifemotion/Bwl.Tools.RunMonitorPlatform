@@ -68,14 +68,19 @@ Public Class ProcessRestartAction
             End If
 
             Dim filename = _task.Parameters.ExecutableFileName
-            Dim fullPath = IO.Path.Combine(_task.Parameters.WorkingDirectory, filename)
+            Dim workdir = _task.Parameters.WorkingDirectory
+            Dim fullPath = IO.Path.Combine(workdir, filename)
             If IO.File.Exists(fullPath) Then filename = fullPath
 
-            If filename = "@shell" Then filename = "cmd"
-                If _task.Parameters.RedirectInputOutput Then
+            If filename = "@shell" Then
+                If System.Environment.OSVersion.VersionString.Contains("Windows") Then filename = "cmd"
+                If System.Environment.OSVersion.VersionString.Contains("Unix") Then filename = "bash" : workdir = ""
+            End If
+
+            If _task.Parameters.RedirectInputOutput Then
                     If _remcmd IsNot Nothing Then _remcmd.Dispose()
-                    _remcmd = New CmdlineServer(_task.Transport, _task.ID, filename, _task.Parameters.Arguments, _task.Parameters.WorkingDirectory)
-                    Try
+                _remcmd = New CmdlineServer(_task.Transport, _task.ID, filename, _task.Parameters.Arguments, workdir)
+                Try
                         _remcmd.Start()
                         _task.SetProcess(_remcmd.Process, _remcmd)
                         If _task.Parameters.ProcessName Is Nothing OrElse _task.Parameters.ProcessName = "" Then
@@ -87,8 +92,8 @@ Public Class ProcessRestartAction
                 Else
                     Dim prc As New Process
                     prc.StartInfo.FileName = filename
-                    prc.StartInfo.WorkingDirectory = _task.Parameters.WorkingDirectory
-                    prc.StartInfo.Arguments = _task.Parameters.Arguments
+                prc.StartInfo.WorkingDirectory = workdir
+                prc.StartInfo.Arguments = _task.Parameters.Arguments
                     Try
                         prc.Start()
                         _task.SetProcess(prc, Nothing)
