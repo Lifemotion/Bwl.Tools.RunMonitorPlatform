@@ -172,4 +172,15 @@ Public Class GuiClient
             ' tbFil.Text = task.Workdir
         End If
     End Sub
+
+    Private Sub bHostInfo_Click(sender As Object, e As EventArgs) Handles bHostInfo.Click
+        Try
+            Dim info = _client.GetHostInfo
+            For Each line In info
+                _logger.AddInformation(line)
+            Next
+        Catch ex As Exception
+            _logger.AddError(ex.Message)
+        End Try
+    End Sub
 End Class

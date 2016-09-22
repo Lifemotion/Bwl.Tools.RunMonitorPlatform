@@ -22,7 +22,7 @@ Partial Class GuiClient
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.gbConnect = New System.Windows.Forms.GroupBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.bFindLocalServers = New System.Windows.Forms.Button()
@@ -66,6 +66,7 @@ Partial Class GuiClient
         Me.bFindTargets = New System.Windows.Forms.Button()
         Me.tUpdateTasks = New System.Windows.Forms.Timer(Me.components)
         Me.selectFolderDialog = New System.Windows.Forms.OpenFileDialog()
+        Me.bHostInfo = New System.Windows.Forms.Button()
         Me.gbConnect.SuspendLayout()
         Me.gbTasks.SuspendLayout()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -76,8 +77,8 @@ Partial Class GuiClient
         'logWriter
         '
         Me.logWriter.ExtendedView = False
-        Me.logWriter.Location = New System.Drawing.Point(2, 540)
-        Me.logWriter.Size = New System.Drawing.Size(1001, 185)
+        Me.logWriter.Location = New System.Drawing.Point(0, 538)
+        Me.logWriter.Size = New System.Drawing.Size(981, 183)
         '
         'gbConnect
         '
@@ -153,7 +154,7 @@ Partial Class GuiClient
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.bRunMonitorRemoteUi.Location = New System.Drawing.Point(9, 222)
         Me.bRunMonitorRemoteUi.Name = "bRunMonitorRemoteUi"
-        Me.bRunMonitorRemoteUi.Size = New System.Drawing.Size(240, 23)
+        Me.bRunMonitorRemoteUi.Size = New System.Drawing.Size(156, 23)
         Me.bRunMonitorRemoteUi.TabIndex = 12
         Me.bRunMonitorRemoteUi.Text = "Open Remote HostControl UI"
         Me.bRunMonitorRemoteUi.UseVisualStyleBackColor = True
@@ -200,7 +201,7 @@ Partial Class GuiClient
         Me.gbTasks.Enabled = False
         Me.gbTasks.Location = New System.Drawing.Point(279, 28)
         Me.gbTasks.Name = "gbTasks"
-        Me.gbTasks.Size = New System.Drawing.Size(713, 318)
+        Me.gbTasks.Size = New System.Drawing.Size(693, 318)
         Me.gbTasks.TabIndex = 3
         Me.gbTasks.TabStop = False
         Me.gbTasks.Text = "Remote Tasks"
@@ -218,7 +219,7 @@ Partial Class GuiClient
         'bUpdateTasks
         '
         Me.bUpdateTasks.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.bUpdateTasks.Location = New System.Drawing.Point(624, 289)
+        Me.bUpdateTasks.Location = New System.Drawing.Point(604, 289)
         Me.bUpdateTasks.Name = "bUpdateTasks"
         Me.bUpdateTasks.Size = New System.Drawing.Size(83, 23)
         Me.bUpdateTasks.TabIndex = 10
@@ -235,21 +236,21 @@ Partial Class GuiClient
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DataGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Navy
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(204, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Navy
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column4})
         Me.DataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically
         Me.DataGridView1.Location = New System.Drawing.Point(6, 19)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(701, 264)
+        Me.DataGridView1.Size = New System.Drawing.Size(681, 264)
         Me.DataGridView1.TabIndex = 0
         '
         'Column1
@@ -493,6 +494,7 @@ Partial Class GuiClient
         '
         'gbTargets
         '
+        Me.gbTargets.Controls.Add(Me.bHostInfo)
         Me.gbTargets.Controls.Add(Me.bFindTargets)
         Me.gbTargets.Controls.Add(Me.bRunMonitorRemoteUi)
         Me.gbTargets.Controls.Add(Me.lbTargets)
@@ -527,11 +529,22 @@ Partial Class GuiClient
         Me.selectFolderDialog.FileName = "Folder Selection"
         Me.selectFolderDialog.ValidateNames = False
         '
+        'bHostInfo
+        '
+        Me.bHostInfo.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.bHostInfo.Location = New System.Drawing.Point(171, 221)
+        Me.bHostInfo.Name = "bHostInfo"
+        Me.bHostInfo.Size = New System.Drawing.Size(78, 23)
+        Me.bHostInfo.TabIndex = 14
+        Me.bHostInfo.Text = "Host Info"
+        Me.bHostInfo.UseVisualStyleBackColor = True
+        '
         'GuiClient
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1004, 752)
+        Me.ClientSize = New System.Drawing.Size(984, 721)
         Me.Controls.Add(Me.gbTargets)
         Me.Controls.Add(Me.gbTask)
         Me.Controls.Add(Me.gbTasks)
@@ -600,4 +613,5 @@ Partial Class GuiClient
     Friend WithEvents Column3 As DataGridViewTextBoxColumn
     Friend WithEvents Column4 As DataGridViewTextBoxColumn
     Friend WithEvents selectFolderDialog As OpenFileDialog
+    Friend WithEvents bHostInfo As Button
 End Class

@@ -41,4 +41,6 @@ Public Class CommonTask
     Public Property ShortState As String = "" Implements ITask.ShortState
 
     Public Property AutoStart As Boolean = True Implements ITask.AutoStart
+
+
 End Class

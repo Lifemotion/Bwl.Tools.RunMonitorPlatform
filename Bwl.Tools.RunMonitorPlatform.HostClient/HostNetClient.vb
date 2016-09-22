@@ -122,6 +122,16 @@ Public Class HostNetClient
         Return form
     End Function
 
+    Public Function GetHostInfo() As String()
+        Dim list As New List(Of RemoteTaskInfo)
+        Dim msg As New NetMessage("S", "RunMonitorControl", "HostInfo")
+        msg.ToID = _transport.TargetSetting.Value
+        msg.FromID = _transport.MyID
+        Dim result = _transport.SendMessageWaitAnswer(msg, "RunMonitorControl-HostInfo", 3)
+        If result Is Nothing Then Throw New Exception("No response")
+        Return result.Part(1).Split({vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries)
+    End Function
+
     Public Function GetTasks() As RemoteTaskInfo()
         Dim list As New List(Of RemoteTaskInfo)
         Dim msg As New NetMessage("S", "RunMonitorControl", "TaskList")
