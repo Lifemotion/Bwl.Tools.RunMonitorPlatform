@@ -243,13 +243,13 @@ Module App
                     Dim psp As New ProcessTaskParameters
                     psp.ExecutableFileName = filename
                     psp.Arguments = arguments
-                    psp.ProcessName = processname
+                   ' psp.ProcessName = processname
                     psp.WorkingDirectory = workdir
                     psp.RedirectInputOutput = remotecmd
                     psp.RestartDelaySecongs = restartdelay
                     Dim foundTask = New ProcessTask(taskName, psp) With {.State = TaskState.Disabled}
                     foundTask.Transport = _transport
-                    If runmonitored Then foundTask.State = TaskState.Warning
+                    If runmonitored Then foundTask.State = TaskState.Warning Else foundTask.State = TaskState.Disabled
                     _appBase.RootLogger.AddMessage("Task " + taskName + " loaded sucessfully")
                     _core.Tasks.Add(foundTask)
                     If autostart Then foundTask.RestartAction.StartProcess()
