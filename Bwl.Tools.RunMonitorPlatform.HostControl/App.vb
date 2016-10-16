@@ -243,7 +243,7 @@ Module App
                     Dim psp As New ProcessTaskParameters
                     psp.ExecutableFileName = filename
                     psp.Arguments = arguments
-                   ' psp.ProcessName = processname
+                    ' psp.ProcessName = processname
                     psp.WorkingDirectory = workdir
                     psp.RedirectInputOutput = remotecmd
                     psp.RestartDelaySecongs = restartdelay

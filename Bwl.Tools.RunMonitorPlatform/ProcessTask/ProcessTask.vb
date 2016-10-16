@@ -65,6 +65,8 @@ Public Class ProcessTask
     End Sub
 
     Public Function GetProcesses() As Process()
+        Dim name = Parameters.ProcessName
+        If name = "mono-sgen" Then name = "mono"
         Dim prcs = Process.GetProcessesByName(Parameters.ProcessName)
         Return prcs
     End Function
