@@ -6,13 +6,14 @@ Module App
     Private _transport As IMessageTransport
     Private _core As New RunMonitorCore(_appBase.RootLogger)
     Private _ui As New RunMonitorAutoUI(_appBase.RootLogger)
-    Private _conWriter As New ConsoleLogWriter
+    Private _conWriter As New ConsoleLogWriter 'With {.WriteExtended = True}
 
     Sub Main(args() As String)
+
         _core.AutomaticEnableTasks = False
         _appBase.RootLogger.ConnectWriter(_conWriter)
         _appBase.RootLogger.AddMessage("Bwl RunMonitor Host Control")
-
+        Console.Title = "Bwl RunMonitor Host Control"
         Dim info = GetHostInfo.Split({vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries)
         For Each line In info
             _appBase.RootLogger.AddMessage(line)
@@ -56,6 +57,19 @@ Module App
         Loop
     End Sub
 
+    Private Function GetShortHostInfo() As String
+        Dim info = ""
+        Dim assembly = System.Reflection.Assembly.GetExecutingAssembly()
+        Dim fvi = FileVersionInfo.GetVersionInfo(assembly.Location)
+        info += System.Environment.MachineName + ", "
+        info += fvi.FileVersion + ", "
+        info += Environment.OSVersion.Platform.ToString  + ", "
+        info += Now.ToShortTimeString + ", "
+        info += "Tasks " + _core.Tasks.Count.ToString
+        Return info
+
+    End Function
+
     Private Function GetHostInfo() As String
         Dim info = ""
         Dim assembly = System.Reflection.Assembly.GetExecutingAssembly()
@@ -92,17 +106,46 @@ Module App
                                 tasktxt += "workdir##=" + prctask.Parameters.WorkingDirectory + "#||"
                                 tasktxt += "remotecmd##=" + prctask.Parameters.RedirectInputOutput.ToString + "#||"
                                 tasktxt += "processname##=" + prctask.Parameters.ProcessName + "#||"
+                                tasktxt += "processstate##=" + prctask.ProcessState + "#||"
                                 tasktxt += "restartdelay##=" + prctask.Parameters.RestartDelaySecongs.ToString + "#||"
                             End If
                             msg.Part(msg.Count) = tasktxt
                         Next
                         transport.SendMessage(msg)
                     Case "Ping"
-                        Dim msg As New NetMessage(message, "RunMonitorControl-Pong")
+                        Dim msg As New NetMessage(message, "RunMonitorControl-Pong", GetShortHostInfo)
                         transport.SendMessage(msg)
                     Case "HostInfo"
                         Dim msg As New NetMessage(message, "RunMonitorControl-HostInfo", GetHostInfo)
                         transport.SendMessage(msg)
+                    Case "DeleteTask"
+                        Dim taskIdWithPrefix = message.Part(2)
+                        If taskIdWithPrefix.StartsWith("ProcessTask_") Then
+                            Dim taskName = taskIdWithPrefix.Replace("ProcessTask_", "")
+                            For Each task In _core.Tasks.ToArray
+                                If task.ID.ToLower = taskIdWithPrefix.ToLower Then
+                                    _core.Tasks.Remove(task)
+                                    DeleteTask(task)
+                                    transport.SendMessage(New NetMessage(message, "RunMonitorControl-DeleteTask", "OK"))
+                                    Return
+                                End If
+                            Next
+                            transport.SendMessage(New NetMessage(message, "RunMonitorControl-DeleteTask", "Error", "NotFound"))
+                        End If
+                    Case "FastShell"
+                        Dim cmd = message.Part(2)
+                        Dim args = message.Part(3)
+                        Dim workdir = message.Part(4)
+                        Try
+                            Dim prc As New Process
+                            prc.StartInfo.FileName = cmd
+                            prc.StartInfo.Arguments = args
+                            prc.StartInfo.WorkingDirectory = workdir
+                            prc.Start()
+                            transport.SendMessage(New NetMessage(message, "RunMonitorControl-FastShell", "OK"))
+                        Catch ex As Exception
+                            transport.SendMessage(New NetMessage(message, "RunMonitorControl-FastShell", "Error", ex.Message))
+                        End Try
                 End Select
             End If
 
@@ -148,7 +191,12 @@ Module App
                                         Case "process" : currentParams.ProcessName = parts(1)
                                         Case "workdir" : currentParams.WorkingDirectory = parts(1).Replace("\", IO.Path.DirectorySeparatorChar)
                                         Case "autostart" : foundTask.AutoStart = (parts(1) = "True")
-                                        Case "runmonitored" : If parts(1) = "True" Then foundTask.State = TaskState.Warning Else foundTask.State = TaskState.Disabled
+                                        Case "state"
+                                            If parts(1) = "Enabled" Then foundTask.State = TaskState.Warning
+                                            If parts(1) = "Warning" Then foundTask.State = TaskState.Warning
+                                            If parts(1) = "Ok" Then foundTask.State = TaskState.Ok
+                                            If parts(1) = "Fault" Then foundTask.State = TaskState.Fault
+                                            If parts(1) = "Disabled" Then foundTask.State = TaskState.Disabled
                                         Case "remotecmd" : currentParams.RedirectInputOutput = (parts(1) = "True")
                                     End Select
                                 End If
@@ -192,7 +240,17 @@ Module App
         End If
     End Sub
 
+    Public Sub DeleteTask(task As ProcessTask)
+        Dim fname = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "data", task.ID + ".prctask")
+        Try
+            IO.File.Delete(fname)
+        Catch ex As Exception
+            _appBase.RootLogger.AddError(ex.Message)
+        End Try
+    End Sub
+
     Public Sub SaveTask(task As ProcessTask)
+        If task.ShortName.StartsWith("_") Then Return
         Dim fname = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "data", task.ID + ".prctask")
         Dim tasktxt As String = ""
         tasktxt += "id##=" + task.ID + vbCrLf
@@ -247,7 +305,9 @@ Module App
                     psp.WorkingDirectory = workdir
                     psp.RedirectInputOutput = remotecmd
                     psp.RestartDelaySecongs = restartdelay
+
                     Dim foundTask = New ProcessTask(taskName, psp) With {.State = TaskState.Disabled}
+                    foundTask.AutoStart = autostart
                     foundTask.Transport = _transport
                     If runmonitored Then foundTask.State = TaskState.Warning Else foundTask.State = TaskState.Disabled
                     _appBase.RootLogger.AddMessage("Task " + taskName + " loaded sucessfully")

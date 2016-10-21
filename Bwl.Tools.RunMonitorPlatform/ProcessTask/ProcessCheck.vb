@@ -19,7 +19,7 @@ Public Class ProcessCheck
         _lastCheck.Message = "Process check: " + _task.Parameters.ProcessName + vbCrLf
         Dim prcs = _task.GetProcesses
         _lastCheck.Message += "Processes found: " + prcs.Length.ToString + vbCrLf
-        If prcs.Length = 0 Then Throw New TaskCheckException(_task, Me, "Running processes not found")
+        If prcs.Length = 0 Then _task.ProcessState = "Stopped, not found" : Throw New TaskCheckException(_task, Me, "Running processes not found")
         _statusInfo = "Processes: " + prcs.Count.ToString + ", "
         For Each prc In prcs
             Dim prcMemoryMb As Integer = (prc.PrivateMemorySize64 / 1024L / 1024L)
@@ -29,16 +29,20 @@ Public Class ProcessCheck
             If _checkProcessResponding Then
                 If prc.Responding = False Then
                     If System.Environment.OSVersion.VersionString.Contains("Windows") Then
+                        _task.ProcessState = "Stopped, not responding"
                         Throw New TaskCheckException(_task, Me, "Process not responding")
                     End If
                 End If
-                If prc.HasExited = True Then Throw New TaskCheckException(_task, Me, "Process has exited")
+                If prc.HasExited = True Then _task.ProcessState = "Stopped, exited" : Throw New TaskCheckException(_task, Me, "Process has exited")
             End If
             If _processMemoryLimit > 0 Then
-                If prcMemoryMb > _processMemoryLimit Then Throw New TaskCheckException(_task, Me, "Memory limit " + _processMemoryLimit.ToString + " > process memory " + prcMemoryMb.ToString)
+                If prcMemoryMb > _processMemoryLimit Then _task.ProcessState = "Running, memory over limit" : Throw New TaskCheckException(_task, Me, "Memory limit " + _processMemoryLimit.ToString + " > process memory " + prcMemoryMb.ToString)
             End If
         Next
-        If prcs.Length > 1 And _checkMultiplyCopies Then Throw New TaskCheckException(_task, Me, ">1 processes found")
+
+        If prcs.Length > 1 And _checkMultiplyCopies Then _task.ProcessState = "Running, >1 processes" : Throw New TaskCheckException(_task, Me, ">1 processes found")
+
+        _task.ProcessState = "Running"
     End Sub
 
 

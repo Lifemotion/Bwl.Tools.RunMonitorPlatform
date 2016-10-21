@@ -1,9 +1,10 @@
 ﻿Imports Bwl.Network.ClientServer
 Imports Bwl.Framework
+Imports Bwl.Tools.RunMonitorPlatform.HostClient
 
 Public Class GuiClient
     Inherits FormAppBase
-    Private _client As New HostNetClient(_storage, _logger)
+    Private WithEvents _client As New HostNetClient(_storage, _logger)
     Private _tasks As New RemoteTaskInfo()
 
     Private Sub HostClient_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -33,13 +34,38 @@ Public Class GuiClient
     End Sub
 
     Private Sub bFindLocalServers_Click(sender As Object, e As EventArgs) Handles bFindLocalServers.Click
-        Dim infos = NetFinder.Find(2000)
-        lbLocalServers.Items.Clear()
-        For Each info In infos
-            If info.Name.Contains("HostControl") Then
-                lbLocalServers.Items.Add(info.Address + ":" + info.Port.ToString + " " + info.Name)
-            End If
-        Next
+        SearchLocalServersAndUIs()
+    End Sub
+
+    Private Sub SearchLocalServersAndUIs()
+        Dim target = settingHostAddress.AssignedSetting.ValueAsString
+        Dim targetParts = target.Split(":")
+        Dim targetHost = "unknown"
+        If targetParts.Length = 2 Then
+            targetHost = targetParts(0)
+        End If
+        Dim thread As New Threading.Thread(Sub()
+                                               Try
+                                                   Dim infos = NetFinder.Find(2000)
+                                                   Me.Invoke(Sub()
+
+                                                                 lbLocalServers.Items.Clear()
+                                                                 lbRemoteUIs.Items.Clear()
+                                                                 For Each info In infos
+                                                                     If info.Name.Contains("HostControl") Then
+                                                                         lbLocalServers.Items.Add(info.Address + ":" + info.Port.ToString + " " + info.Name)
+                                                                     End If
+                                                                     If info.Address.ToLower = targetHost.ToLower And info.Name.Contains("HostControl") = False Then
+                                                                         lbRemoteUIs.Items.Add(info.Address + ":" + info.Port.ToString + " " + info.Name)
+                                                                     End If
+                                                                 Next
+                                                             End Sub)
+                                               Catch ex As Exception
+
+                                               End Try
+
+                                           End Sub)
+        thread.Start()
     End Sub
 
     Private Sub lbLocalServers_DoubleClick(sender As Object, e As EventArgs) Handles lbLocalServers.DoubleClick
@@ -58,7 +84,9 @@ Public Class GuiClient
             If Equals(sender, bStart) Then ops = "kill set start"
             If Equals(sender, bUpload) Then ops = "kill set upload"
             If Equals(sender, bUploadStart) Then ops = "kill set upload start"
-            _client.SendProcessTask(tbTaskId.Text, ops, tbFile.Text, tbArguments.Text, "", tbParameters.Text, cbAutoStart.Checked, cbMonitor.Checked, cbRemoteCmd.Checked, cbUploadFrom.Text)
+            Dim rms = "Ok"
+            If cbMonitor.Checked = False Then rms = "Disabled"
+            _client.SendProcessTask(tbTaskId.Text, ops, tbFile.Text, tbArguments.Text, "", tbParameters.Text, cbAutoStart.Checked, rms, cbRemoteCmd.Checked, cbUploadFrom.Text)
             If cbRemoteCmd.Checked And ops.Contains("start") Then
                 _client.CreateRemoteCmdForm(tbTaskId.Text).Show(Me)
             End If
@@ -83,20 +111,11 @@ Public Class GuiClient
     End Sub
 
     Private Sub ShowTasksList() Handles bUpdateTasks.Click
-        DataGridView1.Rows.Clear()
         Try
-            Dim tasks = _client.GetTasks
-            For Each task In tasks
-                DataGridView1.Rows.Add(task.ID, task.State, task.Autostart, task.Runmonitored)
-                Dim lastrow = DataGridView1.Rows(DataGridView1.Rows.Count - 1)
-                lastrow.Tag = task
-            Next
+            _client.GetTasks()
         Catch ex As Exception
+            _logger.AddError(ex.Message)
         End Try
-    End Sub
-
-    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
-
     End Sub
 
     Private Sub tUpdateConnectedState_Tick(sender As Object, e As EventArgs) Handles tUpdateConnectedState.Tick
@@ -105,11 +124,14 @@ Public Class GuiClient
             If _client.TargetConnected Then
                 gbTasks.Enabled = True
                 gbTask.Enabled = True
+                gbTarget.Enabled = True
             Else
+                gbTarget.Enabled = False
                 gbTasks.Enabled = False
                 gbTask.Enabled = False
             End If
         Else
+            gbTarget.Enabled = False
             gbTargets.Enabled = False
             gbTasks.Enabled = False
             gbTask.Enabled = False
@@ -157,13 +179,48 @@ Public Class GuiClient
         End If
     End Sub
 
-    Private Sub DataGridView1_SelectionChanged(sender As Object, e As EventArgs) Handles DataGridView1.SelectionChanged, DataGridView1.CurrentCellChanged
-        If DataGridView1.SelectedRows.Count = 0 Then Return
-        Dim row = DataGridView1.SelectedRows(0)
+    Private Sub bHostInfo_Click(sender As Object, e As EventArgs) Handles bHostInfo.Click
+        Try
+            _client.GetHostInfo()
+        Catch ex As Exception
+            _logger.AddError(ex.Message)
+        End Try
+    End Sub
+
+    Private Sub _client_TaskListReceived(tasks() As RemoteTaskInfo) Handles _client.TaskListReceived
+        Me.Invoke(Sub()
+                      gbTasks.Text = "Remote Tasks (updated " + Now.ToLongTimeString + ")"
+                      DataGridView1.Rows.Clear()
+                      For Each task In tasks
+                          DataGridView1.Rows.Add(task.ID, task.ProcessState, task.RunMonitorState, task.Autostart)
+                          Dim lastrow = DataGridView1.Rows(DataGridView1.Rows.Count - 1)
+                          lastrow.Tag = task
+                      Next
+                  End Sub)
+    End Sub
+
+    Private Sub _client_SendProcessTaskResultReceived(ok As Boolean, info As String) Handles _client.SendProcessTaskResultReceived
+
+    End Sub
+
+    Private Sub _client_HostInfoReceived(info() As String) Handles _client.HostInfoReceived
+        For Each line In info
+            _logger.AddInformation(line)
+        Next
+    End Sub
+
+    Private Sub bRemoteCmd_Click(sender As Object, e As EventArgs) Handles bRemoteCmd.Click
+        _client.CreateRemoteCmdForm(tbTaskId.Text).Show(Me)
+    End Sub
+
+    Private Sub DataGridView1_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellClick
+
+        If e.RowIndex < 0 Then Return
+        Dim row = DataGridView1.Rows(e.RowIndex)
         Dim task As RemoteTaskInfo = row.Tag
         If task IsNot Nothing Then
             cbAutoStart.Checked = task.Autostart
-            cbMonitor.Checked = task.Runmonitored
+            cbMonitor.Checked = task.RunMonitorState <> "Disabled"
             cbRemoteCmd.Checked = task.RemoteCmd
             tbFile.Text = task.Filename
             tbArguments.Text = task.Arguments
@@ -173,14 +230,65 @@ Public Class GuiClient
         End If
     End Sub
 
-    Private Sub bHostInfo_Click(sender As Object, e As EventArgs) Handles bHostInfo.Click
-        Try
-            Dim info = _client.GetHostInfo
-            For Each line In info
-                _logger.AddInformation(line)
+    Private Sub bDelete_Click(sender As Object, e As EventArgs) Handles bDelete.Click
+        If _client.Transport.IsConnected Then
+            _client.DeleteTask(tbTaskId.Text)
+            Dim thread As New Threading.Thread(Sub()
+                                                   Me.Invoke(Sub() ShowTasksList())
+                                               End Sub)
+            thread.Start()
+        End If
+    End Sub
+
+    Private Sub tScanLocalServers_Tick(sender As Object, e As EventArgs) Handles tScanLocalServers.Tick
+        SearchLocalServersAndUIs()
+    End Sub
+
+    Private Sub _client_ShortHostInfoReceived(info As String) Handles _client.ShortHostInfoReceived
+        Me.Invoke(Sub() tbShortHostInfo.Text = info)
+    End Sub
+
+    Private Sub tbFile_SelectedIndexChanged(sender As Object, e As EventArgs) Handles tbFile.SelectedIndexChanged
+        If tbFile.Text > "" Then
+            Dim id As String = ""
+            For Each ch In IO.Path.GetFileNameWithoutExtension(tbFile.Text)
+                Select Case ch
+                    Case "A" To "Z", "a" To "z", "0" To "9", "-", "_"
+                        id += ch
+                End Select
             Next
-        Catch ex As Exception
-            _logger.AddError(ex.Message)
-        End Try
+            tbTaskId.Text = "ProcessTask_" + id
+        End If
+    End Sub
+
+
+    Private Sub lbRemoteUIs_DoubleClick(sender As Object, e As EventArgs) Handles lbRemoteUIs.DoubleClick
+        If lbRemoteUIs.Text > "" Then
+            Dim addr = lbRemoteUIs.Text.Split(" ")(0)
+            TextBox1.Text = addr
+        End If
+    End Sub
+
+    Private Sub bConnectAutoUi_Click(sender As Object, e As EventArgs) Handles bConnectAutoUi.Click
+        If TextBox1.Text > "" Then
+            Dim remoteclient As New RemoteAppClient
+            remoteclient.MessageTransport.Open(TextBox1.Text, "")
+            remoteclient.MessageTransport.RegisterMe("User", "", "RemoteAppClient", "")
+            remoteclient.CreateAutoUiForm.Show()
+        End If
+    End Sub
+
+    Private Sub bFastshell_Click(sender As Object, e As EventArgs) Handles bFastshell.Click
+        Dim all = tbFastshell.Text
+        If all > "" Then
+            Dim cmd = all.Split(" ")(0)
+            Dim args = all.Replace(cmd + " ", "")
+            Dim workdir = ""
+            _client.FastShellCommand(cmd, args, workdir)
+        End If
+    End Sub
+
+    Private Sub DataGridView1_SelectionChanged(sender As Object, e As EventArgs) Handles DataGridView1.SelectionChanged
+        DataGridView1.ClearSelection()
     End Sub
 End Class

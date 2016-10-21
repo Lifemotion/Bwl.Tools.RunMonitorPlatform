@@ -82,11 +82,13 @@ Public Class ProcessRestartAction
 
             If _task.Parameters.RedirectInputOutput Then
                 If _remcmd IsNot Nothing Then _remcmd.Dispose()
-                _remcmd = New CmdlineServer(_task.Transport, _task.ID, filename, _task.Parameters.Arguments, workdir)
+                Dim enc = System.Text.Encoding.GetEncoding(866)
+                If System.Environment.OSVersion.VersionString.Contains("Unix") Then enc = System.Text.Encoding.UTF8
+                _remcmd = New CmdlineServer(_task.Transport, _task.ID, filename, _task.Parameters.Arguments, workdir) With {.Encoding = enc}
+
                 Try
                     'Console.WriteLine("Process starting")
                     _remcmd.Start()
-                    _task.SetProcess(_remcmd.Process, _remcmd)
                     If _task.Parameters.ProcessName Is Nothing OrElse _task.Parameters.ProcessName = "" Then
                         _task.SetProcessName(_remcmd.Process.ProcessName)
                     End If
@@ -102,7 +104,6 @@ Public Class ProcessRestartAction
                 'Console.WriteLine("Process starting")
                 Try
                     prc.Start()
-                    _task.SetProcess(prc, Nothing)
                     If _task.Parameters.ProcessName Is Nothing OrElse _task.Parameters.ProcessName = "" Then
                         _task.SetProcessName(prc.ProcessName)
                     End If

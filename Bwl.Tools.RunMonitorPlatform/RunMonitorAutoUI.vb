@@ -5,7 +5,7 @@ Public Class RunMonitorAutoUI
     Public Property RefreshTasksDelay As Integer
 
     Private _logger As Logger
-    Private _tasks As ITask()
+    Private _tasks As ITask() = {}
     Private _formDescriptor As AutoFormDescriptor
     Private _ui As New AutoUI
 

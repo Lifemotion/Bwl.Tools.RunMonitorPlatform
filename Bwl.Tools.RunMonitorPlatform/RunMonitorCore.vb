@@ -55,6 +55,12 @@ Public Class RunMonitorCore
                             task.ExternalInfo = ""
                         End If
                     End If
+                    For Each check In task.Checks
+                        Try
+                            check.Check()
+                        Catch ex As Exception
+                        End Try
+                    Next
                 Else
                     _logger.AddDebug("Checking Task " + task.ID)
 
@@ -70,7 +76,7 @@ Public Class RunMonitorCore
                                 _logger.AddWarning("Check Failed " + task.ID + " - " + ex.MainMessage)
                                 check.LastCheck.SetNowError("", ex.MainMessage)
                             Catch ex As Exception
-                                _logger.AddWarning("Check Failed " + task.ID + " - " + ex.Message)
+                                _logger.AddError("Check Failed " + task.ID + " - " + ex.Message)
                                 check.LastCheck.SetNowError("", ex.Message)
                             End Try
                         End If

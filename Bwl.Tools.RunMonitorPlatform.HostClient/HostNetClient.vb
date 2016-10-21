@@ -2,27 +2,84 @@
 Imports Bwl.Framework
 
 Public Class HostNetClient
+    Public ReadOnly Property Transport As MessageTransport
+    Public ReadOnly Property TargetConnected As Boolean
+    Public Event HostInfoReceived(info As String())
+    Public Event ShortHostInfoReceived(info As String)
+    Public Event TaskListReceived(tasks As RemoteTaskInfo())
+    Public Event SendProcessTaskResultReceived(ok As Boolean, info As String)
     Private _storage As SettingsStorage
     Private _logger As Logger
-    Private _transport As MessageTransport
     Private _targetCheckThread As New Threading.Thread(AddressOf TargetCheck)
     Private _uploadFilterSetting As StringSetting
+    Private _lastPongResponse As DateTime
+    Private _remoteCmdForms As New List(Of CmdlineUi)
+
+    Public Sub New(storage As SettingsStorage, logger As Logger)
+        _storage = storage
+        _uploadFilterSetting = New StringSetting(_storage, "UploadFilter", ".pdb, .bak, .vb, .cs, .log, .ini")
+        _logger = logger
+        _Transport = New MessageTransport(_storage, _logger,, "localhost:8064",, "HostControl", "BwlHostClient", False)
+        AddHandler Transport.ReceivedMessage, AddressOf ReceivedMessageHandler
+        _targetCheckThread.IsBackground = True
+        _targetCheckThread.Start()
+    End Sub
+
+    Private Sub ReceivedMessageHandler(message As NetMessage)
+        Select Case message.Part(0)
+            Case "RunMonitorControl-Pong"
+                _lastPongResponse = Now
+                RaiseEvent ShortHostInfoReceived(message.Part(1))
+            Case "RunMonitorControl-HostInfo"
+                Dim result = message.Part(1).Split({vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries)
+                _lastPongResponse = Now
+                RaiseEvent HostInfoReceived(result)
+            Case "RunMonitorControl-TaskList"
+                _lastPongResponse = Now
+                Dim list As New List(Of RemoteTaskInfo)
+                For i = 1 To message.Count - 1
+                    Dim taskitems = message.Part(i).Split({"#||"}, StringSplitOptions.RemoveEmptyEntries)
+                    Dim info As New RemoteTaskInfo
+                    For Each taskitem In taskitems
+                        Dim parts = taskitem.Split({"##="}, StringSplitOptions.RemoveEmptyEntries)
+                        If parts.Length = 2 Then
+                            Select Case parts(0)
+                                Case "id" : info.ID = parts(1)
+                                Case "filename" : info.Filename = parts(1)
+                                Case "arguments" : info.Arguments = parts(1)
+                                Case "workdir" : info.Workdir = parts(1)
+                                Case "params" : info.Parameters = parts(1)
+                                Case "remotecmd" : info.RemoteCmd = (parts(1) = "True")
+                                Case "autostart" : info.Autostart = (parts(1) = "True")
+                                Case "processstate" : info.ProcessState = parts(1)
+                                Case "state" : info.RunMonitorState = parts(1)
+                                Case "info"
+                                    If parts(1) > "" Then
+                                        info.Info = parts(1).Split({vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries)
+                                    End If
+                            End Select
+                        End If
+                    Next
+                    list.Add(info)
+                Next
+                RaiseEvent TaskListReceived(list.ToArray)
+            Case "RunMonitorTask-Result"
+                _lastPongResponse = Now
+                RaiseEvent SendProcessTaskResultReceived(message.Part(1) = "OK", message.Part(2))
+        End Select
+    End Sub
 
     Private Sub TargetCheck()
         Do
             Try
-                If _transport.IsConnected = False Then
+                If _Transport.IsConnected = False Then
                     _TargetConnected = False
                 Else
                     Dim msg As New NetMessage("S", "RunMonitorControl", "Ping")
-                    msg.ToID = _transport.TargetSetting.Value
-                    msg.FromID = _transport.MyID
-                    Dim result = _transport.SendMessageWaitAnswer(msg, "RunMonitorControl-Pong", 5)
-                    If result Is Nothing Then
-                        _TargetConnected = False
-                    Else
-                        _TargetConnected = True
-                    End If
+                    msg.ToID = _Transport.TargetSetting.Value
+                    msg.FromID = _Transport.MyID
+                    _Transport.SendMessage(msg)
+                    _TargetConnected = (Now - _lastPongResponse).TotalSeconds < 10
                 End If
             Catch ex As Exception
             End Try
@@ -30,23 +87,8 @@ Public Class HostNetClient
         Loop
     End Sub
 
-    Public Sub New(storage As SettingsStorage, logger As Logger)
-        _storage = storage
-        _uploadFilterSetting = New StringSetting(_storage, "UploadFilter", ".pdb, .bak, .vb, .cs, .log, .ini")
-        _logger = logger
-        _transport = New MessageTransport(_storage, _logger,, "localhost:8064",, "HostControl", "BwlHostClient", False)
-        _targetCheckThread.IsBackground = True
-        _targetCheckThread.Start()
-    End Sub
-
-    Public ReadOnly Property Transport As MessageTransport
-        Get
-            Return _transport
-        End Get
-    End Property
-
     Public Sub SendProcessTask(id As String, operations As String, filename As String, arguments As String,
-                             workdir As String, params As String, autostart As Boolean, runmonitored As Boolean,
+                             workdir As String, params As String, autostart As Boolean, runmonitorstate As String,
                              remoteCmd As Boolean, uploadFrom As String)
         If id.StartsWith("ProcessTask_") = False Then Throw New Exception("Id must start with 'ProcessTask_'")
         Dim name = id.Replace("ProcessTask_", "")
@@ -65,10 +107,10 @@ Public Class HostNetClient
         taskparams += "workdir=" + workdir + vbCrLf
         taskparams += "remotecmd=" + remoteCmd.ToString + vbCrLf
         taskparams += "autostart=" + autostart.ToString + vbCrLf
-        taskparams += "runmonitored=" + runmonitored.ToString + vbCrLf
+        taskparams += "state=" + runmonitorstate + vbCrLf
         Dim msg As New NetMessage("S", "RunMonitorTask", id, operations, taskparams, params)
-        msg.ToID = _transport.TargetSetting.Value
-        msg.FromID = _transport.MyID
+        msg.ToID = _Transport.TargetSetting.Value
+        msg.FromID = _Transport.MyID
         If operations.Contains("upload") Then
             If IO.Directory.Exists(uploadFrom) = False Then Throw New Exception("Folder upload from not found: " + uploadFrom)
             Dim filelist As New List(Of String)
@@ -104,11 +146,12 @@ Public Class HostNetClient
             Next
             _logger.AddInformation("Files to copy: " + filelist.Count.ToString + ", " + (bytes / 1024 / 1024).ToString("0.000") + " Mb")
         End If
-        Dim result = _transport.SendMessageWaitAnswer(msg, "RunMonitorTask-Result", 120)
-        If result Is Nothing Then Throw New Exception("No response")
-    End Sub
+        Dim thr As New Threading.Thread(Sub()
+                                            _Transport.SendMessage(msg)
 
-    Public ReadOnly Property TargetConnected As Boolean
+                                        End Sub)
+        thr.Start()
+    End Sub
 
     Public Function CreateShellTask() As String
         Dim id = "ProcessTask__shell"
@@ -116,57 +159,52 @@ Public Class HostNetClient
         Return id
     End Function
 
+    Public Sub DeleteTask(id As String)
+        Dim msg As New NetMessage("S", "RunMonitorControl", "DeleteTask", id)
+        msg.ToID = _Transport.TargetSetting.Value
+        msg.FromID = _Transport.MyID
+        _Transport.SendMessage(msg)
+    End Sub
+
     Public Function CreateRemoteCmdForm(id As String) As CmdlineUi
+        For Each existingForm In _remoteCmdForms
+            If existingForm.Tag = id Then
+                existingForm.Hide()
+                Return existingForm
+            End If
+        Next
         Dim cmdclient = New CmdlineClient(Transport, id, Transport.TargetSetting.Value)
         Dim form As New CmdlineUi(cmdclient)
+        form.Tag = id
+        form.Text = "CLI: " + id
+        _remoteCmdForms.Add(form)
+        AddHandler form.FormClosing, Sub()
+                                         _remoteCmdForms.Remove(form)
+                                     End Sub
         Return form
     End Function
 
-    Public Function GetHostInfo() As String()
+    Public Sub GetHostInfo()
         Dim list As New List(Of RemoteTaskInfo)
         Dim msg As New NetMessage("S", "RunMonitorControl", "HostInfo")
-        msg.ToID = _transport.TargetSetting.Value
-        msg.FromID = _transport.MyID
-        Dim result = _transport.SendMessageWaitAnswer(msg, "RunMonitorControl-HostInfo", 3)
-        If result Is Nothing Then Throw New Exception("No response")
-        Return result.Part(1).Split({vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries)
-    End Function
+        msg.ToID = _Transport.TargetSetting.Value
+        msg.FromID = _Transport.MyID
+        _Transport.SendMessage(msg)
+    End Sub
 
-    Public Function GetTasks() As RemoteTaskInfo()
-        Dim list As New List(Of RemoteTaskInfo)
+    Public Sub GetTasks()
         Dim msg As New NetMessage("S", "RunMonitorControl", "TaskList")
-        msg.ToID = _transport.TargetSetting.Value
-        msg.FromID = _transport.MyID
-        Dim result = _transport.SendMessageWaitAnswer(msg, "RunMonitorControl-TaskList", 3)
-        If result Is Nothing Then Throw New Exception("No response")
-        For i = 1 To result.Count - 1
-            Dim taskitems = result.Part(i).Split({"#||"}, StringSplitOptions.RemoveEmptyEntries)
-            Dim info As New RemoteTaskInfo
-            For Each taskitem In taskitems
-                Dim parts = taskitem.Split({"##="}, StringSplitOptions.RemoveEmptyEntries)
-                If parts.Length = 2 Then
-                    Select Case parts(0)
-                        Case "id" : info.ID = parts(1)
-                        Case "filename" : info.Filename = parts(1)
-                        Case "arguments" : info.Arguments = parts(1)
-                        Case "workdir" : info.Workdir = parts(1)
-                        Case "params" : info.Parameters = parts(1)
-                        Case "remotecmd" : info.RemoteCmd = (parts(1) = "True")
-                        Case "autostart" : info.Autostart = (parts(1) = "True")
-                        Case "runmonitored" : info.Runmonitored = (parts(1) = "True")
-                        Case "state" : info.State = parts(1)
-                        Case "info"
-                            If parts(1) > "" Then
-                                info.Info = parts(1).Split({vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries)
-                            End If
-                    End Select
-                End If
-            Next
-            list.Add(info)
-        Next
-        Return list.ToArray
-    End Function
+        msg.ToID = _Transport.TargetSetting.Value
+        msg.FromID = _Transport.MyID
+        _Transport.SendMessage(msg)
+    End Sub
 
+    Public Sub FastShellCommand(cmd As String, args As String, workdir As String)
+        Dim msg As New NetMessage("S", "RunMonitorControl", "FastShell", cmd, args, workdir)
+        msg.ToID = _Transport.TargetSetting.Value
+        msg.FromID = _Transport.MyID
+        _Transport.SendMessage(msg)
+    End Sub
 End Class
 
 Public Class RemoteTaskInfo
@@ -177,7 +215,7 @@ Public Class RemoteTaskInfo
     Public Property Parameters As String = ""
     Public Property RemoteCmd As Boolean
     Public Property Autostart As Boolean
-    Public Property Runmonitored As Boolean
-    Public Property State As String = ""
+    Public Property RunMonitorState As String = ""
+    Public Property ProcessState As String = ""
     Public Property Info As String() = {}
 End Class

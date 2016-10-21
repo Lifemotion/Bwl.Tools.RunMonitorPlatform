@@ -31,19 +31,14 @@ Public Class ProcessTask
     private _restartAction as ProcessRestartAction
 
     Public Property Parameters As ProcessTaskParameters
-    'Public ReadOnly Property Process As Process
-    'Public ReadOnly Property CmdRemoting As CmdlineServer
     Public Property Transport As IMessageTransport
+    Public Property ProcessState As String
+
     Public ReadOnly Property RestartAction As ProcessRestartAction
         Get
             Return _restartAction
         End Get
     End Property
-
-    Friend Sub SetProcess(process As Process, cmdlineServer As CmdlineServer)
-       ' _Process = process
-       ' _CmdRemoting = cmdlineServer
-    End Sub
 
     Friend Sub SetProcessName(processName As String)
         Dim params = Parameters
@@ -56,7 +51,7 @@ Public Class ProcessTask
     End Sub
 
     Sub New(shortname As String, parameters As ProcessTaskParameters, additionalChecks As IEnumerable(Of ITaskCheck))
-        MyBase.New("ProcessTask_" + If(parameters.ProcessName > "", parameters.ProcessName, shortname) + parameters.IdAppendix, shortname)
+        MyBase.New("ProcessTask_" + shortname, shortname)
         _Parameters = parameters
         Checks.Add(New ProcessCheck(Me, True, True, 0))
         Checks.AddRange(additionalChecks)
