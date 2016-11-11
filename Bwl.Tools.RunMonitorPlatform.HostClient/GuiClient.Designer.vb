@@ -37,6 +37,10 @@ Partial Class GuiClient
         Me.bRunRemoteShell = New System.Windows.Forms.Button()
         Me.bUpdateTasks = New System.Windows.Forms.Button()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.gbTask = New System.Windows.Forms.GroupBox()
         Me.bDelete = New System.Windows.Forms.Button()
         Me.bRemoteCmd = New System.Windows.Forms.Button()
@@ -74,10 +78,6 @@ Partial Class GuiClient
         Me.lbRemoteUIs = New System.Windows.Forms.ListBox()
         Me.tbShortHostInfo = New System.Windows.Forms.TextBox()
         Me.tScanLocalServers = New System.Windows.Forms.Timer(Me.components)
-        Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.gbConnect.SuspendLayout()
         Me.gbTasks.SuspendLayout()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -88,14 +88,14 @@ Partial Class GuiClient
         '
         'logWriter
         '
+        Me.logWriter.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.logWriter.ExtendedView = False
         Me.logWriter.Location = New System.Drawing.Point(279, 538)
-        Me.logWriter.Size = New System.Drawing.Size(693, 183)
+        Me.logWriter.Size = New System.Drawing.Size(693, 134)
         '
         'gbConnect
         '
-        Me.gbConnect.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.gbConnect.Controls.Add(Me.Label1)
         Me.gbConnect.Controls.Add(Me.bFindLocalServers)
         Me.gbConnect.Controls.Add(Me.lbLocalServers)
@@ -255,6 +255,30 @@ Partial Class GuiClient
         Me.DataGridView1.ShowEditingIcon = False
         Me.DataGridView1.Size = New System.Drawing.Size(681, 264)
         Me.DataGridView1.TabIndex = 0
+        '
+        'Column1
+        '
+        Me.Column1.HeaderText = "Task ID"
+        Me.Column1.Name = "Column1"
+        Me.Column1.Width = 200
+        '
+        'Column2
+        '
+        Me.Column2.HeaderText = "State"
+        Me.Column2.Name = "Column2"
+        Me.Column2.Width = 200
+        '
+        'Column4
+        '
+        Me.Column4.HeaderText = "RunMonitor"
+        Me.Column4.Name = "Column4"
+        Me.Column4.Width = 160
+        '
+        'Column3
+        '
+        Me.Column3.HeaderText = "Autostart"
+        Me.Column3.Name = "Column3"
+        Me.Column3.Width = 60
         '
         'gbTask
         '
@@ -550,9 +574,9 @@ Partial Class GuiClient
         Me.gbTarget.Controls.Add(Me.bRunMonitorRemoteUi)
         Me.gbTarget.Controls.Add(Me.bHostInfo)
         Me.gbTarget.Enabled = False
-        Me.gbTarget.Location = New System.Drawing.Point(12, 363)
+        Me.gbTarget.Location = New System.Drawing.Point(12, 357)
         Me.gbTarget.Name = "gbTarget"
-        Me.gbTarget.Size = New System.Drawing.Size(261, 346)
+        Me.gbTarget.Size = New System.Drawing.Size(261, 315)
         Me.gbTarget.TabIndex = 15
         Me.gbTarget.TabStop = False
         Me.gbTarget.Text = "Selected Target"
@@ -561,7 +585,7 @@ Partial Class GuiClient
         '
         Me.bFastshell.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.bFastshell.Location = New System.Drawing.Point(9, 296)
+        Me.bFastshell.Location = New System.Drawing.Point(10, 283)
         Me.bFastshell.Name = "bFastshell"
         Me.bFastshell.Size = New System.Drawing.Size(122, 23)
         Me.bFastshell.TabIndex = 30
@@ -571,15 +595,15 @@ Partial Class GuiClient
         'tbFastshell
         '
         Me.tbFastshell.FormattingEnabled = True
-        Me.tbFastshell.Location = New System.Drawing.Point(9, 269)
+        Me.tbFastshell.Location = New System.Drawing.Point(10, 256)
         Me.tbFastshell.Name = "tbFastshell"
-        Me.tbFastshell.Size = New System.Drawing.Size(241, 21)
+        Me.tbFastshell.Size = New System.Drawing.Size(239, 21)
         Me.tbFastshell.TabIndex = 29
         '
         'TextBox1
         '
         Me.TextBox1.Enabled = False
-        Me.TextBox1.Location = New System.Drawing.Point(10, 214)
+        Me.TextBox1.Location = New System.Drawing.Point(10, 201)
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(240, 20)
         Me.TextBox1.TabIndex = 19
@@ -588,7 +612,7 @@ Partial Class GuiClient
         '
         Me.bConnectAutoUi.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.bConnectAutoUi.Location = New System.Drawing.Point(9, 240)
+        Me.bConnectAutoUi.Location = New System.Drawing.Point(10, 227)
         Me.bConnectAutoUi.Name = "bConnectAutoUi"
         Me.bConnectAutoUi.Size = New System.Drawing.Size(122, 23)
         Me.bConnectAutoUi.TabIndex = 18
@@ -612,7 +636,7 @@ Partial Class GuiClient
         Me.lbRemoteUIs.FormattingEnabled = True
         Me.lbRemoteUIs.Location = New System.Drawing.Point(10, 139)
         Me.lbRemoteUIs.Name = "lbRemoteUIs"
-        Me.lbRemoteUIs.Size = New System.Drawing.Size(240, 69)
+        Me.lbRemoteUIs.Size = New System.Drawing.Size(240, 43)
         Me.lbRemoteUIs.TabIndex = 16
         '
         'tbShortHostInfo
@@ -628,35 +652,11 @@ Partial Class GuiClient
         Me.tScanLocalServers.Enabled = True
         Me.tScanLocalServers.Interval = 2000
         '
-        'Column1
-        '
-        Me.Column1.HeaderText = "Task ID"
-        Me.Column1.Name = "Column1"
-        Me.Column1.Width = 200
-        '
-        'Column2
-        '
-        Me.Column2.HeaderText = "State"
-        Me.Column2.Name = "Column2"
-        Me.Column2.Width = 200
-        '
-        'Column4
-        '
-        Me.Column4.HeaderText = "RunMonitor"
-        Me.Column4.Name = "Column4"
-        Me.Column4.Width = 160
-        '
-        'Column3
-        '
-        Me.Column3.HeaderText = "Autostart"
-        Me.Column3.Name = "Column3"
-        Me.Column3.Width = 60
-        '
         'GuiClient
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(984, 721)
+        Me.ClientSize = New System.Drawing.Size(984, 674)
         Me.Controls.Add(Me.gbTarget)
         Me.Controls.Add(Me.gbTargets)
         Me.Controls.Add(Me.gbTask)
