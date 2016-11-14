@@ -120,6 +120,7 @@ Partial Class GuiClient
         'bFindLocalServers
         '
         Me.bFindLocalServers.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.bFindLocalServers.Enabled = False
         Me.bFindLocalServers.Location = New System.Drawing.Point(9, 159)
         Me.bFindLocalServers.Name = "bFindLocalServers"
         Me.bFindLocalServers.Size = New System.Drawing.Size(123, 23)
@@ -135,7 +136,9 @@ Partial Class GuiClient
         Me.lbLocalServers.FormattingEnabled = True
         Me.lbLocalServers.Location = New System.Drawing.Point(9, 38)
         Me.lbLocalServers.Name = "lbLocalServers"
+        Me.lbLocalServers.SelectionMode = System.Windows.Forms.SelectionMode.None
         Me.lbLocalServers.Size = New System.Drawing.Size(240, 69)
+        Me.lbLocalServers.Sorted = True
         Me.lbLocalServers.TabIndex = 8
         '
         'settingHostAddress
@@ -595,6 +598,7 @@ Partial Class GuiClient
         'tbFastshell
         '
         Me.tbFastshell.FormattingEnabled = True
+        Me.tbFastshell.Items.AddRange(New Object() {"//Linux//", "sudo reboot", "sudo shutdown now", "pkill mono", "", "//Windows//", "shutdown -r -t 5"})
         Me.tbFastshell.Location = New System.Drawing.Point(10, 256)
         Me.tbFastshell.Name = "tbFastshell"
         Me.tbFastshell.Size = New System.Drawing.Size(239, 21)
