@@ -136,7 +136,6 @@ Partial Class GuiClient
         Me.lbLocalServers.FormattingEnabled = True
         Me.lbLocalServers.Location = New System.Drawing.Point(9, 38)
         Me.lbLocalServers.Name = "lbLocalServers"
-        Me.lbLocalServers.SelectionMode = System.Windows.Forms.SelectionMode.None
         Me.lbLocalServers.Size = New System.Drawing.Size(240, 69)
         Me.lbLocalServers.Sorted = True
         Me.lbLocalServers.TabIndex = 8

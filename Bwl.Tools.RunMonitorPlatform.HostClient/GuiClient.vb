@@ -304,5 +304,6 @@ Public Class GuiClient
             Dim addr = lbLocalServers.Text.Split(" ")(0)
             settingHostAddress.AssignedSetting.ValueAsString = addr
         End If
+        lbLocalServers.ClearSelected()
     End Sub
 End Class
