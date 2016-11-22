@@ -597,7 +597,7 @@ Partial Class GuiClient
         'tbFastshell
         '
         Me.tbFastshell.FormattingEnabled = True
-        Me.tbFastshell.Items.AddRange(New Object() {"//Linux//", "sudo reboot", "sudo shutdown now", "pkill mono", "", "//Windows//", "shutdown -r -t 5"})
+        Me.tbFastshell.Items.AddRange(New Object() {"//Linux//", "sudo reboot", "sudo shutdown now", "sudo hostnamectl set-hostname mymachine", "pkill mono", "", "//Windows//", "shutdown -r -t 5"})
         Me.tbFastshell.Location = New System.Drawing.Point(10, 256)
         Me.tbFastshell.Name = "tbFastshell"
         Me.tbFastshell.Size = New System.Drawing.Size(239, 21)
