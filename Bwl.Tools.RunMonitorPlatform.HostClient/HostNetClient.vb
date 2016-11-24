@@ -25,6 +25,11 @@ Public Class HostNetClient
         _targetCheckThread.Start()
     End Sub
 
+    Public Sub Connect()
+        Transport.OpenAndRegister()
+        _lastPongResponse = Now
+    End Sub
+
     Private Sub ReceivedMessageHandler(message As NetMessage)
         Select Case message.Part(0)
             Case "RunMonitorControl-Pong"

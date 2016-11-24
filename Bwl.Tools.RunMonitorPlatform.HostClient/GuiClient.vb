@@ -21,7 +21,7 @@ Public Class GuiClient
         Catch ex As Exception
         End Try
         Try
-            _client.Transport.OpenAndRegister()
+            _client.Connect
             bFindTargets_Click()
         Catch ex As Exception
             _logger.AddError(ex.Message)
@@ -175,6 +175,7 @@ Public Class GuiClient
                         End Select
                     Next
                     tbTaskId.Text = "ProcessTask_" + id
+                    IO.File.WriteAllText(IO.Path.Combine(AppBase.DataFolder, tbTaskId.Text + "-uploadpath.txt"), path)
                 Else
                     tbTaskId.Text = "ProcessTask_"
                     tbFile.Text = ""
@@ -230,6 +231,14 @@ Public Class GuiClient
             tbArguments.Text = task.Arguments
             tbTaskId.Text = task.ID
             tbParameters.Text = task.Parameters
+            Try
+                cbUploadFrom.Text = ""
+                Dim path = IO.File.ReadAllText(IO.Path.Combine(AppBase.DataFolder, tbTaskId.Text + "-uploadpath.txt"))
+                cbUploadFrom.Text = path
+            Catch ex As Exception
+
+            End Try
+
             ' tbFil.Text = task.Workdir
         End If
     End Sub
