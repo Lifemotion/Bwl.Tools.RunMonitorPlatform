@@ -18,7 +18,8 @@ Module App
         For Each line In info
             _appBase.RootLogger.AddMessage(line)
         Next
-        _appBase.RootLogger.AddMessage("")
+        Console.WriteLine()
+        Dim ok As Boolean
         For Each arg In args
             Dim argParts = arg.Split("=")
             If argParts(0) = "localserver" AndAlso (argParts.Length = 3 Or argParts.Length = 2) Then
@@ -32,6 +33,7 @@ Module App
                                                              End Sub
                 _transport.RegisterMe("LocalServer", "", "HostControl", "")
                 _appBase.RootLogger.AddMessage("Local Server created: " + arg)
+                ok = True
 
             End If
             If argParts(0) = "repeater" AndAlso argParts.Length = 3 Then
@@ -40,6 +42,7 @@ Module App
                                                            ProcessMessage(_transport, message)
                                                        End Sub
                 _appBase.RootLogger.AddMessage("Repeater connection created: " + arg)
+                ok = True
             End If
 
             If argParts(0) = "remoteapp" Then
@@ -49,12 +52,17 @@ Module App
 
             End If
         Next
-        CreateSavedTasks()
+        If ok = True Then
+            CreateSavedTasks()
 
-        Do
-            Threading.Thread.Sleep(3000)
-            _core.SingleCheck()
-        Loop
+            Do
+                Threading.Thread.Sleep(3000)
+                _core.SingleCheck()
+            Loop
+        Else
+            _appBase.RootLogger.AddError("Usage: localserver=<port> or repeater=<host:port>=<username>")
+        End If
+
     End Sub
 
     Private Function GetShortHostInfo() As String

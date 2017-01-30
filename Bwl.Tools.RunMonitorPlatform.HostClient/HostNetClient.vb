@@ -25,6 +25,11 @@ Public Class HostNetClient
         _targetCheckThread.Start()
     End Sub
 
+    Public Sub Connect()
+        Transport.OpenAndRegister()
+        _lastPongResponse = Now
+    End Sub
+
     Private Sub ReceivedMessageHandler(message As NetMessage)
         Select Case message.Part(0)
             Case "RunMonitorControl-Pong"
@@ -166,7 +171,7 @@ Public Class HostNetClient
         _Transport.SendMessage(msg)
     End Sub
 
-    Public Function CreateRemoteCmdForm(id As String) As CmdlineUi
+    Public Function CreateRemoteCmdForm(id As String, title As String) As CmdlineUi
         For Each existingForm In _remoteCmdForms
             If existingForm.Tag = id Then
                 existingForm.Hide()
@@ -176,7 +181,7 @@ Public Class HostNetClient
         Dim cmdclient = New CmdlineClient(Transport, id, Transport.TargetSetting.Value)
         Dim form As New CmdlineUi(cmdclient)
         form.Tag = id
-        form.Text = "CLI: " + id
+        form.Text = id.Replace("ProcessTask_", "") + " - " + title
         _remoteCmdForms.Add(form)
         AddHandler form.FormClosing, Sub()
                                          _remoteCmdForms.Remove(form)

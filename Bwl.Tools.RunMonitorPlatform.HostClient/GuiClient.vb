@@ -14,7 +14,14 @@ Public Class GuiClient
 
     Private Sub bHostConnect_Click(sender As Object, e As EventArgs) Handles bHostConnect.Click
         Try
-            _client.Transport.OpenAndRegister()
+            If _client.Transport.IsConnected Then
+                _client.Transport.Close()
+                Threading.Thread.Sleep(500)
+            End If
+        Catch ex As Exception
+        End Try
+        Try
+            _client.Connect
             bFindTargets_Click()
         Catch ex As Exception
             _logger.AddError(ex.Message)
@@ -68,13 +75,6 @@ Public Class GuiClient
         thread.Start()
     End Sub
 
-    Private Sub lbLocalServers_DoubleClick(sender As Object, e As EventArgs) Handles lbLocalServers.DoubleClick
-        If lbLocalServers.Text > "" Then
-            Dim addr = lbLocalServers.Text.Split(" ")(0)
-            settingHostAddress.AssignedSetting.ValueAsString = addr
-            bHostConnect_Click(Nothing, Nothing)
-        End If
-    End Sub
 
     Private Sub bStart_Click(sender As Object, e As EventArgs) Handles bUploadStart.Click, bUpload.Click, bStart.Click, bSet.Click, bKill.Click
         Try
@@ -88,7 +88,7 @@ Public Class GuiClient
             If cbMonitor.Checked = False Then rms = "Disabled"
             _client.SendProcessTask(tbTaskId.Text, ops, tbFile.Text, tbArguments.Text, "", tbParameters.Text, cbAutoStart.Checked, rms, cbRemoteCmd.Checked, cbUploadFrom.Text)
             If cbRemoteCmd.Checked And ops.Contains("start") Then
-                _client.CreateRemoteCmdForm(tbTaskId.Text).Show(Me)
+                _client.CreateRemoteCmdForm(tbTaskId.Text, Text.Split(",")(0)).Show(Me)
             End If
             ShowTasksList()
         Catch ex As Exception
@@ -98,7 +98,7 @@ Public Class GuiClient
 
     Private Sub bRunRemoteShell_Click(sender As Object, e As EventArgs) Handles bRunRemoteShell.Click
         Try
-            _client.CreateRemoteCmdForm(_client.CreateShellTask()).Show(Me)
+            _client.CreateRemoteCmdForm(_client.CreateShellTask(), Text.Split(",")(0)).Show(Me)
             ShowTasksList()
         Catch ex As Exception
             _logger.AddError(ex.Message)
@@ -129,12 +129,16 @@ Public Class GuiClient
                 gbTarget.Enabled = False
                 gbTasks.Enabled = False
                 gbTask.Enabled = False
+                Me.Text = "Bwl RunMonitor Remote Host Client (not connected)"
+                DataGridView1.Rows.Clear()
             End If
         Else
             gbTarget.Enabled = False
             gbTargets.Enabled = False
             gbTasks.Enabled = False
             gbTask.Enabled = False
+            DataGridView1.Rows.Clear()
+            Me.Text = "Bwl RunMonitor Remote Host Client (not connected)"
         End If
     End Sub
 
@@ -171,6 +175,7 @@ Public Class GuiClient
                         End Select
                     Next
                     tbTaskId.Text = "ProcessTask_" + id
+                    IO.File.WriteAllText(IO.Path.Combine(AppBase.DataFolder, tbTaskId.Text + "-uploadpath.txt"), path)
                 Else
                     tbTaskId.Text = "ProcessTask_"
                     tbFile.Text = ""
@@ -210,7 +215,7 @@ Public Class GuiClient
     End Sub
 
     Private Sub bRemoteCmd_Click(sender As Object, e As EventArgs) Handles bRemoteCmd.Click
-        _client.CreateRemoteCmdForm(tbTaskId.Text).Show(Me)
+        _client.CreateRemoteCmdForm(tbTaskId.Text, Text.Split(",")(0)).Show(Me)
     End Sub
 
     Private Sub DataGridView1_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellClick
@@ -226,6 +231,14 @@ Public Class GuiClient
             tbArguments.Text = task.Arguments
             tbTaskId.Text = task.ID
             tbParameters.Text = task.Parameters
+            Try
+                cbUploadFrom.Text = ""
+                Dim path = IO.File.ReadAllText(IO.Path.Combine(AppBase.DataFolder, tbTaskId.Text + "-uploadpath.txt"))
+                cbUploadFrom.Text = path
+            Catch ex As Exception
+
+            End Try
+
             ' tbFil.Text = task.Workdir
         End If
     End Sub
@@ -245,7 +258,10 @@ Public Class GuiClient
     End Sub
 
     Private Sub _client_ShortHostInfoReceived(info As String) Handles _client.ShortHostInfoReceived
-        Me.Invoke(Sub() tbShortHostInfo.Text = info)
+        Me.Invoke(Sub()
+                      tbShortHostInfo.Text = info
+                      Me.Text = "RMHC: " + info
+                  End Sub)
     End Sub
 
     Private Sub tbFile_SelectedIndexChanged(sender As Object, e As EventArgs) Handles tbFile.SelectedIndexChanged
@@ -290,5 +306,13 @@ Public Class GuiClient
 
     Private Sub DataGridView1_SelectionChanged(sender As Object, e As EventArgs) Handles DataGridView1.SelectionChanged
         DataGridView1.ClearSelection()
+    End Sub
+
+    Private Sub lbLocalServers_Click(sender As Object, e As EventArgs) Handles lbLocalServers.Click
+        If lbLocalServers.Text > "" Then
+            Dim addr = lbLocalServers.Text.Split(" ")(0)
+            settingHostAddress.AssignedSetting.ValueAsString = addr
+        End If
+        lbLocalServers.ClearSelected()
     End Sub
 End Class
