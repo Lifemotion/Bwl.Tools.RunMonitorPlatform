@@ -72,6 +72,13 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FaultActions\ShutdownComputerAbortForm.Designer.vb">
+      <DependentUpon>ShutdownComputerAbortForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FaultActions\ShutdownComputerAbortForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FaultActions\ShutdownComputerAction.vb" />
     <Compile Include="HttpWatcher\HttpRequestCheck.vb" />
     <Compile Include="HttpWatcher\HttpWatcherTask.vb" />
     <Compile Include="NetClientCheck.vb" />
@@ -141,6 +148,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FaultActions\ShutdownComputerAbortForm.resx">
+      <DependentUpon>ShutdownComputerAbortForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FaultActions\RestartComputerAbortForm.resx">
       <DependentUpon>RestartComputerAbortForm.vb</DependentUpon>
     </EmbeddedResource>
