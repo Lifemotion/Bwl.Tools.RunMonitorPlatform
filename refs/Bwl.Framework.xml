@@ -6,22 +6,6 @@ Bwl.Framework
 </name>
 </assembly>
 <members>
-<member name="T:Bwl.Framework.My.Resources.Resources">
-<summary>
-  Класс ресурса со строгой типизацией для поиска локализованных строк и т.д.
-</summary>
-</member>
-<member name="P:Bwl.Framework.My.Resources.Resources.ResourceManager">
-<summary>
-  Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
-</summary>
-</member>
-<member name="P:Bwl.Framework.My.Resources.Resources.Culture">
-<summary>
-  Перезаписывает свойство CurrentUICulture текущего потока для всех
-  обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
-</summary>
-</member>
 <member name="M:Bwl.Framework.CryptoTools.Des3Encode(System.String,System.Byte[])">
  <summary>
  
@@ -97,13 +81,29 @@ Bwl.Framework
  <returns></returns>
  <remarks></remarks>
 </member>
-<member name="T:Bwl.Framework.ImageAttr">
+<member name="T:Bwl.Framework.My.Resources.Resources">
+<summary>
+  Класс ресурса со строгой типизацией для поиска локализованных строк и т.д.
+</summary>
+</member>
+<member name="P:Bwl.Framework.My.Resources.Resources.ResourceManager">
+<summary>
+  Возвращает кэшированный экземпляр ResourceManager, использованный этим классом.
+</summary>
+</member>
+<member name="P:Bwl.Framework.My.Resources.Resources.Culture">
+<summary>
+  Перезаписывает свойство CurrentUICulture текущего потока для всех
+  обращений к ресурсу с помощью этого класса ресурса со строгой типизацией.
+</summary>
+</member>
+<member name="T:Bwl.Framework.DisplayAttribute">
  <summary>
  Отображаемое поле или свойтсво объекта
  </summary>
  <remarks></remarks>
 </member>
-<member name="T:Bwl.Framework.DisplayAttribute">
+<member name="T:Bwl.Framework.ImageAttr">
  <summary>
  Отображаемое поле или свойтсво объекта
  </summary>
@@ -133,11 +133,6 @@ Bwl.Framework
  </summary>
  <remarks></remarks>
 </member>
-<member name="P:Bwl.Framework.PasswordSetting.Value">
- <summary>
- Не является парллем, используйте поле Pass.
- </summary>
-</member>
 <member name="P:Bwl.Framework.SettingsStorageBackup.BackupAtStart">
  <summary>Включить архивацию при старте. По-умолчанию включено.</summary>
 </member>
@@ -146,6 +141,25 @@ Bwl.Framework
 </member>
 <member name="P:Bwl.Framework.SettingsStorageBackup.AutoBackupInterval">
  <summary>Интервал автоархивации в секундах.</summary>
+</member>
+<member name="P:Bwl.Framework.PasswordSetting.Value">
+ <summary>
+ Не является парллем, используйте поле Pass.
+ </summary>
+</member>
+<member name="T:Bwl.Framework.SettingsStorageBase">
+ <summary>
+ Базовый класс хранилища настроек.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Bwl.Framework.SettingsStorageBase.IsReadOnly">
+ <summary>
+ Можно ли изменять данные в хранилище.
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
 </member>
 <member name="M:Bwl.Framework.SettingsStorageRoot.#ctor(Bwl.Framework.ISettingsReaderWriter,System.String,System.Boolean)">
  <summary>
@@ -232,18 +246,17 @@ Bwl.Framework
  <param name="name"></param>
  <remarks></remarks>
 </member>
-<member name="T:Bwl.Framework.SettingsStorageBase">
+<member name="M:Bwl.Framework.SettingsStorageBufferedRoot.#ctor">
  <summary>
- Базовый класс хранилища настроек.
+ Создать хранилище настроек с виртуальным интерфейсом загрузки\сохранения и корневой категорией Root.
  </summary>
  <remarks></remarks>
 </member>
-<member name="P:Bwl.Framework.SettingsStorageBase.IsReadOnly">
+<member name="M:Bwl.Framework.SettingsStorageBufferedRoot.#ctor(System.String,System.String)">
  <summary>
- Можно ли изменять данные в хранилище.
+ Создать новое хранилище настроек, являющееся корневым.
  </summary>
- <value></value>
- <returns></returns>
+ <param name="iniFileName">Имя ini-файла с настройками.</param>
  <remarks></remarks>
 </member>
 </members>
