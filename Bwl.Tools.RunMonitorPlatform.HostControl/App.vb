@@ -283,7 +283,6 @@ Module App
         Dim arguments As String = ""
         Dim workdir As String = ""
         Dim remotecmd As Boolean
-        Dim processname As String = ""
         Dim restartdelay As Integer
         For Each file In tasks
             Try
@@ -295,7 +294,6 @@ Module App
                             Case "id" : id = parts(1)
                             Case "filename" : filename = parts(1)
                             Case "arguments" : arguments = parts(1)
-                            Case "processname" : processname = parts(1)
                             Case "workdir" : workdir = parts(1)
                             Case "autostart" : autostart = (parts(1) = "True")
                             Case "runmonitored" : runmonitored = (parts(1) = "True")
@@ -309,7 +307,6 @@ Module App
                     Dim psp As New ProcessTaskParameters
                     psp.ExecutableFileName = filename
                     psp.Arguments = arguments
-                    ' psp.ProcessName = processname
                     psp.WorkingDirectory = workdir
                     psp.RedirectInputOutput = remotecmd
                     psp.RestartDelaySecongs = restartdelay
