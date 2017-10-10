@@ -132,8 +132,17 @@ Module App
                             Dim taskName = taskIdWithPrefix.Replace("ProcessTask_", "")
                             For Each task In _core.Tasks.ToArray
                                 If task.ID.ToLower = taskIdWithPrefix.ToLower Then
+                                    Try
+                                        CType(task, ProcessTask).RestartAction.KillAllProcesses()
+                                    Catch ex As Exception
+                                    End Try
                                     _core.Tasks.Remove(task)
                                     DeleteTask(task)
+                                    Try
+                                        Dim taskPath = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "processes", task.ShortName)
+                                        If IO.Directory.Exists(taskPath) = True Then IO.Directory.Delete(taskPath, True)
+                                    Catch ex As Exception
+                                    End Try
                                     transport.SendMessage(New NetMessage(message, "RunMonitorControl-DeleteTask", "OK"))
                                     Return
                                 End If
