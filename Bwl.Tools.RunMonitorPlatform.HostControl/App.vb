@@ -3,7 +3,7 @@ Imports Bwl.Framework
 
 Module App
     Private _appBase As New AppBase
-    Private _transport As IMessageTransport
+    Private _transport As New MultiTransport
     Private _core As New RunMonitorCore(_appBase.RootLogger)
     Private _ui As New RunMonitorAutoUI(_appBase.RootLogger)
     Private _conWriter As New ConsoleLogWriter 'With {.WriteExtended = True}
@@ -23,24 +23,18 @@ Module App
         For Each arg In args
             Dim argParts = arg.Split("=")
             If argParts(0) = "localserver" AndAlso (argParts.Length = 3 Or argParts.Length = 2) Then
-                _transport = New NetServer(argParts(1))
+                Dim netserver = New NetServer(argParts(1))
+                netserver.RegisterMe("LocalServer", "", "HostControl", "")
+                _transport.AddTransport(netserver)
                 Dim beacon As New NetBeacon(argParts(1), "HostControl_" + System.Environment.MachineName, False, True)
-                AddHandler _transport.ReceivedMessage, Sub(message As NetMessage)
-                                                           ProcessMessage(_transport, message)
-                                                       End Sub
-                AddHandler _transport.RegisterClientRequest, Sub(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, serviceName As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String)
-                                                                 allowRegister = True
-                                                             End Sub
-                _transport.RegisterMe("LocalServer", "", "HostControl", "")
                 _appBase.RootLogger.AddMessage("Local Server created: " + arg)
                 ok = True
-
             End If
             If argParts(0) = "repeater" AndAlso argParts.Length = 3 Then
-                _transport = New MessageTransport(_appBase.RootStorage, _appBase.RootLogger, "NetClient", argParts(1), argParts(2), "", "HostControl", True)
-                AddHandler _transport.ReceivedMessage, Sub(message As NetMessage)
-                                                           ProcessMessage(_transport, message)
-                                                       End Sub
+                Dim repeater = New MessageTransport(_appBase.RootStorage, _appBase.RootLogger, "NetClient", argParts(1), argParts(2), "", "HostControl", True)
+                repeater.AddressSetting.Value = argParts(1)
+                repeater.UserSetting.Value = argParts(2)
+                _transport.AddTransport(repeater)
                 _appBase.RootLogger.AddMessage("Repeater connection created: " + arg)
                 ok = True
             End If
@@ -49,9 +43,18 @@ Module App
                 _ui.Tasks = _core.Tasks.ToArray
                 Dim remoteapp As New RemoteAppServer(_transport, "RunMonitorHost", _appBase.RootStorage, _appBase.RootLogger, _ui.UI)
                 _appBase.RootLogger.AddMessage("RemoteUI created: " + arg)
-
             End If
+
+
         Next
+
+        AddHandler _transport.ReceivedMessage, Sub(message As NetMessage)
+                                                   ProcessMessage(_transport, message)
+                                               End Sub
+        AddHandler _transport.RegisterClientRequest, Sub(clientInfo As Dictionary(Of String, String), id As String, method As String, password As String, serviceName As String, options As String, ByRef allowRegister As Boolean, ByRef infoToClient As String)
+                                                         allowRegister = True
+                                                     End Sub
+
         If ok = True Then
             CreateSavedTasks()
 
