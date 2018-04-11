@@ -81,6 +81,7 @@
     <Compile Include="FaultActions\ShutdownComputerAction.vb" />
     <Compile Include="HttpWatcher\HttpRequestCheck.vb" />
     <Compile Include="HttpWatcher\HttpWatcherTask.vb" />
+    <Compile Include="MultiTransport.vb" />
     <Compile Include="NetClientCheck.vb" />
     <Compile Include="NetWatcher\HttpTools.vb" />
     <Compile Include="NetWatcher\NetWatcherTaskHttp.vb" />

@@ -3,6 +3,7 @@
 Public Structure ProcessTaskParameters
     Public IdAppendix As String
     Public ProcessName As String
+    Public ProcessMonoCmdline As String
     Public ExecutableFileName As String
     Public WorkingDirectory As String
     Public Arguments As String
@@ -61,9 +62,31 @@ Public Class ProcessTask
 
     Public Function GetProcesses() As Process()
         Dim name = Parameters.ProcessName
-        If name = "mono-sgen" Then name = "mono"
-        Dim prcs = Process.GetProcessesByName(Parameters.ProcessName)
-        Return prcs
+        If name Is Nothing Then Return {}
+
+        If System.Environment.OSVersion.VersionString.Contains("Unix") Then
+            If name.ToLower = "mono" Or name.ToLower = "mono-sgen" Then
+                Dim prcs = Process.GetProcesses
+                Dim result As New List(Of Process)
+                For Each prc In prcs
+                    Try
+                        Dim cmdline = IO.File.ReadAllText("/proc/" + prc.Id.ToString() + "/cmdline")
+                        If cmdline.Contains(Parameters.ExecutableFileName) Then
+                            result.Add(prc)
+                        End If
+                    Catch ex As Exception
+                    End Try
+                Next
+                Return result.ToArray
+            Else
+                Dim prcs = Process.GetProcessesByName(Parameters.ProcessName)
+                Return prcs
+            End If
+        Else
+            Dim prcs = Process.GetProcessesByName(Parameters.ProcessName)
+            Return prcs
+        End If
+
     End Function
 
 End Class
