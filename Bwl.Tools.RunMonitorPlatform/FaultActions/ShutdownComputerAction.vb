@@ -12,7 +12,7 @@
     End Sub
 
     Public Overrides Sub Run()
-        Shell("shutdown -t " + _delay.ToString + " -f")
+        Shell("shutdown -s -t " + _delay.ToString + " -f")
         If ShowAbortWindow Then
             Try
                 If Application.OpenForms.Count > 0 Then
