@@ -1,4 +1,7 @@
-﻿Imports Bwl.Network.ClientServer
+﻿Imports System.Net
+Imports System.Net.Sockets
+Imports System.Threading
+Imports Bwl.Network.ClientServer
 Imports Bwl.Framework
 Imports Bwl.Tools.RunMonitorPlatform.HostClient
 
@@ -7,9 +10,69 @@ Public Class GuiClient
     Private WithEvents _client As New HostNetClient(_storage, _logger)
     Private _tasks As New RemoteTaskInfo()
 
+    Private _hostRepeaterClient As New NetClient
+
+    Private _useHostRepeater As BooleanSetting
+    Private _hostRepeaterAddress As StringSetting
+    Private _hostRepeaterPort As IntegerSetting
+
+    Private _repeaterThread As Thread
+
+    Private _repeaterClientsList As New List(Of String)
+
     Private Sub HostClient_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         settingHostAddress.AssignedSetting = _client.Transport.AddressSetting
         settingTarget.AssignedSetting = _client.Transport.TargetSetting
+
+        CreateHostRepeaterSettings()
+        _repeaterThread = New Thread(AddressOf HostRepeaterThread)
+        _repeaterThread.IsBackground = True
+        _repeaterThread.Start()
+    End Sub
+
+    Private Sub CreateHostRepeaterSettings()
+        Dim settStorage = AppBase.RootStorage.CreateChildStorage("HostRepeaterSettings", "Настройки репитера для Host Control")
+        _useHostRepeater = settStorage.CreateBooleanSetting("UseHostRepeater", False, "Использовать репитер")
+        _hostRepeaterAddress = settStorage.CreateStringSetting("HostRepeaterAddress", "192.168.42.1", "Адрес репитера")
+        _hostRepeaterPort = settStorage.CreateIntegerSetting("HostRepeaterPort", 8032, "Использовать репитер")
+    End Sub
+
+    Private Sub HostRepeaterThread()
+        While Not Me.IsDisposed
+            Try
+
+                If _useHostRepeater.Value Then
+                    If Not _hostRepeaterClient.IsConnected Then
+                        _hostRepeaterClient.Connect(_hostRepeaterAddress.Value, _hostRepeaterPort.Value)
+                    End If
+                    If _hostRepeaterClient.IsConnected Then
+                        Dim msg = New NetMessage
+                        msg.Part(0) = "RunMonitorRepeater"
+                        msg.Part(1) = "Clients"
+                        Dim answer = _hostRepeaterClient.SendMessageWaitAnswer(msg, "RunMonitorRepeater-Clients", 10)
+                        If answer IsNot Nothing Then
+                            Dim result = New List(Of String)
+                            Dim count = Integer.Parse(answer.Part(1))
+                            For i = 0 To count - 1
+                                result.Add(answer.Part(2 + i).Replace(";",":"))
+                            Next
+                            _repeaterClientsList.Clear()
+                            If result.Any() Then
+                                _repeaterClientsList.AddRange(result.ToArray())
+                            End If
+                        End If
+                    End If
+                Else
+                    If _hostRepeaterClient.IsConnected Then
+                        _hostRepeaterClient.Disconnect()
+                    End If
+                End If
+
+            Catch ex As Exception
+                _logger.AddError(ex.Message)
+            End Try
+            Thread.Sleep(10000)
+        End While
     End Sub
 
     Private Sub bHostConnect_Click(sender As Object, e As EventArgs) Handles bHostConnect.Click
@@ -21,7 +84,7 @@ Public Class GuiClient
         Catch ex As Exception
         End Try
         Try
-            _client.Connect
+            _client.Connect()
             bFindTargets_Click()
         Catch ex As Exception
             _logger.AddError(ex.Message)
@@ -66,6 +129,7 @@ Public Class GuiClient
                                                                          lbRemoteUIs.Items.Add(info.Address + ":" + info.Port.ToString + " " + info.Name)
                                                                      End If
                                                                  Next
+                                                                 lbLocalServers.Items.AddRange(_repeaterClientsList.ToArray())
                                                              End Sub)
                                                Catch ex As Exception
 
