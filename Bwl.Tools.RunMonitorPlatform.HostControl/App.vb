@@ -4,13 +4,10 @@ Imports Bwl.Framework
 Module App
     Private _appBase As New AppBase
     Private _transport As New MultiTransport
-    Private _netRepeaterClient As NetClient
     Private _core As New RunMonitorCore(_appBase.RootLogger)
     Private _ui As New RunMonitorAutoUI(_appBase.RootLogger)
     Private _conWriter As New ConsoleLogWriter 'With {.WriteExtended = True}
 
-    Private _removeVpnAddr As String
-    Private _remoteVpnPort As Integer
     Private _localPort As Integer
 
     Sub Main(args() As String)
@@ -35,15 +32,6 @@ Module App
                 Dim beacon As New NetBeacon(argParts(1), "HostControl_" + System.Environment.MachineName, False, True)
                 _appBase.RootLogger.AddMessage("Local Server created: " + arg)
                 ok = True
-            End If
-            If argParts(0) = "hostrepeater" AndAlso argParts.Length = 2 Then
-                _removeVpnAddr = argParts(1).Split(":"c).First()
-                _remoteVpnPort = Integer.Parse(argParts(1).Split(":"c).Last())
-                _netRepeaterClient = New NetClient()
-                Dim t = New Threading.Thread(AddressOf NetRepeaterRegisterThread)
-                t.IsBackground = True
-                t.Start()
-                _appBase.RootLogger.AddMessage("hostrepeater client created: " + arg)
             End If
             If argParts(0) = "repeater" AndAlso argParts.Length = 3 Then
                 Dim repeater = New MessageTransport(_appBase.RootStorage, _appBase.RootLogger, "NetClient", argParts(1), argParts(2), "", "HostControl", True)
@@ -82,39 +70,7 @@ Module App
         End If
 
     End Sub
-
-    Private Sub NetRepeaterRegisterThread()
-        Try
-            Do
-                Try
-                    If Not _netRepeaterClient.IsConnected Then
-                        _netRepeaterClient.Connect(_removeVpnAddr, _remoteVpnPort)
-                    End If
-                    If Not _netRepeaterClient.IsConnected Then Continue Do
-                    Dim addr = GetMyAddress()
-                    Dim msg = New NetMessage()
-                    msg.Part(0) = "RunMonitorRepeater"
-                    msg.Part(1) = "Register"
-                    msg.Part(2) = System.Environment.MachineName
-                    msg.Part(3) = addr + ":" + _localPort.ToString()
-                    _netRepeaterClient.SendMessageWaitAnswer(msg, "RunMonitorRepeater-Success", 10)
-                Catch ex As Exception
-                    _appBase.RootLogger.AddError(ex.ToString())
-                End Try
-                Threading.Thread.Sleep(New TimeSpan(0, 0, 10))
-            Loop
-        Catch ex As Exception
-            _appBase.RootLogger.AddError(ex.ToString())
-        End Try
-    End Sub
-
-    Private Function GetMyAddress()
-        Dim res = ""
-        Dim netData = ExecuteCommand("bash", "-c ""ip address | awk ""/" + "192.168.42.1" + "/ {print \$2}""""")
-        res = netData.First().Split({"peer"}, StringSplitOptions.RemoveEmptyEntries).First().Split({"inet"}, StringSplitOptions.RemoveEmptyEntries).Last().Trim()
-        Return res
-    End Function
-
+    
     Private Function GetShortHostInfo() As String
         Dim info = ""
         Dim assembly = System.Reflection.Assembly.GetExecutingAssembly()
@@ -390,31 +346,5 @@ Module App
         Next
     End Sub
 
-    Private Function ExecuteCommand(name As String, cmd As String) As List(Of String)
-        Dim info = New ProcessStartInfo()
-        info.FileName = name
-        info.Arguments = cmd
-
-        info.UseShellExecute = False
-        info.CreateNoWindow = True
-
-        info.RedirectStandardOutput = True
-        info.RedirectStandardError = True
-
-        Dim p = Process.Start(info)
-
-        Dim lines = New List(Of String)
-
-        Dim output = "test"
-        While (output IsNot Nothing)
-            output = p.StandardOutput.ReadLine()
-            If output Is Nothing Then Exit While
-            lines.Add(output)
-        End While
-
-        p.WaitForExit()
-
-        Return lines
-    End Function
 
 End Module

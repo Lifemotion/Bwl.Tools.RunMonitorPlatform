@@ -7,6 +7,6 @@
     </StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>localserver=8064 repeater=185.98.87.17:3080=TestHost  remoteapp</StartArguments>
+    <StartArguments>localserver=8064 repeater=localhost:3080=TestHost  remoteapp</StartArguments>
   </PropertyGroup>
 </Project>
