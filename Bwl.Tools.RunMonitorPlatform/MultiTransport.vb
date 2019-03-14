@@ -90,4 +90,8 @@ Public Class MultiTransport
     Public Function GetClientsList(serviceName As String) As String() Implements IMessageTransport.GetClientsList
         Throw New NotImplementedException()
     End Function
+
+    Public Sub Dispose() Implements IDisposable.Dispose
+        'Throw New NotImplementedException()
+    End Sub
 End Class
