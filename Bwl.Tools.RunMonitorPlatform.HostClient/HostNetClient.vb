@@ -19,7 +19,8 @@ Public Class HostNetClient
         _storage = storage
         _uploadFilterSetting = New StringSetting(_storage, "UploadFilter", ".pdb, .bak, .vb, .cs, .log, .ini")
         _logger = logger
-        _Transport = New MessageTransport(_storage, _logger,, "localhost:8064",, "HostControl", "BwlHostClient", False)
+
+        _Transport = New MessageTransport(_storage, _logger,, "localhost:8064", "User_" + Guid.NewGuid().ToString(), "HostControl", "BwlHostClient", False)
         AddHandler Transport.ReceivedMessage, AddressOf ReceivedMessageHandler
         _targetCheckThread.IsBackground = True
         _targetCheckThread.Start()
