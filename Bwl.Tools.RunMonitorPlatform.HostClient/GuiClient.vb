@@ -87,6 +87,13 @@ Public Class GuiClient
             Dim rms = "Ok"
             If cbMonitor.Checked = False Then rms = "Disabled"
             _client.SendProcessTask(tbTaskId.Text, ops, tbFile.Text, tbArguments.Text, "", tbParameters.Text, cbAutoStart.Checked, rms, cbRemoteCmd.Checked, cbUploadFrom.Text)
+
+            If Equals(sender, bUpload) Or Equals(sender, bUploadStart) Then
+                _client.SendProcessTaskSlowUpload(tbTaskId.Text, ops, tbFile.Text, tbArguments.Text, "", tbParameters.Text, cbAutoStart.Checked, rms, cbRemoteCmd.Checked, cbUploadFrom.Text)
+            Else
+                _client.SendProcessTask(tbTaskId.Text, ops, tbFile.Text, tbArguments.Text, "", tbParameters.Text, cbAutoStart.Checked, rms, cbRemoteCmd.Checked, cbUploadFrom.Text)
+            End If
+
             If cbRemoteCmd.Checked And ops.Contains("start") Then
                 _client.CreateRemoteCmdForm(tbTaskId.Text, Text.Split(",")(0)).Show(Me)
             End If
@@ -205,7 +212,11 @@ Public Class GuiClient
     End Sub
 
     Private Sub _client_SendProcessTaskResultReceived(ok As Boolean, info As String) Handles _client.SendProcessTaskResultReceived
-
+        If ok Then
+            _logger.AddInformation("Операция выполнена " & info)
+        Else
+            _logger.AddError("Операция не выполнена " & info)
+        End If
     End Sub
 
     Private Sub _client_HostInfoReceived(info() As String) Handles _client.HostInfoReceived
