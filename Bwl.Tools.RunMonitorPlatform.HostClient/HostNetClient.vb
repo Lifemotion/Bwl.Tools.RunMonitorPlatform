@@ -19,7 +19,8 @@ Public Class HostNetClient
         _storage = storage
         _uploadFilterSetting = New StringSetting(_storage, "UploadFilter", ".pdb, .bak, .vb, .cs, .log, .ini")
         _logger = logger
-        _Transport = New MessageTransport(_storage, _logger,, "localhost:8064",, "HostControl", "BwlHostClient", False)
+
+        _Transport = New MessageTransport(_storage, _logger,, "localhost:8064", "User_" + Guid.NewGuid().ToString(), "HostControl", "BwlHostClient", False)
         AddHandler Transport.ReceivedMessage, AddressOf ReceivedMessageHandler
         _targetCheckThread.IsBackground = True
         _targetCheckThread.Start()
@@ -163,6 +164,106 @@ Public Class HostNetClient
         SendProcessTask(id, "kill set start", "@shell", "", "", "", False, False, True, "")
         Return id
     End Function
+
+    Public Sub SendProcessTaskSlowUpload(id As String, operations As String, filename As String, arguments As String,
+                             workdir As String, params As String, autostart As Boolean, runmonitorstate As String,
+                             remoteCmd As Boolean, uploadFrom As String)
+        If id.StartsWith("ProcessTask_") = False Then Throw New Exception("Id must start with 'ProcessTask_'")
+        Dim name = id.Replace("ProcessTask_", "")
+        If name.Length < 1 Then Throw New Exception("Id must not be empty")
+        For Each smb In name
+            Select Case smb
+                Case "a"c To "z"c, "A"c To "Z"c, "0"c To "9"c, "-", ".", "_"
+                Case Else
+                    Throw New Exception("Id must contains only digits, letters, <-> and <_>")
+            End Select
+        Next
+        If filename Is Nothing OrElse filename.Length < 1 Then Throw New Exception("Filename must not be empty")
+        Dim taskparams As String = ""
+        taskparams += "filename=" + filename + vbCrLf
+        taskparams += "arguments=" + arguments + vbCrLf
+        taskparams += "workdir=" + workdir + vbCrLf
+        taskparams += "remotecmd=" + remoteCmd.ToString + vbCrLf
+        taskparams += "autostart=" + autostart.ToString + vbCrLf
+        taskparams += "state=" + runmonitorstate + vbCrLf
+
+        Dim msgs As List(Of NetMessage) = New List(Of NetMessage)
+        Dim andStart = False
+
+
+        Dim countFiles = 0
+        If operations.Contains("upload") Then
+
+            If operations.Contains("start") Then
+                operations = operations.Replace("start", "")
+                andStart = True
+            End If
+
+
+            If IO.Directory.Exists(uploadFrom) = False Then Throw New Exception("Folder upload from not found: " + uploadFrom)
+            Dim filelist As New List(Of String)
+            Try
+                Dim files = IO.Directory.GetFiles(uploadFrom, "*.*", IO.SearchOption.AllDirectories)
+                For Each file In files
+                    Dim fileGood As Boolean = True
+                    For Each filterName In _uploadFilterSetting.Value.Split({","}, StringSplitOptions.RemoveEmptyEntries)
+                        filterName = filterName.Trim
+                        If filterName > "" Then
+                            If file.Contains(filterName) Then fileGood = False
+                        End If
+                    Next
+                    If fileGood Then
+                        filelist.Add(file)
+                    End If
+                Next
+            Catch ex As Exception
+                Write("Error: " + ex.Message)
+                Return
+            End Try
+
+            Dim msgIndex = 5
+            Dim bytes As Long
+
+            countFiles = filelist.Count
+            For Each file In filelist
+                Dim msg As New NetMessage("S", "RunMonitorTask", id, operations, taskparams, params)
+                msg.ToID = _Transport.TargetSetting.Value
+                msg.FromID = _Transport.MyID
+
+                Dim relpath = IO.Path.GetFullPath(file)
+                relpath = relpath.Replace(uploadFrom + IO.Path.DirectorySeparatorChar, "")
+                relpath = relpath.Replace(uploadFrom, "")
+                msg.Part(msgIndex) = relpath
+                Dim fileBytes = IO.File.ReadAllBytes(file)
+                msg.PartBytes(msgIndex + 1) = fileBytes
+                bytes += fileBytes.Length
+
+                msgs.Add(msg)
+            Next
+
+            _logger.AddInformation("Files to copy: " + filelist.Count.ToString + ", " + (bytes / 1024 / 1024).ToString("0.000") + " Mb")
+        End If
+        Dim thr As New Threading.Thread(Sub()
+
+                                            Try
+                                                Dim index = 0
+                                                For Each msg In msgs
+                                                    _Transport.SendMessage(msg)
+                                                    index = index + 1
+                                                    _logger.AddInformation("Отправлен файл (" & index & " из " & countFiles & "): " & msg.Part(5))
+                                                    Threading.Thread.Sleep(1000)
+                                                Next
+                                                If andStart Then
+                                                    Threading.Thread.Sleep(1000)
+                                                    SendProcessTask(id, "set start", filename, arguments, "", params, autostart, runmonitorstate, remoteCmd, uploadFrom)
+                                                End If
+                                            Catch ex As Exception
+                                                _logger.AddError("Произошла ошибка обновления файлов ")
+                                            End Try
+
+                                        End Sub)
+        thr.Start()
+    End Sub
 
     Public Sub DeleteTask(id As String)
         Dim msg As New NetMessage("S", "RunMonitorControl", "DeleteTask", id)
