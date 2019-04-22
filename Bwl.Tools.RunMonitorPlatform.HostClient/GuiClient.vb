@@ -54,7 +54,7 @@ Public Class GuiClient
                             Dim result = New List(Of String)
                             Dim count = Integer.Parse(answer.Part(1))
                             For i = 0 To count - 1
-                                result.Add(answer.Part(2 + i).Replace(";",":"))
+                                result.Add(answer.Part(2 + i).Replace(";", ":"))
                             Next
                             _repeaterClientsList.Clear()
                             If result.Any() Then
@@ -92,7 +92,7 @@ Public Class GuiClient
     End Sub
 
     Private Sub bFindTargets_Click() Handles bFindTargets.Click
-        Dim clients = _client.Transport.GetClientsList("HostControl")
+        Dim clients = _client.Transport.GetClientsList("HostControl").OrderBy(Function(f) f).ToArray()
         lbTargets.Items.Clear()
         lbTargets.Items.AddRange(clients)
     End Sub
