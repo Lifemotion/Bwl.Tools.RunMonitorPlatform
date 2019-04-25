@@ -29,7 +29,7 @@ Public Class GuiClient
     End Sub
 
     Private Sub bFindTargets_Click() Handles bFindTargets.Click
-        Dim clients = _client.Transport.GetClientsList("HostControl")
+        Dim clients = _client.Transport.GetClientsList("HostControl").OrderBy(Function(f) f).ToArray()
         lbTargets.Items.Clear()
         lbTargets.Items.AddRange(clients)
     End Sub
