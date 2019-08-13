@@ -150,10 +150,16 @@ Public Class GuiClient
             If Equals(sender, bUploadStart) Then ops = "kill set upload start"
             Dim rms = "Ok"
             If cbMonitor.Checked = False Then rms = "Disabled"
-            _client.SendProcessTask(tbTaskId.Text, ops, tbFile.Text, tbArguments.Text, "", tbParameters.Text, cbAutoStart.Checked, rms, cbRemoteCmd.Checked, cbUploadFrom.Text)
 
-            If Equals(sender, bUpload) Or Equals(sender, bUploadStart) Then
-                _client.SendProcessTaskSlowUpload(tbTaskId.Text, ops, tbFile.Text, tbArguments.Text, "", tbParameters.Text, cbAutoStart.Checked, rms, cbRemoteCmd.Checked, cbUploadFrom.Text)
+            If ops.Contains("upload") Then
+                _client.SendProcessTask(tbTaskId.Text, "kill set", tbFile.Text, tbArguments.Text, "", tbParameters.Text, cbAutoStart.Checked, rms, cbRemoteCmd.Checked, cbUploadFrom.Text)
+                Thread.Sleep(100)
+                _client.SendProcessTaskSlowUpload(tbTaskId.Text, "upload", tbFile.Text, tbArguments.Text, "", tbParameters.Text, cbAutoStart.Checked, rms, cbRemoteCmd.Checked, cbUploadFrom.Text)
+                Thread.Sleep(100)
+                If ops.Contains("start") Then
+                    _client.SendProcessTask(tbTaskId.Text, "start", tbFile.Text, tbArguments.Text, "", tbParameters.Text, cbAutoStart.Checked, rms, cbRemoteCmd.Checked, cbUploadFrom.Text)
+                    Thread.Sleep(100)
+                End If
             Else
                 _client.SendProcessTask(tbTaskId.Text, ops, tbFile.Text, tbArguments.Text, "", tbParameters.Text, cbAutoStart.Checked, rms, cbRemoteCmd.Checked, cbUploadFrom.Text)
             End If

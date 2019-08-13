@@ -1,4 +1,6 @@
-﻿Imports Bwl.Network.ClientServer
+﻿Imports System.IO
+Imports System.Security.Cryptography
+Imports Bwl.Network.ClientServer
 Imports Bwl.Framework
 
 Module App
@@ -185,7 +187,7 @@ Module App
                                 Dim operations = message.Part(2)
                                 Dim taskparams = message.Part(3).Split({vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries)
                                 Dim auxparams = message.Part(4).Split({" "}, StringSplitOptions.RemoveEmptyEntries)
-                                Dim taskFolder = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "processes", taskName)
+                                Dim taskFolder = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "processes", taskName))
                                 If IO.Directory.Exists(taskFolder) = False Then IO.Directory.CreateDirectory(taskFolder)
                                 _appBase.RootLogger.AddDebug("Net -> RunMonitorTask " + taskName + " " + operations)
 
@@ -202,6 +204,7 @@ Module App
                                 End If
 
                                 foundTask.Transport = _transport
+                                Dim response As New NetMessage(message, "RunMonitorTask-Result", "OK")
 
                                 If operations.Contains("kill") Then
                                     foundTask.RestartAction.KillAllProcesses()
@@ -252,11 +255,32 @@ Module App
                                     Next
                                 End If
 
+                                If operations.Contains("hashlist") Then
+                                    response = New NetMessage(message, "RunMonitorFileList", taskIdWithPrefix)
+                                    Dim fileList = New List(Of KeyValuePair(Of String, String))
+                                    Dim files = New DirectoryInfo(taskFolder).GetFiles("*", SearchOption.AllDirectories).Select(Function(f) f.FullName)
+
+                                    For Each file In files
+                                        Dim hash = ""
+                                        Dim relpath = IO.Path.GetFullPath(file)
+                                        relpath = relpath.Replace(taskFolder + IO.Path.DirectorySeparatorChar, "")
+                                        relpath = relpath.Replace(taskFolder, "")
+                                        Using hasher = MD5.Create()
+                                            Using fileStream = IO.File.OpenRead(file)
+                                                hash = BitConverter.ToString(hasher.ComputeHash(fileStream)).Replace("-", "").ToLowerInvariant()
+                                            End Using
+                                        End Using
+                                        fileList.Add(New KeyValuePair(Of String, String)(relpath, hash))
+                                    Next
+
+                                    Dim answer = Serializer.SaveObjectToJsonString(fileList)
+                                    response.Part(2) = answer
+                                End If
+
                                 If operations.Contains("start") Then
                                     foundTask.RestartAction.StartProcess()
                                 End If
-                                Dim response As New NetMessage(message, "RunMonitorTask-Result", "OK")
-                                _transport.SendMessage(response)
+                                If response IsNot Nothing Then _transport.SendMessage(response)
                             Catch ex As Exception
                                 _appBase.RootLogger.AddError("Net -> RunMonitorTask " + message.Part(1) + " " + message.Part(2) + " " + ex.Message)
                                 Dim response As New NetMessage(message, "RunMonitorTask-Result", "Error", ex.Message)

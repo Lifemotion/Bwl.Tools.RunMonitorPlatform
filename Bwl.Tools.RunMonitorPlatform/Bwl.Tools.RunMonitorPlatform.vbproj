@@ -58,7 +58,9 @@
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -88,6 +90,7 @@
     <Compile Include="NetWatcher\NetWatcherTaskPing.vb" />
     <Compile Include="NetWatcher\PingCheck.vb" />
     <Compile Include="RunMonitorAutoUI.vb" />
+    <Compile Include="Serializer.vb" />
     <Compile Include="TasksList.vb" />
     <Compile Include="CheckStats.vb" />
     <Compile Include="Checks\CommonTaskCheck.vb" />
