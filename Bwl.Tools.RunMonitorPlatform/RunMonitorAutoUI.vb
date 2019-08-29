@@ -5,6 +5,7 @@ Public Class RunMonitorAutoUI
     Public Property RefreshTasksDelay As Integer
 
     Private _logger As Logger
+    Private _settings As SettingsStorageRoot
     Private _tasks As ITask() = {}
     Private _formDescriptor As AutoFormDescriptor
     Private _ui As New AutoUI
@@ -21,9 +22,18 @@ Public Class RunMonitorAutoUI
         End Get
     End Property
 
-    Public Sub New(_logger As Logger)
+    Public Sub New(logger As Logger)
+        SettingUp(logger, New SettingsStorageRoot())
+    End Sub
+
+    Public Sub New(logger As Logger, settings As SettingsStorageRoot)
+        SettingUp(logger, settings)
+    End Sub
+
+    Private Sub SettingUp(logger As Logger, settings As SettingsStorageRoot)
+        Me._logger = logger
+        Me._settings = settings
         RefreshTasksDelay = 1000
-        Me._logger = _logger
         _formDescriptor = New AutoFormDescriptor(UI, "wdt-form")
         Dim refreshThread As New Threading.Thread(AddressOf RefreshThreadSub)
         refreshThread.IsBackground = True
@@ -45,7 +55,7 @@ Public Class RunMonitorAutoUI
     End Sub
 
     Public Function CreateForm() As AutoUIForm
-        Dim form = New AutoUIForm(New SettingsStorageRoot, _logger, UI)
+        Dim form = New AutoUIForm(If(_settings IsNot Nothing, _settings, New SettingsStorageRoot), _logger, UI)
         Return form
     End Function
 
@@ -71,25 +81,25 @@ Public Class RunMonitorAutoUI
             If listbox.Info.Caption <> _task.ShortName + " - " + _task.State.ToString Then listbox.Info.Caption = _task.ShortName + " - " + _task.State.ToString
 
             If _task.Description > "" Then items.Add("Description: " + _task.Description)
-                If _task.Info > "" Then items.Add("Info: " + _task.Description)
-                If _task.ExternalInfo > "" Then items.Add("ExternalInfo: " + _task.Description)
+            If _task.Info > "" Then items.Add("Info: " + _task.Description)
+            If _task.ExternalInfo > "" Then items.Add("ExternalInfo: " + _task.Description)
 
-                For Each check In _task.Checks
-                    If check.LastCheck.Success Then
-                        items.Add(check.GetType.Name + " - Ok: " + check.LastCheck.Time.ToLongTimeString)
-                    Else
-                        items.Add(check.GetType.Name + " - Error #" + check.LastCheck.FailedAttempts.ToString + ": " + check.LastCheck.Time.ToLongTimeString + ", " + check.LastCheck.ErrorText)
-                    End If
-                    If check.ParametersInfo > "" Then items.Add("--> Params: " + check.ParametersInfo)
-                    If check.StatusInfo > "" Then items.Add("--> Status: " + check.StatusInfo)
-                Next
+            For Each check In _task.Checks
+                If check.LastCheck.Success Then
+                    items.Add(check.GetType.Name + " - Ok: " + check.LastCheck.Time.ToLongTimeString)
+                Else
+                    items.Add(check.GetType.Name + " - Error #" + check.LastCheck.FailedAttempts.ToString + ": " + check.LastCheck.Time.ToLongTimeString + ", " + check.LastCheck.ErrorText)
+                End If
+                If check.ParametersInfo > "" Then items.Add("--> Params: " + check.ParametersInfo)
+                If check.StatusInfo > "" Then items.Add("--> Status: " + check.StatusInfo)
+            Next
 
-                For Each action In _task.FaultActions
-                    items.Add(action.GetType.Name + " after " + action.FaultsToRun.ToString + " err, " + action.LastAttempt.Time)
-                Next
+            For Each action In _task.FaultActions
+                items.Add(action.GetType.Name + " after " + action.FaultsToRun.ToString + " err, " + action.LastAttempt.Time)
+            Next
 
-                listbox.Items.Replace(items.ToArray)
-            End If
+            listbox.Items.Replace(items.ToArray)
+        End If
     End Sub
 
     Public Property Tasks As ITask()

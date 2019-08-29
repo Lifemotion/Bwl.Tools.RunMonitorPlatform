@@ -4,14 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3A67EB7B-84F4-4B76-821A-72A498169D43}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <StartupObject>Bwl.Tools.RunMonitorPlatform.HostClient.My.MyApplication</StartupObject>
-    <RootNamespace>Bwl.Tools.RunMonitorPlatform.HostClient</RootNamespace>
-    <AssemblyName>Bwl.Tools.RunMonitorPlatform.HostClient</AssemblyName>
+    <ProjectGuid>{E00A4CFC-8176-4A9B-83B7-217F37F7637F}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <StartupObject>Bwl.Tools.RunMonitorPlatform.HostRepeater.App</StartupObject>
+    <RootNamespace>Bwl.Tools.RunMonitorPlatform.HostRepeater</RootNamespace>
+    <AssemblyName>Bwl.Tools.RunMonitorPlatform.HostRepeater</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>WindowsForms</MyType>
+    <MyType>Console</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -19,9 +20,10 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\debug\RunMonitorHostClient\bin\</OutputPath>
-    <DocumentationFile>Bwl.Tools.RunMonitorPlatform.HostClient.xml</DocumentationFile>
+    <OutputPath>..\debug\RunMonitorHostRepeater\bin\</OutputPath>
+    <DocumentationFile>Bwl.Tools.RunMonitorPlatform.HostRepeater.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -29,9 +31,10 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>..\release\RunMonitorHostClient\bin\</OutputPath>
-    <DocumentationFile>Bwl.Tools.RunMonitorPlatform.HostClient.xml</DocumentationFile>
+    <OutputPath>..\release\RunMonitorHostRepeater\bin\</OutputPath>
+    <DocumentationFile>Bwl.Tools.RunMonitorPlatform.HostRepeater.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -45,9 +48,6 @@
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>RВseau Wi-Fi green.ico</ApplicationIcon>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Bwl.Framework">
       <HintPath>..\refs\Bwl.Framework.dll</HintPath>
@@ -56,39 +56,19 @@
       <HintPath>..\refs\bwl.Network.ClientServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
-    <Import Include="System.Data" />
-    <Import Include="System.Drawing" />
     <Import Include="System.Diagnostics" />
-    <Import Include="System.Windows.Forms" />
     <Import Include="System.Linq" />
-    <Import Include="System.Xml.Linq" />
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GuiClient.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GuiClient.Designer.vb">
-      <DependentUpon>GuiClient.vb</DependentUpon>
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="HostNetClient.vb" />
+    <Compile Include="App.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -106,10 +86,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GuiClient.resx">
-      <DependentUpon>GuiClient.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -118,6 +94,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -127,16 +104,12 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bwl.Tools.RunMonitorPlatform\Bwl.Tools.RunMonitorPlatform.vbproj">
       <Project>{0e68d73a-77de-4f0f-b49c-731d7040db1b}</Project>
       <Name>Bwl.Tools.RunMonitorPlatform</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="RВseau Wi-Fi green.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
