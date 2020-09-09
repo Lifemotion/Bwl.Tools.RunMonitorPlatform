@@ -23,12 +23,14 @@ Public Class ProcessTools
     End Sub
 
     Public Shared Sub KillProcessAndChildren(pid As Integer)
+        '''TODO
+#If Not NETCOREAPP Then
         Dim searcher As ManagementObjectSearcher = New ManagementObjectSearcher("Select * From Win32_Process Where ParentProcessID=" + pid.ToString)
         Dim moc As ManagementObjectCollection = searcher.Get()
         For Each mo In moc
             KillProcessAndChildren(Convert.ToInt32(mo("ProcessID")))
         Next
-
+#End If
         Try
             Dim proc As Process = Process.GetProcessById(pid)
             proc.Kill()

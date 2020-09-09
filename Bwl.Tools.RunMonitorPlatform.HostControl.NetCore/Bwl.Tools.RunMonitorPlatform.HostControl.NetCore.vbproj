@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Bwl.Tools.RunMonitorPlatform.HostControl.NetCore</RootNamespace>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <OptionCompare>Text</OptionCompare>
+    <AssemblyVersion>10.3.1</AssemblyVersion>
+    <FileVersion>10.3.0.0</FileVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\debug\RunMonitorHostControlStd\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\release\RunMonitorHostControlStd\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform.HostControl\App.vb" Link="App.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\CheckStats.vb" Link="CheckStats.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\Checks\CommonTaskCheck.vb" Link="CommonTaskCheck.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\Checks\ITaskCheck.vb" Link="ITaskCheck.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\Checks\TaskCheckException.vb" Link="TaskCheckException.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\FaultActions\CommonFaultAction.vb" Link="CommonFaultAction.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\FaultActions\FaultActionException.vb" Link="FaultActionException.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\FaultActions\IFaultAction.vb" Link="IFaultAction.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\LastCall.vb" Link="LastCall.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\MultiTransport.vb" Link="MultiTransport.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\ProcessTask\ProcessCheck.vb" Link="ProcessCheck.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\ProcessTask\ProcessRestartAction.vb" Link="ProcessRestartAction.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\ProcessTask\ProcessTask.vb" Link="ProcessTask.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\ProcessTask\ProcessTools.vb" Link="ProcessTools.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\RunMonitorCore.vb" Link="RunMonitorCore.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\Serializer.vb" Link="Serializer.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\TasksList.vb" Link="TasksList.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\Task\ChecksList.vb" Link="ChecksList.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\Task\CommonTask.vb" Link="CommonTask.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\Task\FaultActionsList.vb" Link="FaultActionsList.vb" />
+    <Compile Include="..\Bwl.Tools.RunMonitorPlatform\Task\ITask.vb" Link="ITask.vb" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Bwl.Framework.Standard">
+      <HintPath>..\refs\bwl-framework-standard\netstandard2.0\Bwl.Framework.Standard.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

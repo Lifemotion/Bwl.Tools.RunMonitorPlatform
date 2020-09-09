@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Bwl.Tools.RunMonitorPlatform.HostControl.NetCore": {
+      "commandName": "Project",
+      "commandLineArgs": "localserver=8084"
+    }
+  }
+}

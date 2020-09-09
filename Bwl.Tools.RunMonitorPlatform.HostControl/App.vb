@@ -4,10 +4,12 @@ Imports Bwl.Network.ClientServer
 Imports Bwl.Framework
 
 Module App
-    Private _appBase As New AppBase
+    Private _appBase As New AppBase(True, "RunMonitor", True)
     Private _transport As New MultiTransport
     Private _core As New RunMonitorCore(_appBase.RootLogger)
+#If Not NETCOREAPP Then
     Private _ui As New RunMonitorAutoUI(_appBase.RootLogger)
+#End If
     Private _conWriter As New ConsoleLogWriter 'With {.WriteExtended = True}
 
     Private _localPort As Integer
@@ -44,12 +46,13 @@ Module App
                 ok = True
             End If
 
+#If Not NETCOREAPP Then
             If argParts(0) = "remoteapp" Then
                 _ui.Tasks = _core.Tasks.ToArray
                 Dim remoteapp As New RemoteAppServer(_transport, "RunMonitorHost", _appBase.RootStorage, _appBase.RootLogger, _ui.UI)
                 _appBase.RootLogger.AddMessage("RemoteUI created: " + arg)
             End If
-
+#End If
 
         Next
 
@@ -200,7 +203,9 @@ Module App
                                 If foundTask Is Nothing Then
                                     foundTask = New ProcessTask(taskName, New ProcessTaskParameters) With {.State = TaskState.Disabled}
                                     _core.Tasks.Add(foundTask)
+#If Not NETCOREAPP Then
                                     _ui.Tasks = _core.Tasks.ToArray
+#End If
                                 End If
 
                                 foundTask.Transport = _transport

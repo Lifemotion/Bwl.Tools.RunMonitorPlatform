@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "Bwl.Tools.RunMonitorPlatform.HostControl.NetCore", "Bwl.Tools.RunMonitorPlatform.HostControl.NetCore\Bwl.Tools.RunMonitorPlatform.HostControl.NetCore.vbproj", "{B79EA5B4-52B4-40ED-9DB8-B6F80B996D5F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B79EA5B4-52B4-40ED-9DB8-B6F80B996D5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B79EA5B4-52B4-40ED-9DB8-B6F80B996D5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B79EA5B4-52B4-40ED-9DB8-B6F80B996D5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B79EA5B4-52B4-40ED-9DB8-B6F80B996D5F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0821AA86-9D13-43E8-B469-4DF913BB1D73}
+	EndGlobalSection
+EndGlobal

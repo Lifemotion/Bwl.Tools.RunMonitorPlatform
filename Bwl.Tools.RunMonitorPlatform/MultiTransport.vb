@@ -1,4 +1,5 @@
 ﻿Imports Bwl.Network.ClientServer
+Imports Bwl.Framework
 
 Public Class MultiTransport
     Implements IMessageTransport

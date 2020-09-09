@@ -1,4 +1,5 @@
 ﻿Imports Bwl.Network.ClientServer
+Imports Bwl.Framework
 
 Public Class ProcessRestartAction
 
@@ -82,7 +83,12 @@ Public Class ProcessRestartAction
 
             If _task.Parameters.RedirectInputOutput Then
                 If _remcmd IsNot Nothing Then _remcmd.Dispose()
-                Dim enc = System.Text.Encoding.GetEncoding(866)
+                Dim enc As System.Text.Encoding
+                Try
+                    enc = System.Text.Encoding.GetEncoding(866)
+                Catch ex As Exception
+                    enc = System.Text.Encoding.UTF8
+                End Try
                 If System.Environment.OSVersion.VersionString.Contains("Unix") Then enc = System.Text.Encoding.UTF8
                 _remcmd = New CmdlineServer(_task.Transport, _task.ID, filename, _task.Parameters.Arguments, workdir) With {.Encoding = enc}
 
