@@ -1,4 +1,6 @@
-﻿Imports System.Management
+﻿#If Not NETCOREAPP Then
+Imports System.Management
+#End If
 
 Public Class ProcessTools
     Public Shared Function FindProcesses(fullPath As String, filename As String) As Process()

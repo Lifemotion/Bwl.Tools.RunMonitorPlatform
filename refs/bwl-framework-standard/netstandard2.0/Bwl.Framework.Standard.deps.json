@@ -7,7 +7,7 @@
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
-      "Bwl.Framework.Standard/1.0.0": {
+      "Bwl.Framework.Standard/20.09.17": {
         "dependencies": {
           "NETStandard.Library": "2.0.3"
         },
@@ -24,7 +24,7 @@
     }
   },
   "libraries": {
-    "Bwl.Framework.Standard/1.0.0": {
+    "Bwl.Framework.Standard/20.09.17": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

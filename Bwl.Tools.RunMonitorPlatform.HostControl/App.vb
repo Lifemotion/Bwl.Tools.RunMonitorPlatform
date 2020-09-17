@@ -1,7 +1,7 @@
 ﻿Imports System.IO
 Imports System.Security.Cryptography
-Imports Bwl.Network.ClientServer
 Imports Bwl.Framework
+Imports Bwl.Network.ClientServer
 
 Module App
     Private _appBase As New AppBase(True, "RunMonitor", True)
@@ -107,7 +107,7 @@ Module App
         Try
             If message.ToID > "" And message.FromID > "" Then
                 Dim logMessage As String = message.AsString
-                _appBase.RootLogger.AddDebug("_transportMessageReceived: " + logMessage)
+                '_appBase.RootLogger.AddDebug("_transportMessageReceived: " + logMessage)
                 If message.ToID > "" And message.FromID > "" Then
                     If message.Part(0) = "RunMonitorControl" Then
                         Dim operation = message.Part(1)
