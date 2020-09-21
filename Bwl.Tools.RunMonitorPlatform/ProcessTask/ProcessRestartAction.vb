@@ -103,6 +103,19 @@ Public Class ProcessRestartAction
                     Throw New FaultActionException(_task, Me, "Process (CmdlineServer) Start error: " + ex.Message)
                 End Try
             Else
+                If System.Environment.OSVersion.VersionString.Contains("Unix") Then
+                    Dim prChmod As New Process
+                    prChmod.StartInfo.FileName = "chmod"
+                    prChmod.StartInfo.WorkingDirectory = workdir
+                    prChmod.StartInfo.Arguments = "744 " & filename
+                    Try
+                        prChmod.Start()
+                        Threading.Thread.Sleep(1000)
+                    Catch ex As Exception
+                        Throw New FaultActionException(_task, Me, "Process Start chmod error: " + ex.Message)
+                    End Try
+                End If
+
                 Dim prc As New Process
                 prc.StartInfo.FileName = filename
                 prc.StartInfo.WorkingDirectory = workdir
